@@ -59,6 +59,7 @@ export async function clearDemoData() {
 export async function seedDemoData() {
   const owner_id = await getOwnerId();
   await clearDemoData();
+  await seedProfile(owner_id);
 
   // ---------- Decorations ----------
   const decorationsSeed = [
