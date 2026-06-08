@@ -2,7 +2,7 @@ import { Link, Outlet, useRouterState, useNavigate } from "@tanstack/react-route
 import {
   LayoutDashboard, CalendarDays, CalendarRange, Sparkles, Package,
   Users, Wallet, Bell, BarChart3, Settings, Search, Plus, Crown, LogOut,
-  MoreHorizontal, X, Share2,
+  MoreHorizontal, X, Share2, Inbox,
 } from "lucide-react";
 import { useState } from "react";
 import { ShareBookingLinkModal } from "@/components/ShareBookingLinkModal";
@@ -14,6 +14,7 @@ import { useBranding } from "@/lib/branding";
 const navItems = [
   { to: "/", label: "الرئيسية", icon: LayoutDashboard },
   { to: "/bookings", label: "الحجوزات", icon: CalendarDays },
+  { to: "/booking-requests", label: "طلبات الرابط", icon: Inbox },
   { to: "/decorations", label: "الديكورات", icon: Sparkles },
   { to: "/supplies", label: "المستلزمات", icon: Package },
   { to: "/customers", label: "الزبائن", icon: Users },

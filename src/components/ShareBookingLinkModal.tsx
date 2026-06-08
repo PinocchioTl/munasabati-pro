@@ -196,6 +196,24 @@ export function ShareBookingLinkModal({ open, onClose }: Props) {
                 مشاركة مباشرة
               </Button>
 
+              {/* QR Code */}
+              {qrDataUrl && (
+                <div className="pt-3 border-t border-border/60">
+                  <div className="flex items-center gap-2 mb-3">
+                    <QrCode className="size-4 text-gold" />
+                    <p className="text-sm font-bold">رمز QR للرابط</p>
+                  </div>
+                  <div className="flex flex-col items-center gap-3">
+                    <div className="p-3 bg-white rounded-xl border border-border/60">
+                      <img src={qrDataUrl} alt="QR" className="size-40 block" />
+                    </div>
+                    <Button variant="outline" size="sm" onClick={handleDownloadQR} className="w-full">
+                      <Download className="size-4" /> تحميل رمز QR
+                    </Button>
+                  </div>
+                </div>
+              )}
+
               {/* Social share */}
               <div className="pt-3 border-t border-border/60">
                 <p className="text-xs font-bold text-muted-foreground mb-3 text-center">أو مشاركة عبر</p>
