@@ -84,7 +84,9 @@ function detectConflicts(dayBookings: Booking[]): Set<string> {
   for (let i = 0; i < active.length; i++) {
     for (let j = i + 1; j < active.length; j++) {
       const a = active[i], b = active[j];
-      const overlap = a.start_time < b.end_time && b.start_time < a.end_time;
+      const aStart = a.start_time ?? "", aEnd = a.end_time ?? "";
+      const bStart = b.start_time ?? "", bEnd = b.end_time ?? "";
+      const overlap = aStart < bEnd && bStart < aEnd;
       if (!overlap) continue;
       const aDecs = (a.booking_decorations || []).map(d => d.decoration_id);
       const bDecs = (b.booking_decorations || []).map(d => d.decoration_id);
