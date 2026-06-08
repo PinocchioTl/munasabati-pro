@@ -1,7 +1,7 @@
 import { createFileRoute, Link, useParams } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { getPublicOwner } from "@/lib/booking-public.functions";
-import { Sparkles, ShoppingBag, Package, ArrowLeft, CheckCircle2 } from "lucide-react";
+import { Sparkles, ShoppingBag, CheckCircle2 } from "lucide-react";
 
 export const Route = createFileRoute("/booking/$slug/")({
   component: Landing,
