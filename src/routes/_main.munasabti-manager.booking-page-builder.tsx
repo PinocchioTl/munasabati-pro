@@ -203,22 +203,22 @@ function IdentityTab({ form, update }: any) {
     <Card className="p-6 space-y-5">
       <Field label="اسم النشاط">
         <input value={form.company_name} onChange={(e) => update({ company_name: e.target.value })}
-          className="input" placeholder="مثل: فخامة الديكور" />
+          className="w-full bg-secondary/60 rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-ring" placeholder="مثل: فخامة الديكور" />
       </Field>
 
       <Field label="شعار قصير (Tagline)">
         <input value={form.tagline} onChange={(e) => update({ tagline: e.target.value })}
-          className="input" placeholder="نظم مناسبتك مع الفخامة" />
+          className="w-full bg-secondary/60 rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-ring" placeholder="نظم مناسبتك مع الفخامة" />
       </Field>
 
       <Field label="نبذة عن النشاط">
         <textarea value={form.description} onChange={(e) => update({ description: e.target.value })} rows={4}
-          className="input resize-none" placeholder="اكتب وصفاً مختصراً عن نشاطك..." />
+          className="w-full bg-secondary/60 rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-ring resize-none" placeholder="اكتب وصفاً مختصراً عن نشاطك..." />
       </Field>
 
       <Field label="رقم الهاتف">
         <input value={form.phone} onChange={(e) => update({ phone: e.target.value })}
-          className="input" placeholder="+966..." dir="ltr" />
+          className="w-full bg-secondary/60 rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-ring" placeholder="+966..." dir="ltr" />
       </Field>
 
       <div className="grid sm:grid-cols-2 gap-4">
@@ -283,7 +283,7 @@ function SocialField({ icon: Icon, label, value, onChange, placeholder, dir }: a
       <div className="flex-1">
         <div className="text-xs text-muted-foreground mb-1">{label}</div>
         <input value={value} onChange={(e) => onChange(e.target.value)} placeholder={placeholder} dir={dir}
-          className="input py-2 text-sm" />
+          className="w-full bg-secondary/60 rounded-xl px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-ring" />
       </div>
     </div>
   );
@@ -331,7 +331,7 @@ function ColorRow({ label, value, onChange }: { label: string; value: string; on
       <div className="flex-1">
         <div className="text-xs text-muted-foreground">{label}</div>
         <input value={value} onChange={(e) => onChange(e.target.value)} dir="ltr"
-          className="input py-2 text-sm font-mono" />
+          className="w-full bg-secondary/60 rounded-xl px-3 py-2 text-sm font-mono outline-none focus:ring-2 focus:ring-ring" />
       </div>
     </div>
   );
@@ -344,15 +344,15 @@ function HeroTab({ form, update }: any) {
       <div className="text-sm text-muted-foreground">يظهر هذا المحتوى في أعلى صفحة الحجز. اتركه فارغاً لاستخدام الافتراضي.</div>
       <Field label="العنوان الرئيسي">
         <input value={form.hero_title} onChange={(e) => update({ hero_title: e.target.value })}
-          className="input" placeholder={form.company_name || "نظم مناسبتك معنا"} />
+          className="w-full bg-secondary/60 rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-ring" placeholder={form.company_name || "نظم مناسبتك معنا"} />
       </Field>
       <Field label="النص الترحيبي (Subtitle)">
         <input value={form.hero_subtitle} onChange={(e) => update({ hero_subtitle: e.target.value })}
-          className="input" placeholder={form.tagline || "ديكورات احترافية لجميع المناسبات"} />
+          className="w-full bg-secondary/60 rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-ring" placeholder={form.tagline || "ديكورات احترافية لجميع المناسبات"} />
       </Field>
       <Field label="وصف الخدمة">
         <textarea value={form.hero_description} onChange={(e) => update({ hero_description: e.target.value })} rows={3}
-          className="input resize-none" placeholder="اختر تاريخ مناسبتك أولاً لعرض الديكورات والمستلزمات المتوفرة" />
+          className="w-full bg-secondary/60 rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-ring resize-none" placeholder="اختر تاريخ مناسبتك أولاً لعرض الديكورات والمستلزمات المتوفرة" />
       </Field>
       <div className="pt-4 border-t border-border/60">
         <ToggleRow label="إظهار الأسعار" desc="عرض أسعار الديكورات والمستلزمات للعملاء"
@@ -529,8 +529,8 @@ function GalleryEditDialog({ item, onClose, onSave }: any) {
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4" onClick={onClose}>
       <div className="bg-card rounded-2xl p-5 w-full max-w-sm space-y-3" onClick={(e) => e.stopPropagation()}>
         <div className="font-bold">تعديل الصورة</div>
-        <input value={t} onChange={(e) => setT(e.target.value)} placeholder="العنوان (اختياري)" className="input" />
-        <textarea value={c} onChange={(e) => setC(e.target.value)} placeholder="الوصف (اختياري)" rows={3} className="input resize-none" />
+        <input value={t} onChange={(e) => setT(e.target.value)} placeholder="العنوان (اختياري)" className="w-full bg-secondary/60 rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-ring" />
+        <textarea value={c} onChange={(e) => setC(e.target.value)} placeholder="الوصف (اختياري)" rows={3} className="w-full bg-secondary/60 rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-ring resize-none" />
         <div className="flex justify-end gap-2">
           <Button variant="outline" size="sm" onClick={onClose}>إلغاء</Button>
           <Button variant="gold" size="sm" onClick={() => onSave(t || null, c || null)}><Check className="size-4" /> حفظ</Button>
@@ -550,7 +550,7 @@ function DisabledTab({ form, update }: any) {
       <div className={form.booking_enabled ? "opacity-50 pointer-events-none" : ""}>
         <Field label="الرسالة المخصصة عند تعطيل الحجز">
           <textarea value={form.disabled_message} onChange={(e) => update({ disabled_message: e.target.value })} rows={4}
-            className="input resize-none"
+            className="w-full bg-secondary/60 rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-ring resize-none"
             placeholder="الحجوزات متوقفة حالياً وسيتم فتحها قريباً." />
         </Field>
         <p className="text-xs text-muted-foreground mt-2">ستظهر هذه الرسالة للعملاء عند زيارة صفحة الحجز.</p>
