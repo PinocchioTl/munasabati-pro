@@ -169,12 +169,10 @@ export function ShareBookingLinkModal({ open, onClose }: Props) {
               </div>
 
               {/* Native share */}
-              {navigator.share && (
-                <Button variant="gold" size="md" onClick={handleNativeShare} className="w-full">
-                  <Share2 className="size-4" />
-                  مشاركة مباشرة
-                </Button>
-              )}
+              <Button variant="gold" size="md" onClick={handleNativeShare} className="w-full">
+                <Share2 className="size-4" />
+                مشاركة مباشرة
+              </Button>
 
               {/* Social share */}
               <div className="pt-3 border-t border-border/60">
