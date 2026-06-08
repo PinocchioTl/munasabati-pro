@@ -357,6 +357,39 @@ export type Database = {
           },
         ]
       }
+      gallery_images: {
+        Row: {
+          caption: string | null
+          created_at: string
+          id: string
+          image_url: string
+          owner_id: string
+          sort_order: number
+          title: string | null
+          updated_at: string
+        }
+        Insert: {
+          caption?: string | null
+          created_at?: string
+          id?: string
+          image_url: string
+          owner_id: string
+          sort_order?: number
+          title?: string | null
+          updated_at?: string
+        }
+        Update: {
+          caption?: string | null
+          created_at?: string
+          id?: string
+          image_url?: string
+          owner_id?: string
+          sort_order?: number
+          title?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       invoice_items: {
         Row: {
           id: string
@@ -505,10 +538,15 @@ export type Database = {
           accent_color: string | null
           background_color: string | null
           booking_enabled: boolean
+          button_color: string | null
           company_name: string | null
           cover_url: string | null
           created_at: string
           description: string | null
+          disabled_message: string | null
+          hero_description: string | null
+          hero_subtitle: string | null
+          hero_title: string | null
           id: string
           last_visit_at: string | null
           link_views: number
@@ -517,7 +555,9 @@ export type Database = {
           primary_color: string | null
           public_slug: string | null
           secondary_color: string | null
+          sections_config: Json
           show_prices: boolean
+          social_links: Json
           tagline: string | null
           updated_at: string
         }
@@ -525,10 +565,15 @@ export type Database = {
           accent_color?: string | null
           background_color?: string | null
           booking_enabled?: boolean
+          button_color?: string | null
           company_name?: string | null
           cover_url?: string | null
           created_at?: string
           description?: string | null
+          disabled_message?: string | null
+          hero_description?: string | null
+          hero_subtitle?: string | null
+          hero_title?: string | null
           id: string
           last_visit_at?: string | null
           link_views?: number
@@ -537,7 +582,9 @@ export type Database = {
           primary_color?: string | null
           public_slug?: string | null
           secondary_color?: string | null
+          sections_config?: Json
           show_prices?: boolean
+          social_links?: Json
           tagline?: string | null
           updated_at?: string
         }
@@ -545,10 +592,15 @@ export type Database = {
           accent_color?: string | null
           background_color?: string | null
           booking_enabled?: boolean
+          button_color?: string | null
           company_name?: string | null
           cover_url?: string | null
           created_at?: string
           description?: string | null
+          disabled_message?: string | null
+          hero_description?: string | null
+          hero_subtitle?: string | null
+          hero_title?: string | null
           id?: string
           last_visit_at?: string | null
           link_views?: number
@@ -557,7 +609,9 @@ export type Database = {
           primary_color?: string | null
           public_slug?: string | null
           secondary_color?: string | null
+          sections_config?: Json
           show_prices?: boolean
+          social_links?: Json
           tagline?: string | null
           updated_at?: string
         }
