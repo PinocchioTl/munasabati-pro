@@ -195,6 +195,16 @@ export function ShareBookingLinkModal({ open, onClose }: Props) {
                     <span className="text-[10px] font-medium text-muted-foreground">واتساب</span>
                   </button>
                   <button
+                    onClick={shareToMessenger}
+                    className="flex flex-col items-center gap-1.5 group"
+                    title="ماسنجر"
+                  >
+                    <div className="size-12 rounded-2xl bg-[#0084FF]/10 text-[#0084FF] flex items-center justify-center transition group-hover:scale-105 group-hover:bg-[#0084FF]/20">
+                      <MessageSquare className="size-6" />
+                    </div>
+                    <span className="text-[10px] font-medium text-muted-foreground">ماسنجر</span>
+                  </button>
+                  <button
                     onClick={shareToTelegram}
                     className="flex flex-col items-center gap-1.5 group"
                     title="تيليجرام"
