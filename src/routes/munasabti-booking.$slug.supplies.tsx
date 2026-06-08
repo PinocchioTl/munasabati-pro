@@ -4,7 +4,7 @@ import { getPublicOwner, getPublicSupplies } from "@/lib/booking-public.function
 import { Loader2, Package } from "lucide-react";
 import { useMemo, useState } from "react";
 
-export const Route = createFileRoute("/booking/$slug/supplies")({
+export const Route = createFileRoute("/munasabti-booking/$slug/supplies")({
   component: SuppliesPage,
 });
 

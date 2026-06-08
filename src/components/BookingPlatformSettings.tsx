@@ -74,7 +74,7 @@ export function BookingPlatformSettings() {
     toast.success("تم حفظ إعدادات الحجز");
   }
 
-  const url = slug ? `${typeof window !== "undefined" ? window.location.origin : ""}/booking/${slug}` : "";
+  const url = slug ? `${typeof window !== "undefined" ? window.location.origin : ""}/munasabti-booking/${slug}` : "";
 
   if (loading) return <Card className="p-8 text-center"><Loader2 className="size-6 animate-spin mx-auto" /></Card>;
 

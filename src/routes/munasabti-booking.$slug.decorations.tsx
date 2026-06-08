@@ -75,7 +75,7 @@ function DecorationsPage() {
           {filtered.map(d => (
             <Link
               key={d.id}
-              to={"/booking/$slug/decorations/$id" as any}
+              to={"/munasabti-booking/$slug/decorations/$id" as any}
               params={{ slug, id: d.id } as any}
               className="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition border border-transparent hover:bk-border-gold"
             >

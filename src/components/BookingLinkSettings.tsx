@@ -41,8 +41,8 @@ export function BookingLinkSettings() {
 
   const origin = typeof window !== "undefined" ? window.location.origin : "";
   const currentSlug = data?.public_slug ?? "";
-  const currentUrl = currentSlug ? `${origin}/booking/${currentSlug}` : "";
-  const previewUrl = slug && SLUG_RE.test(slug) ? `${origin}/booking/${slug}` : "";
+  const currentUrl = currentSlug ? `${origin}/munasabti-booking/${currentSlug}` : "";
+  const previewUrl = slug && SLUG_RE.test(slug) ? `${origin}/munasabti-booking/${slug}` : "";
 
   // Generate QR for current saved url
   useEffect(() => {
