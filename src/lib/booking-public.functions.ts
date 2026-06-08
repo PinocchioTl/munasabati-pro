@@ -133,6 +133,39 @@ export const getAvailableForDate = createServerFn({ method: "GET" })
     return { decorations, supplies };
   });
 
+/** Backwards-compat single-item availability check. */
+export const getDecorationAvailability = createServerFn({ method: "GET" })
+  .inputValidator((d: { slug: string; id: string; date: string }) => ({
+    slug: slugSchema.parse(d.slug),
+    id: z.string().uuid().parse(d.id),
+    date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).parse(d.date),
+  }))
+  .handler(async ({ data }) => {
+    const owner_id = await resolveOwner(data.slug);
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data: dec } = await supabaseAdmin
+      .from("decorations").select("id, total_qty")
+      .eq("owner_id", owner_id).eq("id", data.id).maybeSingle();
+    if (!dec) throw new Error("الديكور غير موجود");
+    const [bRes, rRes] = await Promise.all([
+      supabaseAdmin.from("bookings")
+        .select("booking_decorations(decoration_id, qty)")
+        .eq("owner_id", owner_id).eq("event_date", data.date)
+        .in("status", ["pending", "confirmed", "in_progress"]),
+      supabaseAdmin.from("booking_requests").select("decorations")
+        .eq("owner_id", owner_id).eq("event_date", data.date)
+        .in("status", ["pending", "accepted"]),
+    ]);
+    let used = 0;
+    for (const b of bRes.data ?? [])
+      for (const i of ((b as any).booking_decorations ?? []))
+        if (i.decoration_id === data.id) used += i.qty || 0;
+    for (const r of rRes.data ?? [])
+      for (const i of (((r as any).decorations) ?? []))
+        if (i.id === data.id) used += i.qty || 0;
+    return { total: dec.total_qty || 0, used, available: Math.max((dec.total_qty || 0) - used, 0) };
+  });
+
 const requestSchema = z.object({
   slug: slugSchema,
   customer_name: z.string().trim().min(2).max(100),
