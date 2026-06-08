@@ -8,6 +8,8 @@ import {
 import { useState, useEffect, useMemo, ReactNode } from "react";
 import { toast } from "sonner";
 import { BrandingSettings } from "@/components/BrandingSettings";
+import { BookingLinkSettings } from "@/components/BookingLinkSettings";
+import { Link2 } from "lucide-react";
 import { PhoneInput } from "@/components/PhoneInput";
 import { supabase } from "@/integrations/supabase/client";
 import { exportAllData, downloadBundle, importBundle, type BackupBundle } from "@/lib/backup";
@@ -17,10 +19,11 @@ export const Route = createFileRoute("/_main/settings")({
   component: SettingsPage,
 });
 
-type SectionId = "branding" | "notifications" | "appearance" | "backup" | "security";
+type SectionId = "branding" | "booking-link" | "notifications" | "appearance" | "backup" | "security";
 
 const sections: { id: SectionId; label: string; icon: typeof Bell; color: string; bg: string; desc: string }[] = [
   { id: "branding",      label: "الهوية البصرية", icon: Sparkles, color: "text-gold", bg: "bg-gold/10", desc: "شعار الشركة، الاسم، الألوان" },
+  { id: "booking-link",  label: "رابط الحجز", icon: Link2, color: "text-gold", bg: "bg-gold/10", desc: "تخصيص الرابط، QR Code، الإحصائيات" },
   { id: "notifications", label: "الإشعارات", icon: Bell, color: "text-warning", bg: "bg-warning/10", desc: "تنبيهات المناسبات والمخزون والدفعات" },
   { id: "appearance",    label: "المظهر",    icon: Palette, color: "text-info",    bg: "bg-info/10",    desc: "الوضع الليلي، الألوان، حجم الخط" },
   { id: "backup",        label: "النسخ الاحتياطي", icon: Database, color: "text-success", bg: "bg-success/10", desc: "تصدير، استيراد، نسخ تلقائي" },
@@ -37,7 +40,7 @@ const ACCENT_COLORS = [
 ];
 
 function SettingsPage() {
-  const [active, setActive] = useState<SectionId>("notifications");
+  const [active, setActive] = useState<SectionId>("booking-link");
   const [query, setQuery] = useState("");
 
   const filtered = useMemo(() => {
@@ -120,6 +123,7 @@ function SettingsPage() {
         {/* Content */}
         <div className="animate-fade-in min-w-0" key={active}>
           {active === "branding" && <BrandingSettings />}
+          {active === "booking-link" && <BookingLinkSettings />}
           {active === "notifications" && <NotificationsSection />}
           {active === "appearance" && <AppearanceSection />}
           {active === "backup" && <BackupSection />}

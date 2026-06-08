@@ -62,6 +62,36 @@ export type Database = {
         }
         Relationships: []
       }
+      profiles: {
+        Row: {
+          booking_enabled: boolean
+          created_at: string
+          id: string
+          last_visit_at: string | null
+          link_views: number
+          public_slug: string | null
+          updated_at: string
+        }
+        Insert: {
+          booking_enabled?: boolean
+          created_at?: string
+          id: string
+          last_visit_at?: string | null
+          link_views?: number
+          public_slug?: string | null
+          updated_at?: string
+        }
+        Update: {
+          booking_enabled?: boolean
+          created_at?: string
+          id?: string
+          last_visit_at?: string | null
+          link_views?: number
+          public_slug?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
