@@ -14,6 +14,42 @@ export type Database = {
   }
   public: {
     Tables: {
+      booking_decorations: {
+        Row: {
+          booking_id: string
+          decoration_id: string
+          id: string
+          qty: number
+        }
+        Insert: {
+          booking_id: string
+          decoration_id: string
+          id?: string
+          qty?: number
+        }
+        Update: {
+          booking_id?: string
+          decoration_id?: string
+          id?: string
+          qty?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "booking_decorations_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: false
+            referencedRelation: "bookings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "booking_decorations_decoration_id_fkey"
+            columns: ["decoration_id"]
+            isOneToOne: false
+            referencedRelation: "decorations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       booking_requests: {
         Row: {
           created_at: string
@@ -59,6 +95,408 @@ export type Database = {
           status?: string
           supplies?: Json
           updated_at?: string
+        }
+        Relationships: []
+      }
+      booking_supplies: {
+        Row: {
+          booking_id: string
+          id: string
+          qty: number
+          supply_id: string
+        }
+        Insert: {
+          booking_id: string
+          id?: string
+          qty?: number
+          supply_id: string
+        }
+        Update: {
+          booking_id?: string
+          id?: string
+          qty?: number
+          supply_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "booking_supplies_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: false
+            referencedRelation: "bookings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "booking_supplies_supply_id_fkey"
+            columns: ["supply_id"]
+            isOneToOne: false
+            referencedRelation: "supplies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      bookings: {
+        Row: {
+          client_id: string | null
+          code: string | null
+          created_at: string
+          customer_name: string
+          deposit: number
+          end_time: string | null
+          event_date: string
+          event_type: string
+          expenses: number
+          id: string
+          location: string | null
+          net_profit: number
+          notes: string | null
+          owner_id: string
+          payment_status: string
+          phone: string | null
+          remaining: number
+          start_time: string | null
+          status: string
+          total_price: number
+          transport_cost: number
+          updated_at: string
+        }
+        Insert: {
+          client_id?: string | null
+          code?: string | null
+          created_at?: string
+          customer_name: string
+          deposit?: number
+          end_time?: string | null
+          event_date: string
+          event_type?: string
+          expenses?: number
+          id?: string
+          location?: string | null
+          net_profit?: number
+          notes?: string | null
+          owner_id: string
+          payment_status?: string
+          phone?: string | null
+          remaining?: number
+          start_time?: string | null
+          status?: string
+          total_price?: number
+          transport_cost?: number
+          updated_at?: string
+        }
+        Update: {
+          client_id?: string | null
+          code?: string | null
+          created_at?: string
+          customer_name?: string
+          deposit?: number
+          end_time?: string | null
+          event_date?: string
+          event_type?: string
+          expenses?: number
+          id?: string
+          location?: string | null
+          net_profit?: number
+          notes?: string | null
+          owner_id?: string
+          payment_status?: string
+          phone?: string | null
+          remaining?: number
+          start_time?: string | null
+          status?: string
+          total_price?: number
+          transport_cost?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bookings_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "clients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      clients: {
+        Row: {
+          address: string | null
+          created_at: string
+          email: string | null
+          events_count: number
+          id: string
+          is_vip: boolean
+          last_event_date: string | null
+          name: string
+          notes: string | null
+          owner_id: string
+          phone: string | null
+          total_paid: number
+          updated_at: string
+        }
+        Insert: {
+          address?: string | null
+          created_at?: string
+          email?: string | null
+          events_count?: number
+          id?: string
+          is_vip?: boolean
+          last_event_date?: string | null
+          name: string
+          notes?: string | null
+          owner_id: string
+          phone?: string | null
+          total_paid?: number
+          updated_at?: string
+        }
+        Update: {
+          address?: string | null
+          created_at?: string
+          email?: string | null
+          events_count?: number
+          id?: string
+          is_vip?: boolean
+          last_event_date?: string | null
+          name?: string
+          notes?: string | null
+          owner_id?: string
+          phone?: string | null
+          total_paid?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      decorations: {
+        Row: {
+          booked_qty: number
+          bookings_count: number
+          category: string | null
+          created_at: string
+          description: string | null
+          id: string
+          images: Json
+          name: string
+          owner_id: string
+          price: number
+          status: string
+          total_qty: number
+          total_revenue: number
+          updated_at: string
+        }
+        Insert: {
+          booked_qty?: number
+          bookings_count?: number
+          category?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          images?: Json
+          name: string
+          owner_id: string
+          price?: number
+          status?: string
+          total_qty?: number
+          total_revenue?: number
+          updated_at?: string
+        }
+        Update: {
+          booked_qty?: number
+          bookings_count?: number
+          category?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          images?: Json
+          name?: string
+          owner_id?: string
+          price?: number
+          status?: string
+          total_qty?: number
+          total_revenue?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      expenses: {
+        Row: {
+          amount: number
+          booking_id: string | null
+          created_at: string
+          date: string
+          expense_type: string
+          id: string
+          notes: string | null
+          owner_id: string
+        }
+        Insert: {
+          amount?: number
+          booking_id?: string | null
+          created_at?: string
+          date?: string
+          expense_type: string
+          id?: string
+          notes?: string | null
+          owner_id: string
+        }
+        Update: {
+          amount?: number
+          booking_id?: string | null
+          created_at?: string
+          date?: string
+          expense_type?: string
+          id?: string
+          notes?: string | null
+          owner_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "expenses_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: false
+            referencedRelation: "bookings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      invoice_items: {
+        Row: {
+          id: string
+          invoice_id: string
+          line_total: number
+          name: string
+          position: number
+          qty: number
+          unit_price: number
+        }
+        Insert: {
+          id?: string
+          invoice_id: string
+          line_total?: number
+          name: string
+          position?: number
+          qty?: number
+          unit_price?: number
+        }
+        Update: {
+          id?: string
+          invoice_id?: string
+          line_total?: number
+          name?: string
+          position?: number
+          qty?: number
+          unit_price?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "invoice_items_invoice_id_fkey"
+            columns: ["invoice_id"]
+            isOneToOne: false
+            referencedRelation: "invoices"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      invoices: {
+        Row: {
+          booking_id: string | null
+          client_id: string | null
+          created_at: string
+          customer_name: string | null
+          customer_phone: string | null
+          discount: number
+          due_date: string | null
+          id: string
+          issue_date: string
+          owner_id: string
+          paid_amount: number
+          subtotal: number
+          tax_amount: number
+          tax_rate: number
+          total: number
+          updated_at: string
+        }
+        Insert: {
+          booking_id?: string | null
+          client_id?: string | null
+          created_at?: string
+          customer_name?: string | null
+          customer_phone?: string | null
+          discount?: number
+          due_date?: string | null
+          id?: string
+          issue_date?: string
+          owner_id: string
+          paid_amount?: number
+          subtotal?: number
+          tax_amount?: number
+          tax_rate?: number
+          total?: number
+          updated_at?: string
+        }
+        Update: {
+          booking_id?: string | null
+          client_id?: string | null
+          created_at?: string
+          customer_name?: string | null
+          customer_phone?: string | null
+          discount?: number
+          due_date?: string | null
+          id?: string
+          issue_date?: string
+          owner_id?: string
+          paid_amount?: number
+          subtotal?: number
+          tax_amount?: number
+          tax_rate?: number
+          total?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "invoices_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: false
+            referencedRelation: "bookings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "invoices_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "clients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      notifications: {
+        Row: {
+          body: string | null
+          created_at: string
+          id: string
+          is_read: boolean
+          kind: string | null
+          level: string
+          owner_id: string
+          title: string
+        }
+        Insert: {
+          body?: string | null
+          created_at?: string
+          id?: string
+          is_read?: boolean
+          kind?: string | null
+          level?: string
+          owner_id: string
+          title: string
+        }
+        Update: {
+          body?: string | null
+          created_at?: string
+          id?: string
+          is_read?: boolean
+          kind?: string | null
+          level?: string
+          owner_id?: string
+          title?: string
         }
         Relationships: []
       }
@@ -122,6 +560,57 @@ export type Database = {
           show_prices?: boolean
           tagline?: string | null
           updated_at?: string
+        }
+        Relationships: []
+      }
+      supplies: {
+        Row: {
+          category: string | null
+          cost: number
+          created_at: string
+          id: string
+          images: Json
+          min_alert: number
+          name: string
+          notes: string | null
+          owner_id: string
+          status: string
+          supplier: string | null
+          total_qty: number
+          updated_at: string
+          used_qty: number
+        }
+        Insert: {
+          category?: string | null
+          cost?: number
+          created_at?: string
+          id?: string
+          images?: Json
+          min_alert?: number
+          name: string
+          notes?: string | null
+          owner_id: string
+          status?: string
+          supplier?: string | null
+          total_qty?: number
+          updated_at?: string
+          used_qty?: number
+        }
+        Update: {
+          category?: string | null
+          cost?: number
+          created_at?: string
+          id?: string
+          images?: Json
+          min_alert?: number
+          name?: string
+          notes?: string | null
+          owner_id?: string
+          status?: string
+          supplier?: string | null
+          total_qty?: number
+          updated_at?: string
+          used_qty?: number
         }
         Relationships: []
       }
