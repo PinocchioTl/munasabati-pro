@@ -9,11 +9,22 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SuppliesRouteImport } from './routes/supplies'
 import { Route as SignupRouteImport } from './routes/signup'
+import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as ProfitsRouteImport } from './routes/profits'
+import { Route as NotificationsRouteImport } from './routes/notifications'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
+import { Route as DecorationsRouteImport } from './routes/decorations'
+import { Route as CustomersRouteImport } from './routes/customers'
+import { Route as CalendarRouteImport } from './routes/calendar'
+import { Route as BookingsRouteImport } from './routes/bookings'
+import { Route as BookingRequestsRouteImport } from './routes/booking-requests'
+import { Route as AnalyticsRouteImport } from './routes/analytics'
 import { Route as MainRouteImport } from './routes/_main'
+import { Route as IndexRouteImport } from './routes/index'
 import { Route as MunasabtiBookingSlugRouteImport } from './routes/munasabti-booking.$slug'
 import { Route as BookingSplatRouteImport } from './routes/booking.$'
 import { Route as MunasabtiBookingSlugIndexRouteImport } from './routes/munasabti-booking.$slug.index'
@@ -33,14 +44,34 @@ import { Route as MainMunasabtiManagerBookingRequestsRouteImport } from './route
 import { Route as MainMunasabtiManagerAnalyticsRouteImport } from './routes/_main.munasabti-manager.analytics'
 import { Route as MunasabtiBookingSlugDecorationsIdRouteImport } from './routes/munasabti-booking.$slug.decorations.$id'
 
+const SuppliesRoute = SuppliesRouteImport.update({
+  id: '/supplies',
+  path: '/supplies',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SignupRoute = SignupRouteImport.update({
   id: '/signup',
   path: '/signup',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ResetPasswordRoute = ResetPasswordRouteImport.update({
   id: '/reset-password',
   path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProfitsRoute = ProfitsRouteImport.update({
+  id: '/profits',
+  path: '/profits',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NotificationsRoute = NotificationsRouteImport.update({
+  id: '/notifications',
+  path: '/notifications',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -53,8 +84,43 @@ const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
   path: '/forgot-password',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DecorationsRoute = DecorationsRouteImport.update({
+  id: '/decorations',
+  path: '/decorations',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CustomersRoute = CustomersRouteImport.update({
+  id: '/customers',
+  path: '/customers',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CalendarRoute = CalendarRouteImport.update({
+  id: '/calendar',
+  path: '/calendar',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BookingsRoute = BookingsRouteImport.update({
+  id: '/bookings',
+  path: '/bookings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BookingRequestsRoute = BookingRequestsRouteImport.update({
+  id: '/booking-requests',
+  path: '/booking-requests',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AnalyticsRoute = AnalyticsRouteImport.update({
+  id: '/analytics',
+  path: '/analytics',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const MainRoute = MainRouteImport.update({
   id: '/_main',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MunasabtiBookingSlugRoute = MunasabtiBookingSlugRouteImport.update({
@@ -165,11 +231,21 @@ const MunasabtiBookingSlugDecorationsIdRoute =
   } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof MainRouteWithChildren
+  '/': typeof IndexRoute
+  '/analytics': typeof AnalyticsRoute
+  '/booking-requests': typeof BookingRequestsRoute
+  '/bookings': typeof BookingsRoute
+  '/calendar': typeof CalendarRoute
+  '/customers': typeof CustomersRoute
+  '/decorations': typeof DecorationsRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
+  '/notifications': typeof NotificationsRoute
+  '/profits': typeof ProfitsRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/settings': typeof SettingsRoute
   '/signup': typeof SignupRoute
+  '/supplies': typeof SuppliesRoute
   '/booking/$': typeof BookingSplatRoute
   '/munasabti-booking/$slug': typeof MunasabtiBookingSlugRouteWithChildren
   '/munasabti-manager/analytics': typeof MainMunasabtiManagerAnalyticsRoute
@@ -190,11 +266,21 @@ export interface FileRoutesByFullPath {
   '/munasabti-booking/$slug/decorations/$id': typeof MunasabtiBookingSlugDecorationsIdRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof MainRouteWithChildren
+  '/': typeof IndexRoute
+  '/analytics': typeof AnalyticsRoute
+  '/booking-requests': typeof BookingRequestsRoute
+  '/bookings': typeof BookingsRoute
+  '/calendar': typeof CalendarRoute
+  '/customers': typeof CustomersRoute
+  '/decorations': typeof DecorationsRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
+  '/notifications': typeof NotificationsRoute
+  '/profits': typeof ProfitsRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/settings': typeof SettingsRoute
   '/signup': typeof SignupRoute
+  '/supplies': typeof SuppliesRoute
   '/booking/$': typeof BookingSplatRoute
   '/munasabti-manager/analytics': typeof MainMunasabtiManagerAnalyticsRoute
   '/munasabti-manager/booking-requests': typeof MainMunasabtiManagerBookingRequestsRoute
@@ -215,11 +301,22 @@ export interface FileRoutesByTo {
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
+  '/': typeof IndexRoute
   '/_main': typeof MainRouteWithChildren
+  '/analytics': typeof AnalyticsRoute
+  '/booking-requests': typeof BookingRequestsRoute
+  '/bookings': typeof BookingsRoute
+  '/calendar': typeof CalendarRoute
+  '/customers': typeof CustomersRoute
+  '/decorations': typeof DecorationsRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
+  '/notifications': typeof NotificationsRoute
+  '/profits': typeof ProfitsRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/settings': typeof SettingsRoute
   '/signup': typeof SignupRoute
+  '/supplies': typeof SuppliesRoute
   '/booking/$': typeof BookingSplatRoute
   '/munasabti-booking/$slug': typeof MunasabtiBookingSlugRouteWithChildren
   '/_main/munasabti-manager/analytics': typeof MainMunasabtiManagerAnalyticsRoute
@@ -243,10 +340,20 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/analytics'
+    | '/booking-requests'
+    | '/bookings'
+    | '/calendar'
+    | '/customers'
+    | '/decorations'
     | '/forgot-password'
     | '/login'
+    | '/notifications'
+    | '/profits'
     | '/reset-password'
+    | '/settings'
     | '/signup'
+    | '/supplies'
     | '/booking/$'
     | '/munasabti-booking/$slug'
     | '/munasabti-manager/analytics'
@@ -268,10 +375,20 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/analytics'
+    | '/booking-requests'
+    | '/bookings'
+    | '/calendar'
+    | '/customers'
+    | '/decorations'
     | '/forgot-password'
     | '/login'
+    | '/notifications'
+    | '/profits'
     | '/reset-password'
+    | '/settings'
     | '/signup'
+    | '/supplies'
     | '/booking/$'
     | '/munasabti-manager/analytics'
     | '/munasabti-manager/booking-requests'
@@ -291,11 +408,22 @@ export interface FileRouteTypes {
     | '/munasabti-booking/$slug/decorations/$id'
   id:
     | '__root__'
+    | '/'
     | '/_main'
+    | '/analytics'
+    | '/booking-requests'
+    | '/bookings'
+    | '/calendar'
+    | '/customers'
+    | '/decorations'
     | '/forgot-password'
     | '/login'
+    | '/notifications'
+    | '/profits'
     | '/reset-password'
+    | '/settings'
     | '/signup'
+    | '/supplies'
     | '/booking/$'
     | '/munasabti-booking/$slug'
     | '/_main/munasabti-manager/analytics'
@@ -317,17 +445,35 @@ export interface FileRouteTypes {
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
+  IndexRoute: typeof IndexRoute
   MainRoute: typeof MainRouteWithChildren
+  AnalyticsRoute: typeof AnalyticsRoute
+  BookingRequestsRoute: typeof BookingRequestsRoute
+  BookingsRoute: typeof BookingsRoute
+  CalendarRoute: typeof CalendarRoute
+  CustomersRoute: typeof CustomersRoute
+  DecorationsRoute: typeof DecorationsRoute
   ForgotPasswordRoute: typeof ForgotPasswordRoute
   LoginRoute: typeof LoginRoute
+  NotificationsRoute: typeof NotificationsRoute
+  ProfitsRoute: typeof ProfitsRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
+  SettingsRoute: typeof SettingsRoute
   SignupRoute: typeof SignupRoute
+  SuppliesRoute: typeof SuppliesRoute
   BookingSplatRoute: typeof BookingSplatRoute
   MunasabtiBookingSlugRoute: typeof MunasabtiBookingSlugRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/supplies': {
+      id: '/supplies'
+      path: '/supplies'
+      fullPath: '/supplies'
+      preLoaderRoute: typeof SuppliesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/signup': {
       id: '/signup'
       path: '/signup'
@@ -335,11 +481,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SignupRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/reset-password': {
       id: '/reset-password'
       path: '/reset-password'
       fullPath: '/reset-password'
       preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/profits': {
+      id: '/profits'
+      path: '/profits'
+      fullPath: '/profits'
+      preLoaderRoute: typeof ProfitsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/notifications': {
+      id: '/notifications'
+      path: '/notifications'
+      fullPath: '/notifications'
+      preLoaderRoute: typeof NotificationsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -356,11 +523,60 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ForgotPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/decorations': {
+      id: '/decorations'
+      path: '/decorations'
+      fullPath: '/decorations'
+      preLoaderRoute: typeof DecorationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/customers': {
+      id: '/customers'
+      path: '/customers'
+      fullPath: '/customers'
+      preLoaderRoute: typeof CustomersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/calendar': {
+      id: '/calendar'
+      path: '/calendar'
+      fullPath: '/calendar'
+      preLoaderRoute: typeof CalendarRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/bookings': {
+      id: '/bookings'
+      path: '/bookings'
+      fullPath: '/bookings'
+      preLoaderRoute: typeof BookingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/booking-requests': {
+      id: '/booking-requests'
+      path: '/booking-requests'
+      fullPath: '/booking-requests'
+      preLoaderRoute: typeof BookingRequestsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/analytics': {
+      id: '/analytics'
+      path: '/analytics'
+      fullPath: '/analytics'
+      preLoaderRoute: typeof AnalyticsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_main': {
       id: '/_main'
       path: ''
       fullPath: '/'
       preLoaderRoute: typeof MainRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/munasabti-booking/$slug': {
@@ -558,11 +774,22 @@ const MunasabtiBookingSlugRouteWithChildren =
   MunasabtiBookingSlugRoute._addFileChildren(MunasabtiBookingSlugRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
+  IndexRoute: IndexRoute,
   MainRoute: MainRouteWithChildren,
+  AnalyticsRoute: AnalyticsRoute,
+  BookingRequestsRoute: BookingRequestsRoute,
+  BookingsRoute: BookingsRoute,
+  CalendarRoute: CalendarRoute,
+  CustomersRoute: CustomersRoute,
+  DecorationsRoute: DecorationsRoute,
   ForgotPasswordRoute: ForgotPasswordRoute,
   LoginRoute: LoginRoute,
+  NotificationsRoute: NotificationsRoute,
+  ProfitsRoute: ProfitsRoute,
   ResetPasswordRoute: ResetPasswordRoute,
+  SettingsRoute: SettingsRoute,
   SignupRoute: SignupRoute,
+  SuppliesRoute: SuppliesRoute,
   BookingSplatRoute: BookingSplatRoute,
   MunasabtiBookingSlugRoute: MunasabtiBookingSlugRouteWithChildren,
 }
