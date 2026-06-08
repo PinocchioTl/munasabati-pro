@@ -92,6 +92,12 @@ export function ShareBookingLinkModal({ open, onClose }: Props) {
     window.open(`https://t.me/share/url?url=${urlEnc}&text=${text}`, "_blank", "noopener,noreferrer");
   };
 
+  const shareToMessenger = () => {
+    if (!url) return;
+    const urlEnc = encodeURIComponent(url);
+    window.open(`https://www.facebook.com/dialog/send?link=${urlEnc}&app_id=184683071273&redirect_uri=${urlEnc}`, "_blank", "noopener,noreferrer");
+  };
+
   if (!open) return null;
 
   return (
