@@ -154,6 +154,15 @@ export function AppLayout() {
             </div>
             <div className="flex-1 md:hidden" />
 
+            <button
+              onClick={() => setShareOpen(true)}
+              className="hidden sm:flex items-center gap-2 bg-gradient-gold text-primary hover:opacity-90 transition rounded-xl px-3 lg:px-4 py-2 lg:py-2.5 text-sm font-semibold shadow-gold"
+              title="مشاركة رابط الحجز"
+            >
+              <Share2 className="size-4" />
+              <span className="hidden lg:inline">مشاركة الرابط</span>
+            </button>
+
             <Link to="/notifications" className="relative size-9 sm:size-10 rounded-xl hover:bg-secondary flex items-center justify-center transition">
               <Bell className="size-[18px]" />
               {unread > 0 && (
