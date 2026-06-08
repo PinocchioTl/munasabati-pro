@@ -7,7 +7,7 @@ import { TrendingUp, CalendarDays, Wallet, AlertTriangle, ArrowUpRight, Sparkles
 import { DemoModePanel } from "@/components/DemoModePanel";
 import { ResponsiveContainer, XAxis, YAxis, Tooltip, CartesianGrid, Area, AreaChart } from "recharts";
 
-export const Route = createFileRoute("/_main/")({
+export const Route = createFileRoute("/_main/munasabti-manager/")({
   component: Dashboard,
 });
 

@@ -10,7 +10,7 @@ import {
 } from "lucide-react";
 import { useState, useMemo } from "react";
 
-export const Route = createFileRoute("/_main/calendar")({
+export const Route = createFileRoute("/_main/munasabti-manager/calendar")({
   component: CalendarPage,
 });
 

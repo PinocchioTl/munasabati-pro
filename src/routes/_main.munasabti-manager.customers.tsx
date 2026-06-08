@@ -14,7 +14,7 @@ import { toast } from "sonner";
 import { SearchBox } from "@/components/SearchBox";
 import { matches } from "@/lib/search";
 
-export const Route = createFileRoute("/_main/customers")({
+export const Route = createFileRoute("/_main/munasabti-manager/customers")({
   component: CustomersPage,
 });
 

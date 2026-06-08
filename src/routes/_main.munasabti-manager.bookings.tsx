@@ -11,7 +11,7 @@ import { useState, useMemo } from "react";
 import { SearchBox } from "@/components/SearchBox";
 import { matches } from "@/lib/search";
 
-export const Route = createFileRoute("/_main/bookings")({
+export const Route = createFileRoute("/_main/munasabti-manager/bookings")({
   component: BookingsPage,
 });
 

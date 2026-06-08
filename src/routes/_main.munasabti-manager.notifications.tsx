@@ -19,7 +19,7 @@ function getNotificationRoute(n: any): string | null {
   return null;
 }
 
-export const Route = createFileRoute("/_main/notifications")({
+export const Route = createFileRoute("/_main/munasabti-manager/notifications")({
   component: NotificationsPage,
 });
 
