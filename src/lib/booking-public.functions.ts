@@ -22,12 +22,26 @@ export const getPublicOwner = createServerFn({ method: "GET" })
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { data: row, error } = await supabaseAdmin
       .from("profiles")
-      .select("id, public_slug, company_name, logo_url, cover_url, tagline, description, primary_color, secondary_color, accent_color, background_color, show_prices, booking_enabled, phone")
+      .select("id, public_slug, company_name, logo_url, cover_url, tagline, description, primary_color, secondary_color, accent_color, background_color, button_color, show_prices, booking_enabled, phone, hero_title, hero_subtitle, hero_description, disabled_message, social_links, sections_config")
       .eq("public_slug", data.slug)
       .maybeSingle();
     if (error) throw new Error(error.message);
-    if (!row || !row.booking_enabled) throw new Error("الصفحة غير متوفرة");
+    if (!row) throw new Error("الصفحة غير متوفرة");
     return row;
+  });
+
+export const getPublicGallery = createServerFn({ method: "GET" })
+  .inputValidator((d: { slug: string }) => ({ slug: slugSchema.parse(d.slug) }))
+  .handler(async ({ data }) => {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data: owner } = await supabaseAdmin.from("profiles").select("id").eq("public_slug", data.slug).maybeSingle();
+    if (!owner) return [];
+    const { data: rows } = await supabaseAdmin
+      .from("gallery_images")
+      .select("id, image_url, title, caption, sort_order")
+      .eq("owner_id", owner.id)
+      .order("sort_order", { ascending: true });
+    return rows ?? [];
   });
 
 export const getPublicDecorations = createServerFn({ method: "GET" })
