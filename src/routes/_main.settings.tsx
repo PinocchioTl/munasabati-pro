@@ -40,7 +40,7 @@ const ACCENT_COLORS = [
 ];
 
 function SettingsPage() {
-  const [active, setActive] = useState<SectionId>("notifications");
+  const [active, setActive] = useState<SectionId>("booking-link");
   const [query, setQuery] = useState("");
 
   const filtered = useMemo(() => {
