@@ -1,0 +1,1 @@
+CREATE TABLE IF NOT EXISTS public.test_migration_table (id UUID PRIMARY KEY DEFAULT gen_random_uuid(), name TEXT); DROP TABLE public.test_migration_table;
