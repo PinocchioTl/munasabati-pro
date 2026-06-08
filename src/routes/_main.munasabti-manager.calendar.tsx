@@ -513,7 +513,7 @@ function DayTimeline({ date, list, onOpen }: { date: string; list: Booking[]; on
                       {b.customer_name}
                     </div>
                     <div className="text-[10px] text-muted-foreground mt-0.5">
-                      {eventTypeLabels[b.event_type]} • {b.start_time.slice(0,5)} - {b.end_time.slice(0,5)}
+                      {eventTypeLabels[b.event_type]} • {(b.start_time ?? "").slice(0,5) || "—"} - {(b.end_time ?? "").slice(0,5) || "—"}
                     </div>
                   </button>
                 );
