@@ -84,7 +84,9 @@ function detectConflicts(dayBookings: Booking[]): Set<string> {
   for (let i = 0; i < active.length; i++) {
     for (let j = i + 1; j < active.length; j++) {
       const a = active[i], b = active[j];
-      const overlap = a.start_time < b.end_time && b.start_time < a.end_time;
+      const aStart = a.start_time ?? "", aEnd = a.end_time ?? "";
+      const bStart = b.start_time ?? "", bEnd = b.end_time ?? "";
+      const overlap = aStart < bEnd && bStart < aEnd;
       if (!overlap) continue;
       const aDecs = (a.booking_decorations || []).map(d => d.decoration_id);
       const bDecs = (b.booking_decorations || []).map(d => d.decoration_id);
@@ -109,9 +111,9 @@ function CalendarPage() {
 
   const bookingsByDate = useMemo(() => {
     const m: Record<string, Booking[]> = {};
-    bookings.forEach(b => { (m[b.event_date] ||= []).push(b); });
-    // sort each day by start_time
-    Object.values(m).forEach(arr => arr.sort((x, y) => x.start_time.localeCompare(y.start_time)));
+    bookings.forEach(b => { if (b.event_date) (m[b.event_date] ||= []).push(b); });
+    // sort each day by start_time (null-safe)
+    Object.values(m).forEach(arr => arr.sort((x, y) => (x.start_time ?? "").localeCompare(y.start_time ?? "")));
     return m;
   }, [bookings]);
 
@@ -282,7 +284,7 @@ function CalendarPage() {
                           return (
                             <div key={b.id} className={`text-[10px] px-2 py-1 rounded-lg font-semibold ${c.bg} ${c.text}`}>
                               <div className="flex items-center justify-between gap-1">
-                                <span className="font-mono">{b.start_time.slice(0,5)}</span>
+                                <span className="font-mono">{(b.start_time ?? "").slice(0,5) || "—"}</span>
                                 <span className={`size-1.5 rounded-full ${c.dot}`} />
                               </div>
                               <div className="truncate">{b.customer_name}</div>
@@ -379,7 +381,7 @@ function CalendarPage() {
 
                     <div className="grid grid-cols-2 gap-2 text-xs mb-3">
                       <InfoChip icon={<Sparkles className="size-3.5" />} label={eventTypeLabels[b.event_type]} />
-                      <InfoChip icon={<Clock className="size-3.5" />} label={`${b.start_time.slice(0,5)} - ${b.end_time.slice(0,5)}`} />
+                      <InfoChip icon={<Clock className="size-3.5" />} label={`${(b.start_time ?? "").slice(0,5) || "—"} - ${(b.end_time ?? "").slice(0,5) || "—"}`} />
                       {b.phone && <InfoChip icon={<Phone className="size-3.5" />} label={b.phone} />}
                       <InfoChip icon={<User className="size-3.5" />} label={b.customer_name} />
                     </div>
@@ -487,8 +489,8 @@ function DayTimeline({ date, list, onOpen }: { date: string; list: Booking[]; on
       {hours.map(h => {
         const hourStr = String(h).padStart(2, "0");
         const slotBookings = list.filter(b => {
-          const sh = parseInt(b.start_time.slice(0, 2));
-          const eh = parseInt(b.end_time.slice(0, 2));
+          const sh = parseInt((b.start_time ?? "00").slice(0, 2));
+          const eh = parseInt((b.end_time ?? "00").slice(0, 2));
           return sh <= h && eh > h;
         });
         return (
@@ -511,7 +513,7 @@ function DayTimeline({ date, list, onOpen }: { date: string; list: Booking[]; on
                       {b.customer_name}
                     </div>
                     <div className="text-[10px] text-muted-foreground mt-0.5">
-                      {eventTypeLabels[b.event_type]} • {b.start_time.slice(0,5)} - {b.end_time.slice(0,5)}
+                      {eventTypeLabels[b.event_type]} • {(b.start_time ?? "").slice(0,5) || "—"} - {(b.end_time ?? "").slice(0,5) || "—"}
                     </div>
                   </button>
                 );
