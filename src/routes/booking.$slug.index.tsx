@@ -42,14 +42,11 @@ function Landing() {
           </div>
           <div className="flex flex-wrap gap-2 mt-4">
             <Link to={"/booking/$slug/request" as any} params={{ slug } as any}
-              className="bk-gold inline-flex items-center gap-2 px-5 py-3 rounded-xl font-bold text-sm shadow-lg hover:scale-[1.02] transition">
-              <ShoppingBag className="size-4" /> اطلب حجزك الآن
-            </Link>
-            <Link to={"/booking/$slug/decorations" as any} params={{ slug } as any}
-              className="inline-flex items-center gap-2 px-5 py-3 rounded-xl font-bold text-sm bg-white/15 backdrop-blur border border-white/20 hover:bg-white/25 transition">
-              <Sparkles className="size-4" /> تصفح الديكورات
+              className="bk-gold inline-flex items-center gap-2 px-6 py-3.5 rounded-xl font-bold text-base shadow-lg hover:scale-[1.02] transition">
+              <ShoppingBag className="size-5" /> ابدأ الحجز
             </Link>
           </div>
+          <p className="text-xs opacity-80 mt-3">اختر تاريخ مناسبتك أولاً لعرض الديكورات والمستلزمات المتوفرة</p>
         </div>
       </section>
 
@@ -62,10 +59,13 @@ function Landing() {
         </section>
       )}
 
-      <section className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <FeatureCard slug={slug} to="/booking/$slug/decorations" icon={<Sparkles />} title="ديكورات فاخرة" desc="تصفح مجموعة متنوعة من الديكورات لكل المناسبات" />
-        <FeatureCard slug={slug} to="/booking/$slug/supplies" icon={<Package />} title="مستلزمات كاملة" desc="كراسي، طاولات، إضاءة، شاشات ومزيد" />
-        <FeatureCard slug={slug} to="/booking/$slug/request" icon={<ShoppingBag />} title="حجز سريع" desc="املأ النموذج وستصلك إجابة قريباً" />
+      <section className="bg-white rounded-2xl p-6 shadow-md">
+        <h2 className="text-lg font-bold bk-text-primary mb-4">كيف يعمل الحجز؟</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <Step n={1} title="اختر التاريخ" desc="حدد تاريخ مناسبتك أولاً" />
+          <Step n={2} title="اختر الديكورات" desc="من بين العناصر المتوفرة في ذلك اليوم" />
+          <Step n={3} title="أرسل الطلب" desc="سنتواصل معك للتأكيد" />
+        </div>
       </section>
 
       <section className="bg-white rounded-2xl p-6 shadow-md">
