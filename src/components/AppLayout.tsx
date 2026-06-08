@@ -46,6 +46,7 @@ export function AppLayout() {
   const { branding } = useBranding();
   const [moreOpen, setMoreOpen] = useState(false);
   const [fabOpen, setFabOpen] = useState(false);
+  const [shareOpen, setShareOpen] = useState(false);
   const navigate = useNavigate();
 
   const moreItems = [...navItems.filter((i) => !mobilePrimary.includes(i.to)), ...secondaryItems];
