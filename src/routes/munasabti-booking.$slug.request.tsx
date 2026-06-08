@@ -12,7 +12,7 @@ import {
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 
-export const Route = createFileRoute("/booking/$slug/request")({
+export const Route = createFileRoute("/munasabti-booking/$slug/request")({
   validateSearch: (s) => ({
     decoration: typeof s.decoration === "string" ? s.decoration : undefined,
     date: typeof s.date === "string" ? s.date : undefined,
@@ -151,7 +151,7 @@ function RequestPage() {
           <Row label="تاريخ المناسبة" value={form.event_date} />
           <Row label="الحالة" value={<span className="text-amber-600 font-bold">قيد الانتظار</span>} />
         </div>
-        <Link to="/booking/$slug" params={{ slug }}
+        <Link to="/munasabti-booking/$slug" params={{ slug }}
           className="mt-6 inline-flex items-center gap-2 px-5 py-3 rounded-xl bk-gold font-bold text-sm">
           العودة للرئيسية
         </Link>

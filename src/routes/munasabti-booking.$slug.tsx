@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getPublicOwner } from "@/lib/booking-public.functions";
 import { Crown, Loader2, Sparkles, Home, Package, ShoppingBag, Phone } from "lucide-react";
 
-export const Route = createFileRoute("/booking/$slug")({
+export const Route = createFileRoute("/munasabti-booking/$slug")({
   component: BookingShell,
 });
 
@@ -59,7 +59,7 @@ function BookingShell() {
       {/* Header */}
       <header className="sticky top-0 z-30 bk-primary shadow-lg">
         <div className="max-w-6xl mx-auto px-4 py-3 flex items-center gap-3">
-          <Link to="/booking/$slug" params={{ slug }} className="flex items-center gap-3 min-w-0 flex-1">
+          <Link to="/munasabti-booking/$slug" params={{ slug }} className="flex items-center gap-3 min-w-0 flex-1">
             <div className="size-10 rounded-xl bg-white/10 flex items-center justify-center overflow-hidden shrink-0">
               {owner.logo_url ? <img src={owner.logo_url} alt="" className="size-full object-contain" /> : <Crown className="bk-text-gold size-5" />}
             </div>
@@ -77,10 +77,10 @@ function BookingShell() {
 
         {/* Tabs */}
         <nav className="max-w-6xl mx-auto px-2 sm:px-4 flex gap-1 overflow-x-auto scrollbar-none border-t border-white/10">
-          <TabLink slug={slug} to="/booking/$slug" icon={<Home className="size-3.5" />} label="الرئيسية" exact />
-          <TabLink slug={slug} to="/booking/$slug/decorations" icon={<Sparkles className="size-3.5" />} label="الديكورات" />
-          <TabLink slug={slug} to="/booking/$slug/supplies" icon={<Package className="size-3.5" />} label="المستلزمات" />
-          <TabLink slug={slug} to="/booking/$slug/request" icon={<ShoppingBag className="size-3.5" />} label="طلب حجز" />
+          <TabLink slug={slug} to="/munasabti-booking/$slug" icon={<Home className="size-3.5" />} label="الرئيسية" exact />
+          <TabLink slug={slug} to="/munasabti-booking/$slug/decorations" icon={<Sparkles className="size-3.5" />} label="الديكورات" />
+          <TabLink slug={slug} to="/munasabti-booking/$slug/supplies" icon={<Package className="size-3.5" />} label="المستلزمات" />
+          <TabLink slug={slug} to="/munasabti-booking/$slug/request" icon={<ShoppingBag className="size-3.5" />} label="طلب حجز" />
         </nav>
       </header>
 

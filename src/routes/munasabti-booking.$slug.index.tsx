@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getPublicOwner } from "@/lib/booking-public.functions";
 import { Sparkles, ShoppingBag, CheckCircle2 } from "lucide-react";
 
-export const Route = createFileRoute("/booking/$slug/")({
+export const Route = createFileRoute("/munasabti-booking/$slug/")({
   component: Landing,
 });
 
@@ -41,7 +41,7 @@ function Landing() {
             </div>
           </div>
           <div className="flex flex-wrap gap-2 mt-4">
-            <Link to={"/booking/$slug/request" as any} params={{ slug } as any}
+            <Link to={"/munasabti-booking/$slug/request" as any} params={{ slug } as any}
               className="bk-gold inline-flex items-center gap-2 px-6 py-3.5 rounded-xl font-bold text-base shadow-lg hover:scale-[1.02] transition">
               <ShoppingBag className="size-5" /> ابدأ الحجز
             </Link>

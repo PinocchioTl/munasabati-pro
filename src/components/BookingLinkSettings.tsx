@@ -41,8 +41,8 @@ export function BookingLinkSettings() {
 
   const origin = typeof window !== "undefined" ? window.location.origin : "";
   const currentSlug = data?.public_slug ?? "";
-  const currentUrl = currentSlug ? `${origin}/booking/${currentSlug}` : "";
-  const previewUrl = slug && SLUG_RE.test(slug) ? `${origin}/booking/${slug}` : "";
+  const currentUrl = currentSlug ? `${origin}/munasabti-booking/${currentSlug}` : "";
+  const previewUrl = slug && SLUG_RE.test(slug) ? `${origin}/munasabti-booking/${slug}` : "";
 
   // Generate QR for current saved url
   useEffect(() => {
@@ -189,7 +189,7 @@ export function BookingLinkSettings() {
             className="flex items-stretch rounded-xl border border-border/60 bg-secondary/40 overflow-hidden focus-within:ring-2 focus-within:ring-ring"
           >
             <div className="px-3 py-2.5 text-xs text-muted-foreground bg-secondary/60 border-l border-border/60 flex items-center whitespace-nowrap font-mono">
-              {origin.replace(/^https?:\/\//, "")}/booking/
+              {origin.replace(/^https?:\/\//, "")}/munasabti-booking/
             </div>
             <input
               value={slug}

@@ -4,7 +4,7 @@ import { getDecorationAvailability, getPublicDecoration, getPublicOwner } from "
 import { ArrowRight, Calendar, CheckCircle2, Loader2, ShoppingBag, XCircle } from "lucide-react";
 import { useState } from "react";
 
-export const Route = createFileRoute("/booking/$slug/decorations/$id")({
+export const Route = createFileRoute("/munasabti-booking/$slug/decorations/$id")({
   component: DecorationDetail,
 });
 
@@ -38,7 +38,7 @@ function DecorationDetail() {
 
   return (
     <div className="space-y-5">
-      <Link to={"/booking/$slug/decorations" as any} params={{ slug } as any}
+      <Link to={"/munasabti-booking/$slug/decorations" as any} params={{ slug } as any}
         className="inline-flex items-center gap-1.5 text-sm bk-text-primary font-bold hover:opacity-70">
         <ArrowRight className="size-4" /> رجوع للديكورات
       </Link>
@@ -115,7 +115,7 @@ function DecorationDetail() {
             )}
           </div>
 
-          <Link to={"/booking/$slug/request" as any} params={{ slug } as any}
+          <Link to={"/munasabti-booking/$slug/request" as any} params={{ slug } as any}
             search={{ decoration: dec.id, date } as any}
             className="bk-gold w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl font-bold text-sm shadow-lg hover:opacity-95 transition">
             <ShoppingBag className="size-4" /> طلب حجز
