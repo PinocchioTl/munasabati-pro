@@ -1,7 +1,7 @@
 import { createFileRoute, Link, Outlet, useParams } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { getPublicOwner } from "@/lib/booking-public.functions";
-import { Crown, Loader2, Sparkles, Home, Package, ShoppingBag, Phone } from "lucide-react";
+import { Crown, Loader2, Sparkles, Home, Package, ShoppingBag, Phone, EyeOff } from "lucide-react";
 
 export const Route = createFileRoute("/munasabti-booking/$slug")({
   component: BookingShell,
@@ -30,7 +30,7 @@ function BookingShell() {
             <Crown />
           </div>
           <h1 className="text-xl font-bold text-[#5D0A13]">الصفحة غير متوفرة</h1>
-          <p className="text-sm text-muted-foreground mt-2">رابط الحجز غير صحيح أو تم تعطيله مؤقتاً.</p>
+          <p className="text-sm text-muted-foreground mt-2">رابط الحجز غير صحيح.</p>
         </div>
       </div>
     );
@@ -39,24 +39,37 @@ function BookingShell() {
   const cssVars = {
     "--bk-primary": owner.secondary_color || "#5D0A13",
     "--bk-gold": owner.primary_color || "#D4AF37",
+    "--bk-button": (owner as any).button_color || owner.primary_color || "#D4AF37",
     "--bk-bg": owner.background_color || "#FAF7F2",
   } as React.CSSProperties;
 
-  return (
-    <div dir="rtl" lang="ar" style={cssVars}
-      className="min-h-screen flex flex-col"
-      data-bk-root
-    >
-      <style>{`
-        [data-bk-root]{background:var(--bk-bg);color:#1a1a1a;font-family:inherit}
-        [data-bk-root] .bk-primary{background:var(--bk-primary);color:#fff}
-        [data-bk-root] .bk-gold{background:var(--bk-gold);color:var(--bk-primary)}
-        [data-bk-root] .bk-text-primary{color:var(--bk-primary)}
-        [data-bk-root] .bk-text-gold{color:var(--bk-gold)}
-        [data-bk-root] .bk-border-gold{border-color:var(--bk-gold)}
-      `}</style>
+  // Disabled state: show custom message, no tabs/outlet
+  if (!owner.booking_enabled) {
+    return (
+      <div dir="rtl" lang="ar" style={cssVars} className="min-h-screen flex items-center justify-center p-6" data-bk-root>
+        <style>{baseStyles}</style>
+        <div className="max-w-md text-center bg-white rounded-3xl p-8 shadow-xl">
+          <div className="size-16 mx-auto rounded-2xl bk-primary flex items-center justify-center mb-4">
+            {owner.logo_url ? <img src={owner.logo_url} alt="" className="size-10 object-contain" /> : <EyeOff className="bk-text-gold" />}
+          </div>
+          <h1 className="text-xl font-bold bk-text-primary mb-2">{owner.company_name}</h1>
+          <p className="text-sm text-gray-700 leading-relaxed whitespace-pre-line">
+            {(owner as any).disabled_message?.trim() || "الحجوزات متوقفة حالياً وسيتم فتحها قريباً."}
+          </p>
+          {owner.phone && (
+            <a href={`tel:${owner.phone}`} className="mt-5 inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bk-gold font-bold text-sm">
+              <Phone className="size-4" /> {owner.phone}
+            </a>
+          )}
+        </div>
+      </div>
+    );
+  }
 
-      {/* Header */}
+  return (
+    <div dir="rtl" lang="ar" style={cssVars} className="min-h-screen flex flex-col" data-bk-root>
+      <style>{baseStyles}</style>
+
       <header className="sticky top-0 z-30 bk-primary shadow-lg">
         <div className="max-w-6xl mx-auto px-4 py-3 flex items-center gap-3">
           <Link to="/munasabti-booking/$slug" params={{ slug }} className="flex items-center gap-3 min-w-0 flex-1">
@@ -75,7 +88,6 @@ function BookingShell() {
           )}
         </div>
 
-        {/* Tabs */}
         <nav className="max-w-6xl mx-auto px-2 sm:px-4 flex gap-1 overflow-x-auto scrollbar-none border-t border-white/10">
           <TabLink slug={slug} to="/munasabti-booking/$slug" icon={<Home className="size-3.5" />} label="الرئيسية" exact />
           <TabLink slug={slug} to="/munasabti-booking/$slug/decorations" icon={<Sparkles className="size-3.5" />} label="الديكورات" />
@@ -97,6 +109,15 @@ function BookingShell() {
     </div>
   );
 }
+
+const baseStyles = `
+  [data-bk-root]{background:var(--bk-bg);color:#1a1a1a;font-family:inherit}
+  [data-bk-root] .bk-primary{background:var(--bk-primary);color:#fff}
+  [data-bk-root] .bk-gold{background:var(--bk-button);color:var(--bk-primary)}
+  [data-bk-root] .bk-text-primary{color:var(--bk-primary)}
+  [data-bk-root] .bk-text-gold{color:var(--bk-gold)}
+  [data-bk-root] .bk-border-gold{border-color:var(--bk-gold)}
+`;
 
 function TabLink({ slug, to, icon, label, exact }: { slug: string; to: string; icon: React.ReactNode; label: string; exact?: boolean }) {
   return (
