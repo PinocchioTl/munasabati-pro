@@ -41,7 +41,6 @@ function AdminPage() {
   return (
     <div dir="rtl" className="space-y-6">
       <SectionHeader
-        icon={<Shield className="size-5" />}
         title="Platform Admin"
         subtitle="إحصائيات عامة عبر المنصة — لا تتضمن بيانات أي صاحب ديكور"
       />
