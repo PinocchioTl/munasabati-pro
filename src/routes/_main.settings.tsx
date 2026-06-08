@@ -123,6 +123,7 @@ function SettingsPage() {
         {/* Content */}
         <div className="animate-fade-in min-w-0" key={active}>
           {active === "branding" && <BrandingSettings />}
+          {active === "booking-link" && <BookingLinkSettings />}
           {active === "notifications" && <NotificationsSection />}
           {active === "appearance" && <AppearanceSection />}
           {active === "backup" && <BackupSection />}
