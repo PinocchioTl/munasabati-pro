@@ -4,7 +4,7 @@ import { getPublicDecorations, getPublicOwner } from "@/lib/booking-public.funct
 import { Sparkles, ArrowLeft, Loader2 } from "lucide-react";
 import { useMemo, useState } from "react";
 
-export const Route = createFileRoute("/booking/$slug/decorations")({
+export const Route = createFileRoute("/munasabti-booking/$slug/decorations")({
   component: DecorationsPage,
 });
 

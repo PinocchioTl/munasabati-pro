@@ -4,7 +4,7 @@ import { getDecorationAvailability, getPublicDecoration, getPublicOwner } from "
 import { ArrowRight, Calendar, CheckCircle2, Loader2, ShoppingBag, XCircle } from "lucide-react";
 import { useState } from "react";
 
-export const Route = createFileRoute("/booking/$slug/decorations/$id")({
+export const Route = createFileRoute("/munasabti-booking/$slug/decorations/$id")({
   component: DecorationDetail,
 });
 
