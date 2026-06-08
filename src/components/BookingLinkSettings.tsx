@@ -189,7 +189,7 @@ export function BookingLinkSettings() {
             className="flex items-stretch rounded-xl border border-border/60 bg-secondary/40 overflow-hidden focus-within:ring-2 focus-within:ring-ring"
           >
             <div className="px-3 py-2.5 text-xs text-muted-foreground bg-secondary/60 border-l border-border/60 flex items-center whitespace-nowrap font-mono">
-              {origin.replace(/^https?:\/\//, "")}/booking/
+              {origin.replace(/^https?:\/\//, "")}/munasabti-booking/
             </div>
             <input
               value={slug}

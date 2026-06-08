@@ -94,7 +94,7 @@ export function BookingPlatformSettings() {
         <label className="text-sm font-bold flex items-center gap-2 mb-2"><Link2 className="size-4" /> رابط الحجز الخاص بك</label>
         <div className="flex items-stretch gap-2">
           <div className="flex-1 flex items-center bg-secondary/60 rounded-xl px-3 text-sm text-muted-foreground">
-            /booking/
+            /munasabti-booking/
           </div>
           <input
             value={slug}
