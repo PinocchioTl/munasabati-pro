@@ -381,7 +381,7 @@ function CalendarPage() {
 
                     <div className="grid grid-cols-2 gap-2 text-xs mb-3">
                       <InfoChip icon={<Sparkles className="size-3.5" />} label={eventTypeLabels[b.event_type]} />
-                      <InfoChip icon={<Clock className="size-3.5" />} label={`${b.start_time.slice(0,5)} - ${b.end_time.slice(0,5)}`} />
+                      <InfoChip icon={<Clock className="size-3.5" />} label={`${(b.start_time ?? "").slice(0,5) || "—"} - ${(b.end_time ?? "").slice(0,5) || "—"}`} />
                       {b.phone && <InfoChip icon={<Phone className="size-3.5" />} label={b.phone} />}
                       <InfoChip icon={<User className="size-3.5" />} label={b.customer_name} />
                     </div>
