@@ -19,10 +19,11 @@ export const Route = createFileRoute("/_main/settings")({
   component: SettingsPage,
 });
 
-type SectionId = "branding" | "notifications" | "appearance" | "backup" | "security";
+type SectionId = "branding" | "booking-link" | "notifications" | "appearance" | "backup" | "security";
 
 const sections: { id: SectionId; label: string; icon: typeof Bell; color: string; bg: string; desc: string }[] = [
   { id: "branding",      label: "الهوية البصرية", icon: Sparkles, color: "text-gold", bg: "bg-gold/10", desc: "شعار الشركة، الاسم، الألوان" },
+  { id: "booking-link",  label: "رابط الحجز", icon: Link2, color: "text-gold", bg: "bg-gold/10", desc: "تخصيص الرابط، QR Code، الإحصائيات" },
   { id: "notifications", label: "الإشعارات", icon: Bell, color: "text-warning", bg: "bg-warning/10", desc: "تنبيهات المناسبات والمخزون والدفعات" },
   { id: "appearance",    label: "المظهر",    icon: Palette, color: "text-info",    bg: "bg-info/10",    desc: "الوضع الليلي، الألوان، حجم الخط" },
   { id: "backup",        label: "النسخ الاحتياطي", icon: Database, color: "text-success", bg: "bg-success/10", desc: "تصدير، استيراد، نسخ تلقائي" },
