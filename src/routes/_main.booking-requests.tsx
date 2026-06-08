@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useRouter } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
@@ -11,7 +11,32 @@ import { Inbox, Check, X, Share2, Phone, Calendar, MapPin, Clock } from "lucide-
 
 export const Route = createFileRoute("/_main/booking-requests")({
   component: BookingRequestsPage,
+  errorComponent: BookingRequestsError,
 });
+
+function BookingRequestsError({ error, reset }: { error: Error; reset: () => void }) {
+  const router = useRouter();
+  return (
+    <Card className="p-8 text-center space-y-4">
+      <div className="mx-auto size-14 rounded-2xl bg-destructive/10 flex items-center justify-center text-destructive">
+        <Inbox className="size-6" />
+      </div>
+      <div>
+        <p className="font-bold">تعذر تحميل طلبات الحجز</p>
+        <p className="text-sm text-muted-foreground mt-1">{error.message}</p>
+      </div>
+      <Button
+        variant="gold"
+        onClick={() => {
+          router.invalidate();
+          reset();
+        }}
+      >
+        إعادة المحاولة
+      </Button>
+    </Card>
+  );
+}
 
 function BookingRequestsPage() {
   const fetchList = useServerFn(listBookingRequests);
