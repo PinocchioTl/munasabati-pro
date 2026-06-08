@@ -218,7 +218,7 @@ function Dashboard() {
               <div className="text-sm text-muted-foreground">آخر النشاطات</div>
               <div className="text-base lg:text-xl font-bold mt-1">الحجوزات الأخيرة</div>
             </div>
-            <Link to="/bookings" className="text-xs font-semibold text-info hover:underline">عرض الكل</Link>
+            <Link to="/munasabti-manager/bookings" className="text-xs font-semibold text-info hover:underline">عرض الكل</Link>
           </div>
           {lb ? <LoadingState rows={4} /> : (
             <div className="divide-y divide-border">
