@@ -260,17 +260,17 @@ function IdentityTab({ form, update }: any) {
       <div className="pt-4 border-t border-border/60 space-y-3">
         <div className="text-sm font-bold">روابط التواصل الاجتماعي</div>
         <SocialField icon={Instagram} label="انستغرام" value={form.social_links.instagram || ""}
-          onChange={(v) => update({ social_links: { ...form.social_links, instagram: v } })} placeholder="https://instagram.com/..." />
+          onChange={(v: any) => update({ social_links: { ...form.social_links, instagram: v } })} placeholder="https://instagram.com/..." />
         <SocialField icon={Music2} label="تيك توك" value={form.social_links.tiktok || ""}
-          onChange={(v) => update({ social_links: { ...form.social_links, tiktok: v } })} placeholder="https://tiktok.com/@..." />
+          onChange={(v: any) => update({ social_links: { ...form.social_links, tiktok: v } })} placeholder="https://tiktok.com/@..." />
         <SocialField icon={MessageCircle} label="سناب شات" value={form.social_links.snapchat || ""}
-          onChange={(v) => update({ social_links: { ...form.social_links, snapchat: v } })} placeholder="https://snapchat.com/add/..." />
+          onChange={(v: any) => update({ social_links: { ...form.social_links, snapchat: v } })} placeholder="https://snapchat.com/add/..." />
         <SocialField icon={Twitter} label="تويتر / X" value={form.social_links.twitter || ""}
-          onChange={(v) => update({ social_links: { ...form.social_links, twitter: v } })} placeholder="https://x.com/..." />
+          onChange={(v: any) => update({ social_links: { ...form.social_links, twitter: v } })} placeholder="https://x.com/..." />
         <SocialField icon={Facebook} label="فيسبوك" value={form.social_links.facebook || ""}
-          onChange={(v) => update({ social_links: { ...form.social_links, facebook: v } })} placeholder="https://facebook.com/..." />
+          onChange={(v: any) => update({ social_links: { ...form.social_links, facebook: v } })} placeholder="https://facebook.com/..." />
         <SocialField icon={Phone} label="واتساب (رقم)" value={form.social_links.whatsapp || ""}
-          onChange={(v) => update({ social_links: { ...form.social_links, whatsapp: v } })} placeholder="966..." dir="ltr" />
+          onChange={(v: any) => update({ social_links: { ...form.social_links, whatsapp: v } })} placeholder="966..." dir="ltr" />
       </div>
     </Card>
   );
@@ -295,11 +295,11 @@ function ColorsTab({ form, update }: any) {
     <div className="grid lg:grid-cols-2 gap-5">
       <Card className="p-6 space-y-4">
         <div className="text-sm font-bold">ألوان الصفحة</div>
-        <ColorRow label="اللون الرئيسي (الأزرار، الذهبي)" value={form.primary_color} onChange={(v) => update({ primary_color: v, button_color: v })} />
-        <ColorRow label="اللون الثانوي (الهيدر، العنوان)" value={form.secondary_color} onChange={(v) => update({ secondary_color: v })} />
-        <ColorRow label="لون الأزرار" value={form.button_color} onChange={(v) => update({ button_color: v })} />
-        <ColorRow label="لون الخلفية" value={form.background_color} onChange={(v) => update({ background_color: v })} />
-        <ColorRow label="لون التمييز" value={form.accent_color} onChange={(v) => update({ accent_color: v })} />
+        <ColorRow label="اللون الرئيسي (الأزرار، الذهبي)" value={form.primary_color} onChange={(v: any) => update({ primary_color: v, button_color: v })} />
+        <ColorRow label="اللون الثانوي (الهيدر، العنوان)" value={form.secondary_color} onChange={(v: any) => update({ secondary_color: v })} />
+        <ColorRow label="لون الأزرار" value={form.button_color} onChange={(v: any) => update({ button_color: v })} />
+        <ColorRow label="لون الخلفية" value={form.background_color} onChange={(v: any) => update({ background_color: v })} />
+        <ColorRow label="لون التمييز" value={form.accent_color} onChange={(v: any) => update({ accent_color: v })} />
       </Card>
       <Card className="p-6">
         <div className="text-sm font-bold mb-3">معاينة مباشرة</div>
@@ -356,7 +356,7 @@ function HeroTab({ form, update }: any) {
       </Field>
       <div className="pt-4 border-t border-border/60">
         <ToggleRow label="إظهار الأسعار" desc="عرض أسعار الديكورات والمستلزمات للعملاء"
-          value={form.show_prices} onChange={(v) => update({ show_prices: v })} />
+          value={form.show_prices} onChange={(v: any) => update({ show_prices: v })} />
       </div>
     </Card>
   );
@@ -512,7 +512,7 @@ function GalleryTab() {
               </div>
               {editing === it.id && (
                 <GalleryEditDialog item={it} onClose={() => setEditing(null)}
-                  onSave={(t, c) => updMut.mutate({ id: it.id, title: t, caption: c })} />
+                  onSave={(t: any, c: any) => updMut.mutate({ id: it.id, title: t, caption: c })} />
               )}
             </div>
           ))}
@@ -545,7 +545,7 @@ function DisabledTab({ form, update }: any) {
   return (
     <Card className="p-6 space-y-5">
       <ToggleRow label="تفعيل استقبال الحجوزات" desc="عند الإيقاف، يرى الزوار رسالة بدلاً من نموذج الحجز"
-        value={form.booking_enabled} onChange={(v) => update({ booking_enabled: v })} />
+        value={form.booking_enabled} onChange={(v: any) => update({ booking_enabled: v })} />
 
       <div className={form.booking_enabled ? "opacity-50 pointer-events-none" : ""}>
         <Field label="الرسالة المخصصة عند تعطيل الحجز">
