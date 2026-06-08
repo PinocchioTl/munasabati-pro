@@ -8,6 +8,8 @@ import {
 import { useState, useEffect, useMemo, ReactNode } from "react";
 import { toast } from "sonner";
 import { BrandingSettings } from "@/components/BrandingSettings";
+import { BookingLinkSettings } from "@/components/BookingLinkSettings";
+import { Link2 } from "lucide-react";
 import { PhoneInput } from "@/components/PhoneInput";
 import { supabase } from "@/integrations/supabase/client";
 import { exportAllData, downloadBundle, importBundle, type BackupBundle } from "@/lib/backup";
