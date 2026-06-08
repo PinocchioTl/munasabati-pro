@@ -37,7 +37,7 @@ function LoginPage() {
     await logAttempt(email.trim(), !error, error?.message);
     if (error) return setError(error.message.includes("Invalid") ? "البريد أو كلمة المرور غير صحيحة" : error.message);
     toast.success("تم تسجيل الدخول بنجاح");
-    navigate({ to: "/" });
+    navigate({ to: "/munasabti-manager" });
   }
 
   return (

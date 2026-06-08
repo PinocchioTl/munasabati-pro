@@ -12,7 +12,7 @@ import { useBranding } from "@/lib/branding";
 
 // Primary navigation — matches user-requested sidebar order
 const navItems = [
-  { to: "/", label: "الرئيسية", icon: LayoutDashboard },
+  { to: "/munasabti-manager", label: "الرئيسية", icon: LayoutDashboard },
   { to: "/bookings", label: "الحجوزات", icon: CalendarDays },
   { to: "/booking-requests", label: "طلبات الرابط", icon: Inbox },
   { to: "/decorations", label: "الديكورات", icon: Sparkles },
