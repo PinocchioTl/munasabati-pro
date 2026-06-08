@@ -185,6 +185,9 @@ export function AppLayout() {
         </div>
       </main>
 
+      {/* Share Booking Link Modal */}
+      <ShareBookingLinkModal open={shareOpen} onClose={() => setShareOpen(false)} />
+
       {/* Mobile bottom nav (hidden on md+) */}
       <nav className="md:hidden fixed bottom-0 inset-x-0 z-40 glass border-t border-border/60 safe-area-inset">
         <div className="grid grid-cols-5 px-1 py-1.5">
