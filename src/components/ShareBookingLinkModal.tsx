@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { X, Copy, ExternalLink, Link2, Share2, MessageCircle, Send, MessageSquare } from "lucide-react";
+import { X, Copy, ExternalLink, Link2, Share2, MessageCircle, Send, MessageSquare, QrCode, Download } from "lucide-react";
+import QRCode from "qrcode";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { Button } from "@/components/ui-bits";
@@ -15,6 +16,7 @@ export function ShareBookingLinkModal({ open, onClose }: Props) {
   const [slug, setSlug] = useState("");
   const [loading, setLoading] = useState(true);
   const [copied, setCopied] = useState(false);
+  const [qrDataUrl, setQrDataUrl] = useState<string>("");
 
   const origin = typeof window !== "undefined" ? window.location.origin : "";
   const url = slug ? `${origin}/booking/${slug}` : "";
@@ -39,8 +41,22 @@ export function ShareBookingLinkModal({ open, onClose }: Props) {
   useEffect(() => {
     if (!open) {
       setCopied(false);
+      return;
     }
-  }, [open]);
+    if (url) {
+      QRCode.toDataURL(url, { width: 320, margin: 1, color: { dark: "#1a1a1a", light: "#ffffff" } })
+        .then(setQrDataUrl)
+        .catch(() => setQrDataUrl(""));
+    }
+  }, [open, url]);
+
+  const handleDownloadQR = () => {
+    if (!qrDataUrl) return;
+    const a = document.createElement("a");
+    a.href = qrDataUrl;
+    a.download = `booking-${slug}-qr.png`;
+    a.click();
+  };
 
   const handleCopy = async () => {
     if (!url) return;
