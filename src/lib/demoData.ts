@@ -1,6 +1,7 @@
 import { supabase } from "@/integrations/supabase/client";
 
-export const DEMO_EMAIL = "admin@local.com";
+export const DEMO_EMAIL = "admin@munasabati.test";
+export const DEMO_PASSWORD = "Admin123456";
 
 export function isDemoUser(email?: string | null) {
   return (email || "").toLowerCase() === DEMO_EMAIL;
@@ -9,8 +10,24 @@ export function isDemoUser(email?: string | null) {
 async function getOwnerId() {
   const { data } = await supabase.auth.getUser();
   if (!data.user) throw new Error("غير مسجل الدخول");
-  if (!isDemoUser(data.user.email)) throw new Error("متاح فقط لحساب المطور");
+  if (!isDemoUser(data.user.email)) throw new Error("متاح فقط لحساب المطور التجريبي");
   return data.user.id;
+}
+
+async function seedProfile(owner_id: string) {
+  await supabase.from("profiles").upsert({
+    id: owner_id,
+    company_name: "مناسباتي للديكورات",
+    tagline: "ديكورات الأعراس والخطوبة والمناسبات",
+    description: "مؤسسة متخصصة في تأجير ديكورات الأعراس والخطوبة والمناسبات.",
+    phone: "0555000000",
+    public_slug: "munasabati-demo",
+    booking_enabled: true,
+    show_prices: true,
+    primary_color: "#D4AF37",
+    secondary_color: "#5D0A13",
+    background_color: "#FAF7F2",
+  } as any, { onConflict: "id" });
 }
 
 /** Deletes ALL data owned by the demo account. */
