@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { X, Copy, ExternalLink, Link2, Share2, MessageCircle, Send } from "lucide-react";
+import { X, Copy, ExternalLink, Link2, Share2, MessageCircle, Send, MessageSquare } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { Button } from "@/components/ui-bits";
