@@ -109,9 +109,9 @@ function CalendarPage() {
 
   const bookingsByDate = useMemo(() => {
     const m: Record<string, Booking[]> = {};
-    bookings.forEach(b => { (m[b.event_date] ||= []).push(b); });
-    // sort each day by start_time
-    Object.values(m).forEach(arr => arr.sort((x, y) => x.start_time.localeCompare(y.start_time)));
+    bookings.forEach(b => { if (b.event_date) (m[b.event_date] ||= []).push(b); });
+    // sort each day by start_time (null-safe)
+    Object.values(m).forEach(arr => arr.sort((x, y) => (x.start_time ?? "").localeCompare(y.start_time ?? "")));
     return m;
   }, [bookings]);
 
