@@ -9,38 +9,69 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SuppliesRouteImport } from './routes/supplies'
 import { Route as SignupRouteImport } from './routes/signup'
+import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as ProfitsRouteImport } from './routes/profits'
+import { Route as NotificationsRouteImport } from './routes/notifications'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
+import { Route as DecorationsRouteImport } from './routes/decorations'
+import { Route as CustomersRouteImport } from './routes/customers'
+import { Route as CalendarRouteImport } from './routes/calendar'
+import { Route as BookingsRouteImport } from './routes/bookings'
+import { Route as BookingRequestsRouteImport } from './routes/booking-requests'
+import { Route as AnalyticsRouteImport } from './routes/analytics'
 import { Route as MainRouteImport } from './routes/_main'
-import { Route as MainIndexRouteImport } from './routes/_main.index'
+import { Route as IndexRouteImport } from './routes/index'
 import { Route as MunasabtiBookingSlugRouteImport } from './routes/munasabti-booking.$slug'
 import { Route as BookingSplatRouteImport } from './routes/booking.$'
-import { Route as MainSuppliesRouteImport } from './routes/_main.supplies'
-import { Route as MainSettingsRouteImport } from './routes/_main.settings'
-import { Route as MainProfitsRouteImport } from './routes/_main.profits'
-import { Route as MainNotificationsRouteImport } from './routes/_main.notifications'
-import { Route as MainDecorationsRouteImport } from './routes/_main.decorations'
-import { Route as MainCustomersRouteImport } from './routes/_main.customers'
-import { Route as MainCalendarRouteImport } from './routes/_main.calendar'
-import { Route as MainBookingsRouteImport } from './routes/_main.bookings'
-import { Route as MainBookingRequestsRouteImport } from './routes/_main.booking-requests'
-import { Route as MainAnalyticsRouteImport } from './routes/_main.analytics'
 import { Route as MunasabtiBookingSlugIndexRouteImport } from './routes/munasabti-booking.$slug.index'
+import { Route as MainMunasabtiManagerIndexRouteImport } from './routes/_main.munasabti-manager.index'
 import { Route as MunasabtiBookingSlugSuppliesRouteImport } from './routes/munasabti-booking.$slug.supplies'
 import { Route as MunasabtiBookingSlugRequestRouteImport } from './routes/munasabti-booking.$slug.request'
 import { Route as MunasabtiBookingSlugDecorationsRouteImport } from './routes/munasabti-booking.$slug.decorations'
+import { Route as MainMunasabtiManagerSuppliesRouteImport } from './routes/_main.munasabti-manager.supplies'
+import { Route as MainMunasabtiManagerSettingsRouteImport } from './routes/_main.munasabti-manager.settings'
+import { Route as MainMunasabtiManagerProfitsRouteImport } from './routes/_main.munasabti-manager.profits'
+import { Route as MainMunasabtiManagerNotificationsRouteImport } from './routes/_main.munasabti-manager.notifications'
+import { Route as MainMunasabtiManagerDecorationsRouteImport } from './routes/_main.munasabti-manager.decorations'
+import { Route as MainMunasabtiManagerCustomersRouteImport } from './routes/_main.munasabti-manager.customers'
+import { Route as MainMunasabtiManagerCalendarRouteImport } from './routes/_main.munasabti-manager.calendar'
+import { Route as MainMunasabtiManagerBookingsRouteImport } from './routes/_main.munasabti-manager.bookings'
+import { Route as MainMunasabtiManagerBookingRequestsRouteImport } from './routes/_main.munasabti-manager.booking-requests'
+import { Route as MainMunasabtiManagerAnalyticsRouteImport } from './routes/_main.munasabti-manager.analytics'
 import { Route as MunasabtiBookingSlugDecorationsIdRouteImport } from './routes/munasabti-booking.$slug.decorations.$id'
 
+const SuppliesRoute = SuppliesRouteImport.update({
+  id: '/supplies',
+  path: '/supplies',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SignupRoute = SignupRouteImport.update({
   id: '/signup',
   path: '/signup',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ResetPasswordRoute = ResetPasswordRouteImport.update({
   id: '/reset-password',
   path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProfitsRoute = ProfitsRouteImport.update({
+  id: '/profits',
+  path: '/profits',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NotificationsRoute = NotificationsRouteImport.update({
+  id: '/notifications',
+  path: '/notifications',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -53,14 +84,44 @@ const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
   path: '/forgot-password',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DecorationsRoute = DecorationsRouteImport.update({
+  id: '/decorations',
+  path: '/decorations',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CustomersRoute = CustomersRouteImport.update({
+  id: '/customers',
+  path: '/customers',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CalendarRoute = CalendarRouteImport.update({
+  id: '/calendar',
+  path: '/calendar',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BookingsRoute = BookingsRouteImport.update({
+  id: '/bookings',
+  path: '/bookings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BookingRequestsRoute = BookingRequestsRouteImport.update({
+  id: '/booking-requests',
+  path: '/booking-requests',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AnalyticsRoute = AnalyticsRouteImport.update({
+  id: '/analytics',
+  path: '/analytics',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const MainRoute = MainRouteImport.update({
   id: '/_main',
   getParentRoute: () => rootRouteImport,
 } as any)
-const MainIndexRoute = MainIndexRouteImport.update({
+const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => MainRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
 const MunasabtiBookingSlugRoute = MunasabtiBookingSlugRouteImport.update({
   id: '/munasabti-booking/$slug',
@@ -72,61 +133,17 @@ const BookingSplatRoute = BookingSplatRouteImport.update({
   path: '/booking/$',
   getParentRoute: () => rootRouteImport,
 } as any)
-const MainSuppliesRoute = MainSuppliesRouteImport.update({
-  id: '/supplies',
-  path: '/supplies',
-  getParentRoute: () => MainRoute,
-} as any)
-const MainSettingsRoute = MainSettingsRouteImport.update({
-  id: '/settings',
-  path: '/settings',
-  getParentRoute: () => MainRoute,
-} as any)
-const MainProfitsRoute = MainProfitsRouteImport.update({
-  id: '/profits',
-  path: '/profits',
-  getParentRoute: () => MainRoute,
-} as any)
-const MainNotificationsRoute = MainNotificationsRouteImport.update({
-  id: '/notifications',
-  path: '/notifications',
-  getParentRoute: () => MainRoute,
-} as any)
-const MainDecorationsRoute = MainDecorationsRouteImport.update({
-  id: '/decorations',
-  path: '/decorations',
-  getParentRoute: () => MainRoute,
-} as any)
-const MainCustomersRoute = MainCustomersRouteImport.update({
-  id: '/customers',
-  path: '/customers',
-  getParentRoute: () => MainRoute,
-} as any)
-const MainCalendarRoute = MainCalendarRouteImport.update({
-  id: '/calendar',
-  path: '/calendar',
-  getParentRoute: () => MainRoute,
-} as any)
-const MainBookingsRoute = MainBookingsRouteImport.update({
-  id: '/bookings',
-  path: '/bookings',
-  getParentRoute: () => MainRoute,
-} as any)
-const MainBookingRequestsRoute = MainBookingRequestsRouteImport.update({
-  id: '/booking-requests',
-  path: '/booking-requests',
-  getParentRoute: () => MainRoute,
-} as any)
-const MainAnalyticsRoute = MainAnalyticsRouteImport.update({
-  id: '/analytics',
-  path: '/analytics',
-  getParentRoute: () => MainRoute,
-} as any)
 const MunasabtiBookingSlugIndexRoute =
   MunasabtiBookingSlugIndexRouteImport.update({
     id: '/',
     path: '/',
     getParentRoute: () => MunasabtiBookingSlugRoute,
+  } as any)
+const MainMunasabtiManagerIndexRoute =
+  MainMunasabtiManagerIndexRouteImport.update({
+    id: '/munasabti-manager/',
+    path: '/munasabti-manager/',
+    getParentRoute: () => MainRoute,
   } as any)
 const MunasabtiBookingSlugSuppliesRoute =
   MunasabtiBookingSlugSuppliesRouteImport.update({
@@ -146,6 +163,66 @@ const MunasabtiBookingSlugDecorationsRoute =
     path: '/decorations',
     getParentRoute: () => MunasabtiBookingSlugRoute,
   } as any)
+const MainMunasabtiManagerSuppliesRoute =
+  MainMunasabtiManagerSuppliesRouteImport.update({
+    id: '/munasabti-manager/supplies',
+    path: '/munasabti-manager/supplies',
+    getParentRoute: () => MainRoute,
+  } as any)
+const MainMunasabtiManagerSettingsRoute =
+  MainMunasabtiManagerSettingsRouteImport.update({
+    id: '/munasabti-manager/settings',
+    path: '/munasabti-manager/settings',
+    getParentRoute: () => MainRoute,
+  } as any)
+const MainMunasabtiManagerProfitsRoute =
+  MainMunasabtiManagerProfitsRouteImport.update({
+    id: '/munasabti-manager/profits',
+    path: '/munasabti-manager/profits',
+    getParentRoute: () => MainRoute,
+  } as any)
+const MainMunasabtiManagerNotificationsRoute =
+  MainMunasabtiManagerNotificationsRouteImport.update({
+    id: '/munasabti-manager/notifications',
+    path: '/munasabti-manager/notifications',
+    getParentRoute: () => MainRoute,
+  } as any)
+const MainMunasabtiManagerDecorationsRoute =
+  MainMunasabtiManagerDecorationsRouteImport.update({
+    id: '/munasabti-manager/decorations',
+    path: '/munasabti-manager/decorations',
+    getParentRoute: () => MainRoute,
+  } as any)
+const MainMunasabtiManagerCustomersRoute =
+  MainMunasabtiManagerCustomersRouteImport.update({
+    id: '/munasabti-manager/customers',
+    path: '/munasabti-manager/customers',
+    getParentRoute: () => MainRoute,
+  } as any)
+const MainMunasabtiManagerCalendarRoute =
+  MainMunasabtiManagerCalendarRouteImport.update({
+    id: '/munasabti-manager/calendar',
+    path: '/munasabti-manager/calendar',
+    getParentRoute: () => MainRoute,
+  } as any)
+const MainMunasabtiManagerBookingsRoute =
+  MainMunasabtiManagerBookingsRouteImport.update({
+    id: '/munasabti-manager/bookings',
+    path: '/munasabti-manager/bookings',
+    getParentRoute: () => MainRoute,
+  } as any)
+const MainMunasabtiManagerBookingRequestsRoute =
+  MainMunasabtiManagerBookingRequestsRouteImport.update({
+    id: '/munasabti-manager/booking-requests',
+    path: '/munasabti-manager/booking-requests',
+    getParentRoute: () => MainRoute,
+  } as any)
+const MainMunasabtiManagerAnalyticsRoute =
+  MainMunasabtiManagerAnalyticsRouteImport.update({
+    id: '/munasabti-manager/analytics',
+    path: '/munasabti-manager/analytics',
+    getParentRoute: () => MainRoute,
+  } as any)
 const MunasabtiBookingSlugDecorationsIdRoute =
   MunasabtiBookingSlugDecorationsIdRouteImport.update({
     id: '/$id',
@@ -154,75 +231,108 @@ const MunasabtiBookingSlugDecorationsIdRoute =
   } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof MainIndexRoute
+  '/': typeof IndexRoute
+  '/analytics': typeof AnalyticsRoute
+  '/booking-requests': typeof BookingRequestsRoute
+  '/bookings': typeof BookingsRoute
+  '/calendar': typeof CalendarRoute
+  '/customers': typeof CustomersRoute
+  '/decorations': typeof DecorationsRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
+  '/notifications': typeof NotificationsRoute
+  '/profits': typeof ProfitsRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/settings': typeof SettingsRoute
   '/signup': typeof SignupRoute
-  '/analytics': typeof MainAnalyticsRoute
-  '/booking-requests': typeof MainBookingRequestsRoute
-  '/bookings': typeof MainBookingsRoute
-  '/calendar': typeof MainCalendarRoute
-  '/customers': typeof MainCustomersRoute
-  '/decorations': typeof MainDecorationsRoute
-  '/notifications': typeof MainNotificationsRoute
-  '/profits': typeof MainProfitsRoute
-  '/settings': typeof MainSettingsRoute
-  '/supplies': typeof MainSuppliesRoute
+  '/supplies': typeof SuppliesRoute
   '/booking/$': typeof BookingSplatRoute
   '/munasabti-booking/$slug': typeof MunasabtiBookingSlugRouteWithChildren
+  '/munasabti-manager/analytics': typeof MainMunasabtiManagerAnalyticsRoute
+  '/munasabti-manager/booking-requests': typeof MainMunasabtiManagerBookingRequestsRoute
+  '/munasabti-manager/bookings': typeof MainMunasabtiManagerBookingsRoute
+  '/munasabti-manager/calendar': typeof MainMunasabtiManagerCalendarRoute
+  '/munasabti-manager/customers': typeof MainMunasabtiManagerCustomersRoute
+  '/munasabti-manager/decorations': typeof MainMunasabtiManagerDecorationsRoute
+  '/munasabti-manager/notifications': typeof MainMunasabtiManagerNotificationsRoute
+  '/munasabti-manager/profits': typeof MainMunasabtiManagerProfitsRoute
+  '/munasabti-manager/settings': typeof MainMunasabtiManagerSettingsRoute
+  '/munasabti-manager/supplies': typeof MainMunasabtiManagerSuppliesRoute
   '/munasabti-booking/$slug/decorations': typeof MunasabtiBookingSlugDecorationsRouteWithChildren
   '/munasabti-booking/$slug/request': typeof MunasabtiBookingSlugRequestRoute
   '/munasabti-booking/$slug/supplies': typeof MunasabtiBookingSlugSuppliesRoute
+  '/munasabti-manager/': typeof MainMunasabtiManagerIndexRoute
   '/munasabti-booking/$slug/': typeof MunasabtiBookingSlugIndexRoute
   '/munasabti-booking/$slug/decorations/$id': typeof MunasabtiBookingSlugDecorationsIdRoute
 }
 export interface FileRoutesByTo {
+  '/': typeof IndexRoute
+  '/analytics': typeof AnalyticsRoute
+  '/booking-requests': typeof BookingRequestsRoute
+  '/bookings': typeof BookingsRoute
+  '/calendar': typeof CalendarRoute
+  '/customers': typeof CustomersRoute
+  '/decorations': typeof DecorationsRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
+  '/notifications': typeof NotificationsRoute
+  '/profits': typeof ProfitsRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/settings': typeof SettingsRoute
   '/signup': typeof SignupRoute
-  '/analytics': typeof MainAnalyticsRoute
-  '/booking-requests': typeof MainBookingRequestsRoute
-  '/bookings': typeof MainBookingsRoute
-  '/calendar': typeof MainCalendarRoute
-  '/customers': typeof MainCustomersRoute
-  '/decorations': typeof MainDecorationsRoute
-  '/notifications': typeof MainNotificationsRoute
-  '/profits': typeof MainProfitsRoute
-  '/settings': typeof MainSettingsRoute
-  '/supplies': typeof MainSuppliesRoute
+  '/supplies': typeof SuppliesRoute
   '/booking/$': typeof BookingSplatRoute
-  '/': typeof MainIndexRoute
+  '/munasabti-manager/analytics': typeof MainMunasabtiManagerAnalyticsRoute
+  '/munasabti-manager/booking-requests': typeof MainMunasabtiManagerBookingRequestsRoute
+  '/munasabti-manager/bookings': typeof MainMunasabtiManagerBookingsRoute
+  '/munasabti-manager/calendar': typeof MainMunasabtiManagerCalendarRoute
+  '/munasabti-manager/customers': typeof MainMunasabtiManagerCustomersRoute
+  '/munasabti-manager/decorations': typeof MainMunasabtiManagerDecorationsRoute
+  '/munasabti-manager/notifications': typeof MainMunasabtiManagerNotificationsRoute
+  '/munasabti-manager/profits': typeof MainMunasabtiManagerProfitsRoute
+  '/munasabti-manager/settings': typeof MainMunasabtiManagerSettingsRoute
+  '/munasabti-manager/supplies': typeof MainMunasabtiManagerSuppliesRoute
   '/munasabti-booking/$slug/decorations': typeof MunasabtiBookingSlugDecorationsRouteWithChildren
   '/munasabti-booking/$slug/request': typeof MunasabtiBookingSlugRequestRoute
   '/munasabti-booking/$slug/supplies': typeof MunasabtiBookingSlugSuppliesRoute
+  '/munasabti-manager': typeof MainMunasabtiManagerIndexRoute
   '/munasabti-booking/$slug': typeof MunasabtiBookingSlugIndexRoute
   '/munasabti-booking/$slug/decorations/$id': typeof MunasabtiBookingSlugDecorationsIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
+  '/': typeof IndexRoute
   '/_main': typeof MainRouteWithChildren
+  '/analytics': typeof AnalyticsRoute
+  '/booking-requests': typeof BookingRequestsRoute
+  '/bookings': typeof BookingsRoute
+  '/calendar': typeof CalendarRoute
+  '/customers': typeof CustomersRoute
+  '/decorations': typeof DecorationsRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
+  '/notifications': typeof NotificationsRoute
+  '/profits': typeof ProfitsRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/settings': typeof SettingsRoute
   '/signup': typeof SignupRoute
-  '/_main/analytics': typeof MainAnalyticsRoute
-  '/_main/booking-requests': typeof MainBookingRequestsRoute
-  '/_main/bookings': typeof MainBookingsRoute
-  '/_main/calendar': typeof MainCalendarRoute
-  '/_main/customers': typeof MainCustomersRoute
-  '/_main/decorations': typeof MainDecorationsRoute
-  '/_main/notifications': typeof MainNotificationsRoute
-  '/_main/profits': typeof MainProfitsRoute
-  '/_main/settings': typeof MainSettingsRoute
-  '/_main/supplies': typeof MainSuppliesRoute
+  '/supplies': typeof SuppliesRoute
   '/booking/$': typeof BookingSplatRoute
   '/munasabti-booking/$slug': typeof MunasabtiBookingSlugRouteWithChildren
-  '/_main/': typeof MainIndexRoute
+  '/_main/munasabti-manager/analytics': typeof MainMunasabtiManagerAnalyticsRoute
+  '/_main/munasabti-manager/booking-requests': typeof MainMunasabtiManagerBookingRequestsRoute
+  '/_main/munasabti-manager/bookings': typeof MainMunasabtiManagerBookingsRoute
+  '/_main/munasabti-manager/calendar': typeof MainMunasabtiManagerCalendarRoute
+  '/_main/munasabti-manager/customers': typeof MainMunasabtiManagerCustomersRoute
+  '/_main/munasabti-manager/decorations': typeof MainMunasabtiManagerDecorationsRoute
+  '/_main/munasabti-manager/notifications': typeof MainMunasabtiManagerNotificationsRoute
+  '/_main/munasabti-manager/profits': typeof MainMunasabtiManagerProfitsRoute
+  '/_main/munasabti-manager/settings': typeof MainMunasabtiManagerSettingsRoute
+  '/_main/munasabti-manager/supplies': typeof MainMunasabtiManagerSuppliesRoute
   '/munasabti-booking/$slug/decorations': typeof MunasabtiBookingSlugDecorationsRouteWithChildren
   '/munasabti-booking/$slug/request': typeof MunasabtiBookingSlugRequestRoute
   '/munasabti-booking/$slug/supplies': typeof MunasabtiBookingSlugSuppliesRoute
+  '/_main/munasabti-manager/': typeof MainMunasabtiManagerIndexRoute
   '/munasabti-booking/$slug/': typeof MunasabtiBookingSlugIndexRoute
   '/munasabti-booking/$slug/decorations/$id': typeof MunasabtiBookingSlugDecorationsIdRoute
 }
@@ -230,89 +340,140 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/forgot-password'
-    | '/login'
-    | '/reset-password'
-    | '/signup'
     | '/analytics'
     | '/booking-requests'
     | '/bookings'
     | '/calendar'
     | '/customers'
     | '/decorations'
+    | '/forgot-password'
+    | '/login'
     | '/notifications'
     | '/profits'
+    | '/reset-password'
     | '/settings'
+    | '/signup'
     | '/supplies'
     | '/booking/$'
     | '/munasabti-booking/$slug'
+    | '/munasabti-manager/analytics'
+    | '/munasabti-manager/booking-requests'
+    | '/munasabti-manager/bookings'
+    | '/munasabti-manager/calendar'
+    | '/munasabti-manager/customers'
+    | '/munasabti-manager/decorations'
+    | '/munasabti-manager/notifications'
+    | '/munasabti-manager/profits'
+    | '/munasabti-manager/settings'
+    | '/munasabti-manager/supplies'
     | '/munasabti-booking/$slug/decorations'
     | '/munasabti-booking/$slug/request'
     | '/munasabti-booking/$slug/supplies'
+    | '/munasabti-manager/'
     | '/munasabti-booking/$slug/'
     | '/munasabti-booking/$slug/decorations/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/forgot-password'
-    | '/login'
-    | '/reset-password'
-    | '/signup'
+    | '/'
     | '/analytics'
     | '/booking-requests'
     | '/bookings'
     | '/calendar'
     | '/customers'
     | '/decorations'
+    | '/forgot-password'
+    | '/login'
     | '/notifications'
     | '/profits'
+    | '/reset-password'
     | '/settings'
+    | '/signup'
     | '/supplies'
     | '/booking/$'
-    | '/'
+    | '/munasabti-manager/analytics'
+    | '/munasabti-manager/booking-requests'
+    | '/munasabti-manager/bookings'
+    | '/munasabti-manager/calendar'
+    | '/munasabti-manager/customers'
+    | '/munasabti-manager/decorations'
+    | '/munasabti-manager/notifications'
+    | '/munasabti-manager/profits'
+    | '/munasabti-manager/settings'
+    | '/munasabti-manager/supplies'
     | '/munasabti-booking/$slug/decorations'
     | '/munasabti-booking/$slug/request'
     | '/munasabti-booking/$slug/supplies'
+    | '/munasabti-manager'
     | '/munasabti-booking/$slug'
     | '/munasabti-booking/$slug/decorations/$id'
   id:
     | '__root__'
+    | '/'
     | '/_main'
+    | '/analytics'
+    | '/booking-requests'
+    | '/bookings'
+    | '/calendar'
+    | '/customers'
+    | '/decorations'
     | '/forgot-password'
     | '/login'
+    | '/notifications'
+    | '/profits'
     | '/reset-password'
+    | '/settings'
     | '/signup'
-    | '/_main/analytics'
-    | '/_main/booking-requests'
-    | '/_main/bookings'
-    | '/_main/calendar'
-    | '/_main/customers'
-    | '/_main/decorations'
-    | '/_main/notifications'
-    | '/_main/profits'
-    | '/_main/settings'
-    | '/_main/supplies'
+    | '/supplies'
     | '/booking/$'
     | '/munasabti-booking/$slug'
-    | '/_main/'
+    | '/_main/munasabti-manager/analytics'
+    | '/_main/munasabti-manager/booking-requests'
+    | '/_main/munasabti-manager/bookings'
+    | '/_main/munasabti-manager/calendar'
+    | '/_main/munasabti-manager/customers'
+    | '/_main/munasabti-manager/decorations'
+    | '/_main/munasabti-manager/notifications'
+    | '/_main/munasabti-manager/profits'
+    | '/_main/munasabti-manager/settings'
+    | '/_main/munasabti-manager/supplies'
     | '/munasabti-booking/$slug/decorations'
     | '/munasabti-booking/$slug/request'
     | '/munasabti-booking/$slug/supplies'
+    | '/_main/munasabti-manager/'
     | '/munasabti-booking/$slug/'
     | '/munasabti-booking/$slug/decorations/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
+  IndexRoute: typeof IndexRoute
   MainRoute: typeof MainRouteWithChildren
+  AnalyticsRoute: typeof AnalyticsRoute
+  BookingRequestsRoute: typeof BookingRequestsRoute
+  BookingsRoute: typeof BookingsRoute
+  CalendarRoute: typeof CalendarRoute
+  CustomersRoute: typeof CustomersRoute
+  DecorationsRoute: typeof DecorationsRoute
   ForgotPasswordRoute: typeof ForgotPasswordRoute
   LoginRoute: typeof LoginRoute
+  NotificationsRoute: typeof NotificationsRoute
+  ProfitsRoute: typeof ProfitsRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
+  SettingsRoute: typeof SettingsRoute
   SignupRoute: typeof SignupRoute
+  SuppliesRoute: typeof SuppliesRoute
   BookingSplatRoute: typeof BookingSplatRoute
   MunasabtiBookingSlugRoute: typeof MunasabtiBookingSlugRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/supplies': {
+      id: '/supplies'
+      path: '/supplies'
+      fullPath: '/supplies'
+      preLoaderRoute: typeof SuppliesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/signup': {
       id: '/signup'
       path: '/signup'
@@ -320,11 +481,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SignupRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/reset-password': {
       id: '/reset-password'
       path: '/reset-password'
       fullPath: '/reset-password'
       preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/profits': {
+      id: '/profits'
+      path: '/profits'
+      fullPath: '/profits'
+      preLoaderRoute: typeof ProfitsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/notifications': {
+      id: '/notifications'
+      path: '/notifications'
+      fullPath: '/notifications'
+      preLoaderRoute: typeof NotificationsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -341,6 +523,48 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ForgotPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/decorations': {
+      id: '/decorations'
+      path: '/decorations'
+      fullPath: '/decorations'
+      preLoaderRoute: typeof DecorationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/customers': {
+      id: '/customers'
+      path: '/customers'
+      fullPath: '/customers'
+      preLoaderRoute: typeof CustomersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/calendar': {
+      id: '/calendar'
+      path: '/calendar'
+      fullPath: '/calendar'
+      preLoaderRoute: typeof CalendarRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/bookings': {
+      id: '/bookings'
+      path: '/bookings'
+      fullPath: '/bookings'
+      preLoaderRoute: typeof BookingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/booking-requests': {
+      id: '/booking-requests'
+      path: '/booking-requests'
+      fullPath: '/booking-requests'
+      preLoaderRoute: typeof BookingRequestsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/analytics': {
+      id: '/analytics'
+      path: '/analytics'
+      fullPath: '/analytics'
+      preLoaderRoute: typeof AnalyticsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_main': {
       id: '/_main'
       path: ''
@@ -348,12 +572,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MainRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_main/': {
-      id: '/_main/'
+    '/': {
+      id: '/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof MainIndexRouteImport
-      parentRoute: typeof MainRoute
+      preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/munasabti-booking/$slug': {
       id: '/munasabti-booking/$slug'
@@ -369,82 +593,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BookingSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_main/supplies': {
-      id: '/_main/supplies'
-      path: '/supplies'
-      fullPath: '/supplies'
-      preLoaderRoute: typeof MainSuppliesRouteImport
-      parentRoute: typeof MainRoute
-    }
-    '/_main/settings': {
-      id: '/_main/settings'
-      path: '/settings'
-      fullPath: '/settings'
-      preLoaderRoute: typeof MainSettingsRouteImport
-      parentRoute: typeof MainRoute
-    }
-    '/_main/profits': {
-      id: '/_main/profits'
-      path: '/profits'
-      fullPath: '/profits'
-      preLoaderRoute: typeof MainProfitsRouteImport
-      parentRoute: typeof MainRoute
-    }
-    '/_main/notifications': {
-      id: '/_main/notifications'
-      path: '/notifications'
-      fullPath: '/notifications'
-      preLoaderRoute: typeof MainNotificationsRouteImport
-      parentRoute: typeof MainRoute
-    }
-    '/_main/decorations': {
-      id: '/_main/decorations'
-      path: '/decorations'
-      fullPath: '/decorations'
-      preLoaderRoute: typeof MainDecorationsRouteImport
-      parentRoute: typeof MainRoute
-    }
-    '/_main/customers': {
-      id: '/_main/customers'
-      path: '/customers'
-      fullPath: '/customers'
-      preLoaderRoute: typeof MainCustomersRouteImport
-      parentRoute: typeof MainRoute
-    }
-    '/_main/calendar': {
-      id: '/_main/calendar'
-      path: '/calendar'
-      fullPath: '/calendar'
-      preLoaderRoute: typeof MainCalendarRouteImport
-      parentRoute: typeof MainRoute
-    }
-    '/_main/bookings': {
-      id: '/_main/bookings'
-      path: '/bookings'
-      fullPath: '/bookings'
-      preLoaderRoute: typeof MainBookingsRouteImport
-      parentRoute: typeof MainRoute
-    }
-    '/_main/booking-requests': {
-      id: '/_main/booking-requests'
-      path: '/booking-requests'
-      fullPath: '/booking-requests'
-      preLoaderRoute: typeof MainBookingRequestsRouteImport
-      parentRoute: typeof MainRoute
-    }
-    '/_main/analytics': {
-      id: '/_main/analytics'
-      path: '/analytics'
-      fullPath: '/analytics'
-      preLoaderRoute: typeof MainAnalyticsRouteImport
-      parentRoute: typeof MainRoute
-    }
     '/munasabti-booking/$slug/': {
       id: '/munasabti-booking/$slug/'
       path: '/'
       fullPath: '/munasabti-booking/$slug/'
       preLoaderRoute: typeof MunasabtiBookingSlugIndexRouteImport
       parentRoute: typeof MunasabtiBookingSlugRoute
+    }
+    '/_main/munasabti-manager/': {
+      id: '/_main/munasabti-manager/'
+      path: '/munasabti-manager'
+      fullPath: '/munasabti-manager/'
+      preLoaderRoute: typeof MainMunasabtiManagerIndexRouteImport
+      parentRoute: typeof MainRoute
     }
     '/munasabti-booking/$slug/supplies': {
       id: '/munasabti-booking/$slug/supplies'
@@ -467,6 +628,76 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MunasabtiBookingSlugDecorationsRouteImport
       parentRoute: typeof MunasabtiBookingSlugRoute
     }
+    '/_main/munasabti-manager/supplies': {
+      id: '/_main/munasabti-manager/supplies'
+      path: '/munasabti-manager/supplies'
+      fullPath: '/munasabti-manager/supplies'
+      preLoaderRoute: typeof MainMunasabtiManagerSuppliesRouteImport
+      parentRoute: typeof MainRoute
+    }
+    '/_main/munasabti-manager/settings': {
+      id: '/_main/munasabti-manager/settings'
+      path: '/munasabti-manager/settings'
+      fullPath: '/munasabti-manager/settings'
+      preLoaderRoute: typeof MainMunasabtiManagerSettingsRouteImport
+      parentRoute: typeof MainRoute
+    }
+    '/_main/munasabti-manager/profits': {
+      id: '/_main/munasabti-manager/profits'
+      path: '/munasabti-manager/profits'
+      fullPath: '/munasabti-manager/profits'
+      preLoaderRoute: typeof MainMunasabtiManagerProfitsRouteImport
+      parentRoute: typeof MainRoute
+    }
+    '/_main/munasabti-manager/notifications': {
+      id: '/_main/munasabti-manager/notifications'
+      path: '/munasabti-manager/notifications'
+      fullPath: '/munasabti-manager/notifications'
+      preLoaderRoute: typeof MainMunasabtiManagerNotificationsRouteImport
+      parentRoute: typeof MainRoute
+    }
+    '/_main/munasabti-manager/decorations': {
+      id: '/_main/munasabti-manager/decorations'
+      path: '/munasabti-manager/decorations'
+      fullPath: '/munasabti-manager/decorations'
+      preLoaderRoute: typeof MainMunasabtiManagerDecorationsRouteImport
+      parentRoute: typeof MainRoute
+    }
+    '/_main/munasabti-manager/customers': {
+      id: '/_main/munasabti-manager/customers'
+      path: '/munasabti-manager/customers'
+      fullPath: '/munasabti-manager/customers'
+      preLoaderRoute: typeof MainMunasabtiManagerCustomersRouteImport
+      parentRoute: typeof MainRoute
+    }
+    '/_main/munasabti-manager/calendar': {
+      id: '/_main/munasabti-manager/calendar'
+      path: '/munasabti-manager/calendar'
+      fullPath: '/munasabti-manager/calendar'
+      preLoaderRoute: typeof MainMunasabtiManagerCalendarRouteImport
+      parentRoute: typeof MainRoute
+    }
+    '/_main/munasabti-manager/bookings': {
+      id: '/_main/munasabti-manager/bookings'
+      path: '/munasabti-manager/bookings'
+      fullPath: '/munasabti-manager/bookings'
+      preLoaderRoute: typeof MainMunasabtiManagerBookingsRouteImport
+      parentRoute: typeof MainRoute
+    }
+    '/_main/munasabti-manager/booking-requests': {
+      id: '/_main/munasabti-manager/booking-requests'
+      path: '/munasabti-manager/booking-requests'
+      fullPath: '/munasabti-manager/booking-requests'
+      preLoaderRoute: typeof MainMunasabtiManagerBookingRequestsRouteImport
+      parentRoute: typeof MainRoute
+    }
+    '/_main/munasabti-manager/analytics': {
+      id: '/_main/munasabti-manager/analytics'
+      path: '/munasabti-manager/analytics'
+      fullPath: '/munasabti-manager/analytics'
+      preLoaderRoute: typeof MainMunasabtiManagerAnalyticsRouteImport
+      parentRoute: typeof MainRoute
+    }
     '/munasabti-booking/$slug/decorations/$id': {
       id: '/munasabti-booking/$slug/decorations/$id'
       path: '/$id'
@@ -478,31 +709,33 @@ declare module '@tanstack/react-router' {
 }
 
 interface MainRouteChildren {
-  MainAnalyticsRoute: typeof MainAnalyticsRoute
-  MainBookingRequestsRoute: typeof MainBookingRequestsRoute
-  MainBookingsRoute: typeof MainBookingsRoute
-  MainCalendarRoute: typeof MainCalendarRoute
-  MainCustomersRoute: typeof MainCustomersRoute
-  MainDecorationsRoute: typeof MainDecorationsRoute
-  MainNotificationsRoute: typeof MainNotificationsRoute
-  MainProfitsRoute: typeof MainProfitsRoute
-  MainSettingsRoute: typeof MainSettingsRoute
-  MainSuppliesRoute: typeof MainSuppliesRoute
-  MainIndexRoute: typeof MainIndexRoute
+  MainMunasabtiManagerAnalyticsRoute: typeof MainMunasabtiManagerAnalyticsRoute
+  MainMunasabtiManagerBookingRequestsRoute: typeof MainMunasabtiManagerBookingRequestsRoute
+  MainMunasabtiManagerBookingsRoute: typeof MainMunasabtiManagerBookingsRoute
+  MainMunasabtiManagerCalendarRoute: typeof MainMunasabtiManagerCalendarRoute
+  MainMunasabtiManagerCustomersRoute: typeof MainMunasabtiManagerCustomersRoute
+  MainMunasabtiManagerDecorationsRoute: typeof MainMunasabtiManagerDecorationsRoute
+  MainMunasabtiManagerNotificationsRoute: typeof MainMunasabtiManagerNotificationsRoute
+  MainMunasabtiManagerProfitsRoute: typeof MainMunasabtiManagerProfitsRoute
+  MainMunasabtiManagerSettingsRoute: typeof MainMunasabtiManagerSettingsRoute
+  MainMunasabtiManagerSuppliesRoute: typeof MainMunasabtiManagerSuppliesRoute
+  MainMunasabtiManagerIndexRoute: typeof MainMunasabtiManagerIndexRoute
 }
 
 const MainRouteChildren: MainRouteChildren = {
-  MainAnalyticsRoute: MainAnalyticsRoute,
-  MainBookingRequestsRoute: MainBookingRequestsRoute,
-  MainBookingsRoute: MainBookingsRoute,
-  MainCalendarRoute: MainCalendarRoute,
-  MainCustomersRoute: MainCustomersRoute,
-  MainDecorationsRoute: MainDecorationsRoute,
-  MainNotificationsRoute: MainNotificationsRoute,
-  MainProfitsRoute: MainProfitsRoute,
-  MainSettingsRoute: MainSettingsRoute,
-  MainSuppliesRoute: MainSuppliesRoute,
-  MainIndexRoute: MainIndexRoute,
+  MainMunasabtiManagerAnalyticsRoute: MainMunasabtiManagerAnalyticsRoute,
+  MainMunasabtiManagerBookingRequestsRoute:
+    MainMunasabtiManagerBookingRequestsRoute,
+  MainMunasabtiManagerBookingsRoute: MainMunasabtiManagerBookingsRoute,
+  MainMunasabtiManagerCalendarRoute: MainMunasabtiManagerCalendarRoute,
+  MainMunasabtiManagerCustomersRoute: MainMunasabtiManagerCustomersRoute,
+  MainMunasabtiManagerDecorationsRoute: MainMunasabtiManagerDecorationsRoute,
+  MainMunasabtiManagerNotificationsRoute:
+    MainMunasabtiManagerNotificationsRoute,
+  MainMunasabtiManagerProfitsRoute: MainMunasabtiManagerProfitsRoute,
+  MainMunasabtiManagerSettingsRoute: MainMunasabtiManagerSettingsRoute,
+  MainMunasabtiManagerSuppliesRoute: MainMunasabtiManagerSuppliesRoute,
+  MainMunasabtiManagerIndexRoute: MainMunasabtiManagerIndexRoute,
 }
 
 const MainRouteWithChildren = MainRoute._addFileChildren(MainRouteChildren)
@@ -541,14 +774,35 @@ const MunasabtiBookingSlugRouteWithChildren =
   MunasabtiBookingSlugRoute._addFileChildren(MunasabtiBookingSlugRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
+  IndexRoute: IndexRoute,
   MainRoute: MainRouteWithChildren,
+  AnalyticsRoute: AnalyticsRoute,
+  BookingRequestsRoute: BookingRequestsRoute,
+  BookingsRoute: BookingsRoute,
+  CalendarRoute: CalendarRoute,
+  CustomersRoute: CustomersRoute,
+  DecorationsRoute: DecorationsRoute,
   ForgotPasswordRoute: ForgotPasswordRoute,
   LoginRoute: LoginRoute,
+  NotificationsRoute: NotificationsRoute,
+  ProfitsRoute: ProfitsRoute,
   ResetPasswordRoute: ResetPasswordRoute,
+  SettingsRoute: SettingsRoute,
   SignupRoute: SignupRoute,
+  SuppliesRoute: SuppliesRoute,
   BookingSplatRoute: BookingSplatRoute,
   MunasabtiBookingSlugRoute: MunasabtiBookingSlugRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}

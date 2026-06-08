@@ -12,32 +12,32 @@ import { useBranding } from "@/lib/branding";
 
 // Primary navigation — matches user-requested sidebar order
 const navItems = [
-  { to: "/", label: "الرئيسية", icon: LayoutDashboard },
-  { to: "/bookings", label: "الحجوزات", icon: CalendarDays },
-  { to: "/booking-requests", label: "طلبات الرابط", icon: Inbox },
-  { to: "/decorations", label: "الديكورات", icon: Sparkles },
-  { to: "/supplies", label: "المستلزمات", icon: Package },
-  { to: "/customers", label: "الزبائن", icon: Users },
-  { to: "/profits", label: "الأرباح", icon: Wallet },
-  { to: "/notifications", label: "الإشعارات", icon: Bell },
-  { to: "/settings", label: "الإعدادات", icon: Settings },
+  { to: "/munasabti-manager", label: "الرئيسية", icon: LayoutDashboard },
+  { to: "/munasabti-manager/bookings", label: "الحجوزات", icon: CalendarDays },
+  { to: "/munasabti-manager/booking-requests", label: "طلبات الرابط", icon: Inbox },
+  { to: "/munasabti-manager/decorations", label: "الديكورات", icon: Sparkles },
+  { to: "/munasabti-manager/supplies", label: "المستلزمات", icon: Package },
+  { to: "/munasabti-manager/customers", label: "الزبائن", icon: Users },
+  { to: "/munasabti-manager/profits", label: "الأرباح", icon: Wallet },
+  { to: "/munasabti-manager/notifications", label: "الإشعارات", icon: Bell },
+  { to: "/munasabti-manager/settings", label: "الإعدادات", icon: Settings },
 ];
 
 // Secondary nav — accessible from sidebar (bottom group) and mobile "More" sheet
 const secondaryItems = [
-  { to: "/calendar", label: "التقويم", icon: CalendarRange },
-  { to: "/analytics", label: "الإحصائيات", icon: BarChart3 },
+  { to: "/munasabti-manager/calendar", label: "التقويم", icon: CalendarRange },
+  { to: "/munasabti-manager/analytics", label: "الإحصائيات", icon: BarChart3 },
 ];
 
 // Mobile bottom-nav primary items (4 + More) — most-used daily actions
-const mobilePrimary = ["/", "/bookings", "/decorations", "/customers"];
+const mobilePrimary = ["/", "/munasabti-manager/bookings", "/munasabti-manager/decorations", "/munasabti-manager/customers"];
 
 
 const quickActions = [
-  { to: "/bookings", label: "حجز جديد", icon: CalendarDays },
-  { to: "/decorations", label: "ديكور جديد", icon: Sparkles },
-  { to: "/supplies", label: "مستلزم جديد", icon: Package },
-  { to: "/customers", label: "زبون جديد", icon: Users },
+  { to: "/munasabti-manager/bookings", label: "حجز جديد", icon: CalendarDays },
+  { to: "/munasabti-manager/decorations", label: "ديكور جديد", icon: Sparkles },
+  { to: "/munasabti-manager/supplies", label: "مستلزم جديد", icon: Package },
+  { to: "/munasabti-manager/customers", label: "زبون جديد", icon: Users },
 ];
 
 export function AppLayout() {
@@ -90,7 +90,7 @@ export function AppLayout() {
                 {active && <span className="hidden lg:block absolute right-0 top-1/2 -translate-y-1/2 h-6 w-1 rounded-l-full bg-gold" />}
                 <Icon className={`size-[18px] shrink-0 transition-transform group-hover:scale-110 ${active ? "text-gold" : ""}`} />
                 <span className="flex-1 hidden lg:inline">{item.label}</span>
-                {item.to === "/notifications" && unread > 0 && (
+                {item.to === "/munasabti-manager/notifications" && unread > 0 && (
                   <span className="hidden lg:inline text-[10px] font-bold bg-destructive text-destructive-foreground rounded-full px-1.5 py-0.5 min-w-[18px] text-center">
                     {unread}
                   </span>
@@ -164,7 +164,7 @@ export function AppLayout() {
               <span className="hidden lg:inline">مشاركة الرابط</span>
             </button>
 
-            <Link to="/notifications" className="relative size-9 sm:size-10 rounded-xl hover:bg-secondary flex items-center justify-center transition">
+            <Link to="/munasabti-manager/notifications" className="relative size-9 sm:size-10 rounded-xl hover:bg-secondary flex items-center justify-center transition">
               <Bell className="size-[18px]" />
               {unread > 0 && (
                 <span className="absolute top-2 left-2 size-2 rounded-full bg-destructive ring-2 ring-background" />
@@ -172,7 +172,7 @@ export function AppLayout() {
             </Link>
 
             <button
-              onClick={() => navigate({ to: "/bookings" })}
+              onClick={() => navigate({ to: "/munasabti-manager/bookings" })}
               className="hidden sm:inline-flex items-center gap-2 bg-primary text-primary-foreground hover:opacity-90 transition rounded-xl px-3 lg:px-4 py-2 lg:py-2.5 text-sm font-semibold shadow-elegant"
             >
               <Plus className="size-4" />
@@ -204,7 +204,7 @@ export function AppLayout() {
                 {active && <span className="absolute top-0 left-1/2 -translate-x-1/2 h-1 w-8 rounded-b-full bg-gold" />}
                 <Icon className={`size-[20px] transition-transform ${active ? "scale-110" : ""}`} />
                 <span>{item.label}</span>
-                {item.to === "/notifications" && unread > 0 && (
+                {item.to === "/munasabti-manager/notifications" && unread > 0 && (
                   <span className="absolute top-1 right-3 size-2 rounded-full bg-destructive ring-2 ring-card" />
                 )}
               </Link>
@@ -216,7 +216,7 @@ export function AppLayout() {
             }`}>
             <MoreHorizontal className="size-[20px]" />
             <span>المزيد</span>
-            {unread > 0 && !mobilePrimary.includes("/notifications") && (
+            {unread > 0 && !mobilePrimary.includes("/munasabti-manager/notifications") && (
               <span className="absolute top-1 right-3 size-2 rounded-full bg-destructive ring-2 ring-card" />
             )}
           </button>
@@ -272,7 +272,7 @@ export function AppLayout() {
                     }`}>
                     <Icon className="size-5" />
                     <span className="text-xs font-medium">{item.label}</span>
-                    {item.to === "/notifications" && unread > 0 && (
+                    {item.to === "/munasabti-manager/notifications" && unread > 0 && (
                       <span className="text-[10px] font-bold bg-destructive text-destructive-foreground rounded-full px-1.5 py-0.5">
                         {unread}
                       </span>

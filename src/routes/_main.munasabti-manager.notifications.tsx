@@ -9,17 +9,17 @@ import { useMemo, useRef, useState } from "react";
 
 // Map notification kind → source page route
 const kindRoute: Record<string, string> = {
-  booking: "/bookings",
-  decoration: "/decorations",
-  supply: "/supplies",
-  profit: "/profits",
+  booking: "/munasabti-manager/bookings",
+  decoration: "/munasabti-manager/decorations",
+  supply: "/munasabti-manager/supplies",
+  profit: "/munasabti-manager/profits",
 };
 function getNotificationRoute(n: any): string | null {
   if (n.kind && kindRoute[n.kind]) return kindRoute[n.kind];
   return null;
 }
 
-export const Route = createFileRoute("/_main/notifications")({
+export const Route = createFileRoute("/_main/munasabti-manager/notifications")({
   component: NotificationsPage,
 });
 

@@ -76,7 +76,7 @@ function SignupPage() {
     setLoading(false);
     if (signInErr) return setError(signInErr.message);
     toast.success("تم إنشاء الحساب بنجاح");
-    navigate({ to: "/" });
+    navigate({ to: "/munasabti-manager" });
   }
 
   return (

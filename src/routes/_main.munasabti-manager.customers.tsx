@@ -14,7 +14,7 @@ import { toast } from "sonner";
 import { SearchBox } from "@/components/SearchBox";
 import { matches } from "@/lib/search";
 
-export const Route = createFileRoute("/_main/customers")({
+export const Route = createFileRoute("/_main/munasabti-manager/customers")({
   component: CustomersPage,
 });
 
@@ -208,7 +208,7 @@ function CustomersPage() {
                 <a href={`https://wa.me/${selected.phone?.replace(/\D/g, "")}`} target="_blank" rel="noreferrer">
                   <Button variant="outline" size="sm" className="w-full"><MessageCircle className="size-3.5" />رسالة</Button>
                 </a>
-                <Link to="/bookings"><Button variant="primary" size="sm" className="w-full"><Plus className="size-3.5" />حجز جديد</Button></Link>
+                <Link to="/munasabti-manager/bookings"><Button variant="primary" size="sm" className="w-full"><Plus className="size-3.5" />حجز جديد</Button></Link>
                 <Button variant="outline" size="sm" onClick={() => setEditing(selected)}><Edit3 className="size-3.5" />تعديل</Button>
               </div>
 

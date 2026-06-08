@@ -28,7 +28,7 @@ function ResetPage() {
     setLoading(false);
     if (error) return setError(error.message);
     toast.success("تم تحديث كلمة المرور");
-    navigate({ to: "/" });
+    navigate({ to: "/munasabti-manager" });
   }
 
   return (

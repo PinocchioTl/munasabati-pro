@@ -11,7 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 
-export const Route = createFileRoute("/_main/profits")({
+export const Route = createFileRoute("/_main/munasabti-manager/profits")({
   component: ProfitsPage,
 });
 

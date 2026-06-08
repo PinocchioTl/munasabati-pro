@@ -27,10 +27,10 @@ export function OnboardingWelcome() {
   if (!open) return null;
 
   const steps = [
-    { icon: Package, title: "أضف الديكورات", desc: "ابدأ ببناء كتالوج الديكورات الخاص بك", to: "/decorations" },
-    { icon: Sparkles, title: "أضف المستلزمات", desc: "نظّم مخزون المستلزمات والمواد", to: "/supplies" },
-    { icon: Users, title: "أضف العملاء", desc: "أنشئ قاعدة بيانات الزبائن", to: "/customers" },
-    { icon: CalendarDays, title: "سجّل أول حجز", desc: "ابدأ بإدارة حجوزات المناسبات", to: "/bookings" },
+    { icon: Package, title: "أضف الديكورات", desc: "ابدأ ببناء كتالوج الديكورات الخاص بك", to: "/munasabti-manager/decorations" },
+    { icon: Sparkles, title: "أضف المستلزمات", desc: "نظّم مخزون المستلزمات والمواد", to: "/munasabti-manager/supplies" },
+    { icon: Users, title: "أضف العملاء", desc: "أنشئ قاعدة بيانات الزبائن", to: "/munasabti-manager/customers" },
+    { icon: CalendarDays, title: "سجّل أول حجز", desc: "ابدأ بإدارة حجوزات المناسبات", to: "/munasabti-manager/bookings" },
   ] as const;
 
   return (

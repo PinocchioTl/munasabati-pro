@@ -11,7 +11,7 @@ import {
   Crown, AlertTriangle, Flame, Package, BarChart3, ArrowUpRight, ArrowDownRight,
 } from "lucide-react";
 
-export const Route = createFileRoute("/_main/analytics")({
+export const Route = createFileRoute("/_main/munasabti-manager/analytics")({
   component: AnalyticsPage,
 });
 

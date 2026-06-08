@@ -15,7 +15,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { exportAllData, downloadBundle, importBundle, type BackupBundle } from "@/lib/backup";
 import { useQueryClient } from "@tanstack/react-query";
 
-export const Route = createFileRoute("/_main/settings")({
+export const Route = createFileRoute("/_main/munasabti-manager/settings")({
   component: SettingsPage,
 });
 
