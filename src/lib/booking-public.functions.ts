@@ -77,7 +77,63 @@ export const getPublicSupplies = createServerFn({ method: "GET" })
     return rows ?? [];
   });
 
-/** Check availability of a decoration on a specific date */
+/** Return decorations + supplies that still have availability on a given date. */
+export const getAvailableForDate = createServerFn({ method: "GET" })
+  .inputValidator((d: { slug: string; date: string }) => ({
+    slug: slugSchema.parse(d.slug),
+    date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).parse(d.date),
+  }))
+  .handler(async ({ data }) => {
+    const owner_id = await resolveOwner(data.slug);
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+
+    const [decRes, supRes, bookingsRes, reqRes] = await Promise.all([
+      supabaseAdmin.from("decorations")
+        .select("id, name, category, images, price, total_qty, description")
+        .eq("owner_id", owner_id).order("name"),
+      supabaseAdmin.from("supplies")
+        .select("id, name, category, images, cost, total_qty, notes")
+        .eq("owner_id", owner_id).order("name"),
+      supabaseAdmin.from("bookings")
+        .select("id, booking_decorations(decoration_id, qty), booking_supplies(supply_id, qty)")
+        .eq("owner_id", owner_id).eq("event_date", data.date)
+        .in("status", ["pending", "confirmed", "in_progress"]),
+      supabaseAdmin.from("booking_requests")
+        .select("decorations, supplies")
+        .eq("owner_id", owner_id).eq("event_date", data.date)
+        .in("status", ["pending", "accepted"]),
+    ]);
+    if (decRes.error) throw new Error(decRes.error.message);
+    if (supRes.error) throw new Error(supRes.error.message);
+    if (bookingsRes.error) throw new Error(bookingsRes.error.message);
+    if (reqRes.error) throw new Error(reqRes.error.message);
+
+    const decUsed: Record<string, number> = {};
+    const supUsed: Record<string, number> = {};
+    for (const b of bookingsRes.data ?? []) {
+      for (const i of ((b as any).booking_decorations ?? []))
+        decUsed[i.decoration_id] = (decUsed[i.decoration_id] || 0) + (i.qty || 0);
+      for (const i of ((b as any).booking_supplies ?? []))
+        supUsed[i.supply_id] = (supUsed[i.supply_id] || 0) + (i.qty || 0);
+    }
+    for (const r of reqRes.data ?? []) {
+      for (const i of (((r as any).decorations) ?? []))
+        decUsed[i.id] = (decUsed[i.id] || 0) + (i.qty || 0);
+      for (const i of (((r as any).supplies) ?? []))
+        supUsed[i.id] = (supUsed[i.id] || 0) + (i.qty || 0);
+    }
+
+    const decorations = (decRes.data ?? [])
+      .map(d => ({ ...d, available: Math.max((d.total_qty || 0) - (decUsed[d.id] || 0), 0) }))
+      .filter(d => d.available > 0);
+    const supplies = (supRes.data ?? [])
+      .map(s => ({ ...s, available: Math.max((s.total_qty || 0) - (supUsed[s.id] || 0), 0) }))
+      .filter(s => s.available > 0);
+
+    return { decorations, supplies };
+  });
+
+/** Backwards-compat single-item availability check. */
 export const getDecorationAvailability = createServerFn({ method: "GET" })
   .inputValidator((d: { slug: string; id: string; date: string }) => ({
     slug: slugSchema.parse(d.slug),
@@ -87,31 +143,27 @@ export const getDecorationAvailability = createServerFn({ method: "GET" })
   .handler(async ({ data }) => {
     const owner_id = await resolveOwner(data.slug);
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { data: dec, error: e1 } = await supabaseAdmin
-      .from("decorations")
-      .select("id, total_qty")
-      .eq("owner_id", owner_id)
-      .eq("id", data.id)
-      .maybeSingle();
-    if (e1) throw new Error(e1.message);
+    const { data: dec } = await supabaseAdmin
+      .from("decorations").select("id, total_qty")
+      .eq("owner_id", owner_id).eq("id", data.id).maybeSingle();
     if (!dec) throw new Error("الديكور غير موجود");
-
-    // Sum qty across active bookings on that date
-    const { data: bookings, error: e2 } = await supabaseAdmin
-      .from("bookings")
-      .select("id, status, event_date, booking_decorations(decoration_id, qty)")
-      .eq("owner_id", owner_id)
-      .eq("event_date", data.date)
-      .in("status", ["pending", "confirmed", "in_progress"]);
-    if (e2) throw new Error(e2.message);
-
-    const used = (bookings ?? []).reduce((sum, b: any) => {
-      const items = (b.booking_decorations ?? []) as { decoration_id: string; qty: number }[];
-      return sum + items.filter(i => i.decoration_id === data.id).reduce((s, i) => s + i.qty, 0);
-    }, 0);
-
-    const available = Math.max(dec.total_qty - used, 0);
-    return { total: dec.total_qty, used, available };
+    const [bRes, rRes] = await Promise.all([
+      supabaseAdmin.from("bookings")
+        .select("booking_decorations(decoration_id, qty)")
+        .eq("owner_id", owner_id).eq("event_date", data.date)
+        .in("status", ["pending", "confirmed", "in_progress"]),
+      supabaseAdmin.from("booking_requests").select("decorations")
+        .eq("owner_id", owner_id).eq("event_date", data.date)
+        .in("status", ["pending", "accepted"]),
+    ]);
+    let used = 0;
+    for (const b of bRes.data ?? [])
+      for (const i of ((b as any).booking_decorations ?? []))
+        if (i.decoration_id === data.id) used += i.qty || 0;
+    for (const r of rRes.data ?? [])
+      for (const i of (((r as any).decorations) ?? []))
+        if (i.id === data.id) used += i.qty || 0;
+    return { total: dec.total_qty || 0, used, available: Math.max((dec.total_qty || 0) - used, 0) };
   });
 
 const requestSchema = z.object({
