@@ -489,8 +489,8 @@ function DayTimeline({ date, list, onOpen }: { date: string; list: Booking[]; on
       {hours.map(h => {
         const hourStr = String(h).padStart(2, "0");
         const slotBookings = list.filter(b => {
-          const sh = parseInt(b.start_time.slice(0, 2));
-          const eh = parseInt(b.end_time.slice(0, 2));
+          const sh = parseInt((b.start_time ?? "00").slice(0, 2));
+          const eh = parseInt((b.end_time ?? "00").slice(0, 2));
           return sh <= h && eh > h;
         });
         return (
