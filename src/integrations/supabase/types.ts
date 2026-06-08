@@ -647,7 +647,6 @@ export type Database = {
         }
         Returns: boolean
       }
-      platform_stats: { Args: never; Returns: Json }
     }
     Enums: {
       app_role: "platform_admin" | "tenant_admin"
