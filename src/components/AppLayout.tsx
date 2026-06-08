@@ -30,7 +30,12 @@ const secondaryItems = [
 ];
 
 // Mobile bottom-nav primary items (4 + More) — most-used daily actions
-const mobilePrimary = ["/", "/munasabti-manager/bookings", "/munasabti-manager/decorations", "/munasabti-manager/customers"];
+const mobilePrimary = [
+  "/munasabti-manager",
+  "/munasabti-manager/bookings",
+  "/munasabti-manager/decorations",
+  "/munasabti-manager/customers",
+];
 
 
 const quickActions = [
@@ -193,7 +198,8 @@ export function AppLayout() {
       <nav className="md:hidden fixed bottom-0 inset-x-0 z-40 glass border-t border-border/60 safe-area-inset">
         <div className="grid grid-cols-5 px-1 py-1.5">
           {mobilePrimary.map((to) => {
-            const item = navItems.find((n) => n.to === to)!;
+            const item = navItems.find((n) => n.to === to);
+            if (!item) return null;
             const active = item.to === "/" ? pathname === "/" : pathname.startsWith(item.to);
             const Icon = item.icon;
             return (
