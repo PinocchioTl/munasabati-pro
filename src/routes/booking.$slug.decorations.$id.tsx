@@ -54,7 +54,7 @@ function DecorationDetail() {
           </div>
           {images.length > 1 && (
             <div className="flex gap-2 overflow-x-auto scrollbar-none">
-              {images.map((src, i) => (
+              {images.map((src: string, i: number) => (
                 <button key={i} onClick={() => setIdx(i)}
                   className={`size-16 shrink-0 rounded-xl overflow-hidden border-2 transition ${
                     i === idx ? "bk-border-gold" : "border-transparent"
