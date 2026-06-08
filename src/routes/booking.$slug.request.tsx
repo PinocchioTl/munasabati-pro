@@ -1,14 +1,13 @@
 import { createFileRoute, useParams, useSearch, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import {
-  getPublicDecorations,
+  getAvailableForDate,
   getPublicOwner,
-  getPublicSupplies,
   submitBookingRequest,
 } from "@/lib/booking-public.functions";
 import {
   CalendarDays, CheckCircle2, ChevronLeft, ChevronRight, Loader2, Minus, Plus,
-  Send, ShoppingBag, Sparkles, Package, User, ClipboardList, Phone, MapPin, Hash, Clock,
+  Send, ShoppingBag, Sparkles, Package, User, ClipboardList, Phone, MapPin,
 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
@@ -29,14 +28,6 @@ const EVENT_TYPES = [
   { value: "other", label: "مناسبة أخرى", emoji: "🎉" },
 ];
 
-const WILAYAS = [
-  "أدرار","الشلف","الأغواط","أم البواقي","باتنة","بجاية","بسكرة","بشار","البليدة","البويرة",
-  "تمنراست","تبسة","تلمسان","تيارت","تيزي وزو","الجزائر","الجلفة","جيجل","سطيف","سعيدة",
-  "سكيكدة","سيدي بلعباس","عنابة","قالمة","قسنطينة","المدية","مستغانم","المسيلة","معسكر","ورقلة",
-  "وهران","البيض","إليزي","برج بوعريريج","بومرداس","الطارف","تندوف","تيسمسيلت","الوادي","خنشلة",
-  "سوق أهراس","تيبازة","ميلة","عين الدفلى","النعامة","عين تموشنت","غرداية","غليزان",
-];
-
 type StepKey = "date" | "items" | "info" | "summary";
 const STEPS: { key: StepKey; label: string; icon: any }[] = [
   { key: "date", label: "التاريخ", icon: CalendarDays },
@@ -54,33 +45,30 @@ function RequestPage() {
     queryFn: () => getPublicOwner({ data: { slug } }),
     retry: false,
   });
-  const { data: decorations = [] } = useQuery({
-    queryKey: ["public-decorations", slug],
-    queryFn: () => getPublicDecorations({ data: { slug } }).catch(() => []),
-    retry: false,
-  });
-  const { data: supplies = [] } = useQuery({
-    queryKey: ["public-supplies", slug],
-    queryFn: () => getPublicSupplies({ data: { slug } }).catch(() => []),
-    retry: false,
-  });
 
   const [step, setStep] = useState<StepKey>("date");
   const [form, setForm] = useState({
     customer_name: "",
     customer_phone: "",
     event_date: search.date || "",
-    event_time: "",
     event_type: "wedding",
-    wilaya: "",
-    baladiya: "",
-    address: "",
+    location: "",
     notes: "",
   });
   const [decQty, setDecQty] = useState<Record<string, number>>({});
   const [supQty, setSupQty] = useState<Record<string, number>>({});
   const [submitting, setSubmitting] = useState(false);
   const [result, setResult] = useState<{ id: string; at: string } | null>(null);
+
+  // Date-gated availability: only fetch once a date is chosen.
+  const { data: avail, isFetching: loadingItems } = useQuery({
+    queryKey: ["public-available", slug, form.event_date],
+    queryFn: () => getAvailableForDate({ data: { slug, date: form.event_date } }),
+    enabled: !!form.event_date,
+    retry: false,
+  });
+  const decorations = avail?.decorations ?? [];
+  const supplies = avail?.supplies ?? [];
 
   useEffect(() => {
     if (search.decoration) setDecQty(q => ({ ...q, [search.decoration!]: q[search.decoration!] || 1 }));
@@ -106,7 +94,7 @@ function RequestPage() {
 
   function goNext() {
     if (step === "date") {
-      if (!form.event_date) return toast.error("اختر تاريخ المناسبة");
+      if (!form.event_date) return toast.error("اختر تاريخ المناسبة أولاً");
       if (!form.event_type) return toast.error("اختر نوع المناسبة");
       setStep("items");
     } else if (step === "items") {
@@ -116,8 +104,7 @@ function RequestPage() {
     } else if (step === "info") {
       if (!form.customer_name.trim()) return toast.error("الاسم الكامل مطلوب");
       if (!form.customer_phone.trim()) return toast.error("رقم الهاتف مطلوب");
-      if (!form.wilaya) return toast.error("اختر الولاية");
-      if (!form.baladiya.trim()) return toast.error("اكتب البلدية");
+      if (!form.location.trim()) return toast.error("الموقع مطلوب");
       setStep("summary");
     }
   }
@@ -129,16 +116,14 @@ function RequestPage() {
   async function submit() {
     setSubmitting(true);
     try {
-      const location = [form.address, form.baladiya, form.wilaya].filter(Boolean).join("، ");
-      const notes = [form.event_time ? `الوقت: ${form.event_time}` : "", form.notes].filter(Boolean).join("\n");
       const res = await submitBookingRequest({ data: {
         slug,
         customer_name: form.customer_name,
         customer_phone: form.customer_phone,
         event_date: form.event_date,
         event_type: form.event_type,
-        event_location: location || null,
-        notes: notes || null,
+        event_location: form.location || null,
+        notes: form.notes || null,
         decorations: selectedDecorations,
         supplies: selectedSupplies,
       } as any });
@@ -207,17 +192,12 @@ function RequestPage() {
       {step === "date" && (
         <section className="bg-white rounded-2xl p-5 shadow-sm space-y-5 animate-in fade-in">
           <SectionTitle icon={<CalendarDays className="size-4 bk-text-gold" />} title="متى ستقام مناسبتك؟" />
-          <div className="grid sm:grid-cols-2 gap-3">
-            <Field label="تاريخ المناسبة *" icon={<CalendarDays className="size-3.5" />}>
-              <input required type="date" min={new Date().toISOString().slice(0, 10)}
-                value={form.event_date} onChange={e => setForm({ ...form, event_date: e.target.value })}
-                className={inputCls} />
-            </Field>
-            <Field label="وقت المناسبة (اختياري)" icon={<Clock className="size-3.5" />}>
-              <input type="time" value={form.event_time} onChange={e => setForm({ ...form, event_time: e.target.value })}
-                className={inputCls} />
-            </Field>
-          </div>
+          <p className="text-xs text-gray-500 -mt-3">يجب اختيار تاريخ المناسبة أولاً لعرض الديكورات والمستلزمات المتوفرة في ذلك اليوم.</p>
+          <Field label="تاريخ المناسبة *" icon={<CalendarDays className="size-3.5" />}>
+            <input required type="date" min={new Date().toISOString().slice(0, 10)}
+              value={form.event_date} onChange={e => setForm({ ...form, event_date: e.target.value })}
+              className={inputCls} />
+          </Field>
           <Field label="نوع المناسبة *">
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
               {EVENT_TYPES.map(t => (
@@ -239,16 +219,21 @@ function RequestPage() {
 
       {step === "items" && (
         <div className="space-y-4 animate-in fade-in">
-          {decorations.length === 0 && supplies.length === 0 ? (
+          {loadingItems ? (
+            <div className="bg-white rounded-2xl p-12 shadow-sm flex justify-center">
+              <Loader2 className="size-6 animate-spin bk-text-gold" />
+            </div>
+          ) : decorations.length === 0 && supplies.length === 0 ? (
             <div className="bg-white rounded-2xl p-8 shadow-sm text-center text-sm text-gray-500">
-              لا توجد عناصر متاحة حالياً.
+              لا توجد عناصر متاحة في تاريخ <span className="font-bold bk-text-primary">{form.event_date}</span>.
+              <br />جرّب تاريخاً آخر.
             </div>
           ) : null}
 
           {decorations.length > 0 && (
             <Section title="الديكورات المتاحة" icon={<Sparkles className="size-4 bk-text-gold" />}
-              hint={`تاريخ المناسبة: ${form.event_date}`}>
-              {decorations.map(d => (
+              hint={`متوفر في ${form.event_date}`}>
+              {decorations.map((d: any) => (
                 <PickRow key={d.id}
                   image={d.images?.[0]}
                   name={d.name}
@@ -256,7 +241,8 @@ function RequestPage() {
                   price={showPrices ? d.price : undefined}
                   qty={decQty[d.id] || 0}
                   onChange={(v) => setDecQty({ ...decQty, [d.id]: v })}
-                  maxQty={d.total_qty || 99}
+                  maxQty={d.available || 1}
+                  availableLabel={`متاح: ${d.available}`}
                 />
               ))}
             </Section>
@@ -264,7 +250,7 @@ function RequestPage() {
 
           {supplies.length > 0 && (
             <Section title="المستلزمات المتاحة" icon={<Package className="size-4 bk-text-gold" />}>
-              {supplies.map(s => (
+              {supplies.map((s: any) => (
                 <PickRow key={s.id}
                   image={s.images?.[0]}
                   name={s.name}
@@ -272,7 +258,8 @@ function RequestPage() {
                   price={showPrices ? s.cost : undefined}
                   qty={supQty[s.id] || 0}
                   onChange={(v) => setSupQty({ ...supQty, [s.id]: v })}
-                  maxQty={999}
+                  maxQty={s.available || 1}
+                  availableLabel={`متاح: ${s.available}`}
                 />
               ))}
             </Section>
@@ -292,23 +279,12 @@ function RequestPage() {
               <input required type="tel" value={form.customer_phone} onChange={e => setForm({ ...form, customer_phone: e.target.value })}
                 placeholder="0555 12 34 56" className={inputCls} />
             </Field>
-            <Field label="الولاية *" icon={<MapPin className="size-3.5" />}>
-              <select value={form.wilaya} onChange={e => setForm({ ...form, wilaya: e.target.value })}
-                className={inputCls + " bg-white"}>
-                <option value="">— اختر الولاية —</option>
-                {WILAYAS.map(w => <option key={w} value={w}>{w}</option>)}
-              </select>
-            </Field>
-            <Field label="البلدية *" icon={<Hash className="size-3.5" />}>
-              <input required value={form.baladiya} onChange={e => setForm({ ...form, baladiya: e.target.value })}
-                className={inputCls} />
-            </Field>
           </div>
-          <Field label="العنوان (اختياري)">
-            <input value={form.address} onChange={e => setForm({ ...form, address: e.target.value })}
-              placeholder="الحي، الشارع..." className={inputCls} />
+          <Field label="الموقع *" icon={<MapPin className="size-3.5" />}>
+            <input required value={form.location} onChange={e => setForm({ ...form, location: e.target.value })}
+              placeholder="مكان إقامة المناسبة (المدينة، الحي، العنوان...)" className={inputCls} />
           </Field>
-          <Field label="ملاحظات إضافية">
+          <Field label="ملاحظات إضافية (اختياري)">
             <textarea rows={3} value={form.notes} onChange={e => setForm({ ...form, notes: e.target.value })}
               className={inputCls + " resize-none"} />
           </Field>
@@ -320,11 +296,11 @@ function RequestPage() {
           <SectionTitle icon={<ClipboardList className="size-4 bk-text-gold" />} title="مراجعة الطلب" />
 
           <div className="bg-[var(--bk-bg)] rounded-xl p-4 space-y-2">
-            <Row label="تاريخ المناسبة" value={form.event_date + (form.event_time ? ` — ${form.event_time}` : "")} />
+            <Row label="تاريخ المناسبة" value={form.event_date} />
             <Row label="نوع المناسبة" value={EVENT_TYPES.find(t => t.value === form.event_type)?.label || "—"} />
             <Row label="الاسم" value={form.customer_name} />
             <Row label="الهاتف" value={form.customer_phone} />
-            <Row label="الموقع" value={[form.address, form.baladiya, form.wilaya].filter(Boolean).join("، ")} />
+            <Row label="الموقع" value={form.location} />
           </div>
 
           {selectedDecorations.length > 0 && (
@@ -332,7 +308,7 @@ function RequestPage() {
               <h3 className="text-xs font-bold bk-text-primary mb-2">الديكورات</h3>
               <div className="space-y-1.5">
                 {selectedDecorations.map(x => {
-                  const d = decorations.find(d => d.id === x.id);
+                  const d: any = decorations.find((d: any) => d.id === x.id);
                   if (!d) return null;
                   return (
                     <div key={x.id} className="flex items-center justify-between text-sm border border-gray-100 rounded-lg px-3 py-2">
@@ -352,7 +328,7 @@ function RequestPage() {
               <h3 className="text-xs font-bold bk-text-primary mb-2">المستلزمات</h3>
               <div className="space-y-1.5">
                 {selectedSupplies.map(x => {
-                  const s = supplies.find(d => d.id === x.id);
+                  const s: any = supplies.find((d: any) => d.id === x.id);
                   if (!s) return null;
                   return (
                     <div key={x.id} className="flex items-center justify-between text-sm border border-gray-100 rounded-lg px-3 py-2">
@@ -440,9 +416,9 @@ function Section({ title, icon, hint, children }: { title: string; icon: React.R
   );
 }
 
-function PickRow({ image, name, meta, price, qty, onChange, maxQty = 99 }: {
+function PickRow({ image, name, meta, price, qty, onChange, maxQty = 99, availableLabel }: {
   image?: string; name: string; meta?: string; price?: number;
-  qty: number; onChange: (v: number) => void; maxQty?: number;
+  qty: number; onChange: (v: number) => void; maxQty?: number; availableLabel?: string;
 }) {
   return (
     <div className={`flex items-center gap-3 p-2 rounded-xl border transition ${qty > 0 ? "bk-border-gold bg-yellow-50/30" : "border-gray-100"}`}>
@@ -451,11 +427,12 @@ function PickRow({ image, name, meta, price, qty, onChange, maxQty = 99 }: {
       </div>
       <div className="flex-1 min-w-0">
         <div className="font-bold text-sm truncate bk-text-primary">{name}</div>
-        <div className="flex items-center gap-2 mt-0.5">
+        <div className="flex items-center gap-2 mt-0.5 flex-wrap">
           {meta && <span className="text-[10px] text-gray-500">{meta}</span>}
           {price !== undefined && (
             <span className="text-[11px] font-bold bk-text-gold">{new Intl.NumberFormat("ar-DZ").format(price)} د.ج</span>
           )}
+          {availableLabel && <span className="text-[10px] text-green-600 font-bold">{availableLabel}</span>}
         </div>
       </div>
       <div className="flex items-center gap-1 shrink-0">
@@ -465,7 +442,8 @@ function PickRow({ image, name, meta, price, qty, onChange, maxQty = 99 }: {
         </button>
         <span className="w-8 text-center text-sm font-bold">{qty}</span>
         <button type="button" onClick={() => onChange(Math.min(maxQty, qty + 1))}
-          className="size-8 rounded-lg bk-gold flex items-center justify-center">
+          className="size-8 rounded-lg bk-gold flex items-center justify-center disabled:opacity-40"
+          disabled={qty >= maxQty}>
           <Plus className="size-3.5" />
         </button>
       </div>
