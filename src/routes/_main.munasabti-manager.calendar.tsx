@@ -284,7 +284,7 @@ function CalendarPage() {
                           return (
                             <div key={b.id} className={`text-[10px] px-2 py-1 rounded-lg font-semibold ${c.bg} ${c.text}`}>
                               <div className="flex items-center justify-between gap-1">
-                                <span className="font-mono">{b.start_time.slice(0,5)}</span>
+                                <span className="font-mono">{(b.start_time ?? "").slice(0,5) || "—"}</span>
                                 <span className={`size-1.5 rounded-full ${c.dot}`} />
                               </div>
                               <div className="truncate">{b.customer_name}</div>
