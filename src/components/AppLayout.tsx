@@ -279,6 +279,12 @@ export function AppLayout() {
                   </Link>
                 );
               })}
+              <button
+                onClick={() => { setMoreOpen(false); setShareOpen(true); }}
+                className="flex flex-col items-center justify-center gap-2 py-4 rounded-2xl border border-gold/40 bg-gold/10 text-gold transition">
+                <Share2 className="size-5" />
+                <span className="text-xs font-medium">مشاركة الرابط</span>
+              </button>
             </div>
             <button onClick={() => { setMoreOpen(false); signOut(); }}
               className="mt-4 w-full flex items-center justify-center gap-2 py-3 rounded-2xl border border-destructive/30 text-destructive font-semibold">
