@@ -41,6 +41,7 @@ import { Route as MainMunasabtiManagerCustomersRouteImport } from './routes/_mai
 import { Route as MainMunasabtiManagerCalendarRouteImport } from './routes/_main.munasabti-manager.calendar'
 import { Route as MainMunasabtiManagerBookingsRouteImport } from './routes/_main.munasabti-manager.bookings'
 import { Route as MainMunasabtiManagerBookingRequestsRouteImport } from './routes/_main.munasabti-manager.booking-requests'
+import { Route as MainMunasabtiManagerBookingPageBuilderRouteImport } from './routes/_main.munasabti-manager.booking-page-builder'
 import { Route as MainMunasabtiManagerAnalyticsRouteImport } from './routes/_main.munasabti-manager.analytics'
 import { Route as MunasabtiBookingSlugDecorationsIdRouteImport } from './routes/munasabti-booking.$slug.decorations.$id'
 
@@ -217,6 +218,12 @@ const MainMunasabtiManagerBookingRequestsRoute =
     path: '/munasabti-manager/booking-requests',
     getParentRoute: () => MainRoute,
   } as any)
+const MainMunasabtiManagerBookingPageBuilderRoute =
+  MainMunasabtiManagerBookingPageBuilderRouteImport.update({
+    id: '/munasabti-manager/booking-page-builder',
+    path: '/munasabti-manager/booking-page-builder',
+    getParentRoute: () => MainRoute,
+  } as any)
 const MainMunasabtiManagerAnalyticsRoute =
   MainMunasabtiManagerAnalyticsRouteImport.update({
     id: '/munasabti-manager/analytics',
@@ -249,6 +256,7 @@ export interface FileRoutesByFullPath {
   '/booking/$': typeof BookingSplatRoute
   '/munasabti-booking/$slug': typeof MunasabtiBookingSlugRouteWithChildren
   '/munasabti-manager/analytics': typeof MainMunasabtiManagerAnalyticsRoute
+  '/munasabti-manager/booking-page-builder': typeof MainMunasabtiManagerBookingPageBuilderRoute
   '/munasabti-manager/booking-requests': typeof MainMunasabtiManagerBookingRequestsRoute
   '/munasabti-manager/bookings': typeof MainMunasabtiManagerBookingsRoute
   '/munasabti-manager/calendar': typeof MainMunasabtiManagerCalendarRoute
@@ -283,6 +291,7 @@ export interface FileRoutesByTo {
   '/supplies': typeof SuppliesRoute
   '/booking/$': typeof BookingSplatRoute
   '/munasabti-manager/analytics': typeof MainMunasabtiManagerAnalyticsRoute
+  '/munasabti-manager/booking-page-builder': typeof MainMunasabtiManagerBookingPageBuilderRoute
   '/munasabti-manager/booking-requests': typeof MainMunasabtiManagerBookingRequestsRoute
   '/munasabti-manager/bookings': typeof MainMunasabtiManagerBookingsRoute
   '/munasabti-manager/calendar': typeof MainMunasabtiManagerCalendarRoute
@@ -320,6 +329,7 @@ export interface FileRoutesById {
   '/booking/$': typeof BookingSplatRoute
   '/munasabti-booking/$slug': typeof MunasabtiBookingSlugRouteWithChildren
   '/_main/munasabti-manager/analytics': typeof MainMunasabtiManagerAnalyticsRoute
+  '/_main/munasabti-manager/booking-page-builder': typeof MainMunasabtiManagerBookingPageBuilderRoute
   '/_main/munasabti-manager/booking-requests': typeof MainMunasabtiManagerBookingRequestsRoute
   '/_main/munasabti-manager/bookings': typeof MainMunasabtiManagerBookingsRoute
   '/_main/munasabti-manager/calendar': typeof MainMunasabtiManagerCalendarRoute
@@ -357,6 +367,7 @@ export interface FileRouteTypes {
     | '/booking/$'
     | '/munasabti-booking/$slug'
     | '/munasabti-manager/analytics'
+    | '/munasabti-manager/booking-page-builder'
     | '/munasabti-manager/booking-requests'
     | '/munasabti-manager/bookings'
     | '/munasabti-manager/calendar'
@@ -391,6 +402,7 @@ export interface FileRouteTypes {
     | '/supplies'
     | '/booking/$'
     | '/munasabti-manager/analytics'
+    | '/munasabti-manager/booking-page-builder'
     | '/munasabti-manager/booking-requests'
     | '/munasabti-manager/bookings'
     | '/munasabti-manager/calendar'
@@ -427,6 +439,7 @@ export interface FileRouteTypes {
     | '/booking/$'
     | '/munasabti-booking/$slug'
     | '/_main/munasabti-manager/analytics'
+    | '/_main/munasabti-manager/booking-page-builder'
     | '/_main/munasabti-manager/booking-requests'
     | '/_main/munasabti-manager/bookings'
     | '/_main/munasabti-manager/calendar'
@@ -691,6 +704,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MainMunasabtiManagerBookingRequestsRouteImport
       parentRoute: typeof MainRoute
     }
+    '/_main/munasabti-manager/booking-page-builder': {
+      id: '/_main/munasabti-manager/booking-page-builder'
+      path: '/munasabti-manager/booking-page-builder'
+      fullPath: '/munasabti-manager/booking-page-builder'
+      preLoaderRoute: typeof MainMunasabtiManagerBookingPageBuilderRouteImport
+      parentRoute: typeof MainRoute
+    }
     '/_main/munasabti-manager/analytics': {
       id: '/_main/munasabti-manager/analytics'
       path: '/munasabti-manager/analytics'
@@ -710,6 +730,7 @@ declare module '@tanstack/react-router' {
 
 interface MainRouteChildren {
   MainMunasabtiManagerAnalyticsRoute: typeof MainMunasabtiManagerAnalyticsRoute
+  MainMunasabtiManagerBookingPageBuilderRoute: typeof MainMunasabtiManagerBookingPageBuilderRoute
   MainMunasabtiManagerBookingRequestsRoute: typeof MainMunasabtiManagerBookingRequestsRoute
   MainMunasabtiManagerBookingsRoute: typeof MainMunasabtiManagerBookingsRoute
   MainMunasabtiManagerCalendarRoute: typeof MainMunasabtiManagerCalendarRoute
@@ -724,6 +745,8 @@ interface MainRouteChildren {
 
 const MainRouteChildren: MainRouteChildren = {
   MainMunasabtiManagerAnalyticsRoute: MainMunasabtiManagerAnalyticsRoute,
+  MainMunasabtiManagerBookingPageBuilderRoute:
+    MainMunasabtiManagerBookingPageBuilderRoute,
   MainMunasabtiManagerBookingRequestsRoute:
     MainMunasabtiManagerBookingRequestsRoute,
   MainMunasabtiManagerBookingsRoute: MainMunasabtiManagerBookingsRoute,
@@ -796,13 +819,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
