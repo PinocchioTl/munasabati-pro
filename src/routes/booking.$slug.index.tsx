@@ -83,18 +83,12 @@ function Landing() {
   );
 }
 
-function FeatureCard({ slug, to, icon, title, desc }: { slug: string; to: string; icon: React.ReactNode; title: string; desc: string }) {
+function Step({ n, title, desc }: { n: number; title: string; desc: string }) {
   return (
-    <Link to={to as any} params={{ slug } as any}
-      className="group bg-white rounded-2xl p-5 shadow-md hover:shadow-xl transition border border-transparent hover:bk-border-gold">
-      <div className="size-11 rounded-xl bk-gold flex items-center justify-center mb-3">
-        {icon}
-      </div>
-      <div className="font-bold bk-text-primary text-base">{title}</div>
+    <div className="bg-[var(--bk-bg)] rounded-2xl p-4">
+      <div className="size-10 rounded-xl bk-gold flex items-center justify-center font-bold mb-2">{n}</div>
+      <div className="font-bold bk-text-primary">{title}</div>
       <div className="text-xs text-gray-600 mt-1">{desc}</div>
-      <div className="mt-3 text-xs bk-text-gold font-bold flex items-center gap-1 group-hover:gap-2 transition-all">
-        تصفح <ArrowLeft className="size-3" />
-      </div>
-    </Link>
+    </div>
   );
 }
