@@ -1,4 +1,4 @@
-import { createFileRoute, useParams, useSearch } from "@tanstack/react-router";
+import { createFileRoute, useParams, useSearch, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import {
   getPublicDecorations,
@@ -6,7 +6,10 @@ import {
   getPublicSupplies,
   submitBookingRequest,
 } from "@/lib/booking-public.functions";
-import { CheckCircle2, Loader2, Minus, Plus, Send, ShoppingBag, Sparkles, Package } from "lucide-react";
+import {
+  CalendarDays, CheckCircle2, ChevronLeft, ChevronRight, Loader2, Minus, Plus,
+  Send, ShoppingBag, Sparkles, Package, User, ClipboardList, Phone, MapPin, Hash, Clock,
+} from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 
@@ -17,6 +20,30 @@ export const Route = createFileRoute("/booking/$slug/request")({
   }),
   component: RequestPage,
 });
+
+const EVENT_TYPES = [
+  { value: "wedding", label: "عرس", emoji: "💍" },
+  { value: "engagement", label: "خطوبة", emoji: "💐" },
+  { value: "birthday", label: "عيد ميلاد", emoji: "🎂" },
+  { value: "graduation", label: "حفل تخرج", emoji: "🎓" },
+  { value: "other", label: "مناسبة أخرى", emoji: "🎉" },
+];
+
+const WILAYAS = [
+  "أدرار","الشلف","الأغواط","أم البواقي","باتنة","بجاية","بسكرة","بشار","البليدة","البويرة",
+  "تمنراست","تبسة","تلمسان","تيارت","تيزي وزو","الجزائر","الجلفة","جيجل","سطيف","سعيدة",
+  "سكيكدة","سيدي بلعباس","عنابة","قالمة","قسنطينة","المدية","مستغانم","المسيلة","معسكر","ورقلة",
+  "وهران","البيض","إليزي","برج بوعريريج","بومرداس","الطارف","تندوف","تيسمسيلت","الوادي","خنشلة",
+  "سوق أهراس","تيبازة","ميلة","عين الدفلى","النعامة","عين تموشنت","غرداية","غليزان",
+];
+
+type StepKey = "date" | "items" | "info" | "summary";
+const STEPS: { key: StepKey; label: string; icon: any }[] = [
+  { key: "date", label: "التاريخ", icon: CalendarDays },
+  { key: "items", label: "الاختيارات", icon: Sparkles },
+  { key: "info", label: "بياناتك", icon: User },
+  { key: "summary", label: "الملخص", icon: ClipboardList },
+];
 
 function RequestPage() {
   const { slug } = useParams({ strict: false }) as { slug: string };
@@ -29,34 +56,38 @@ function RequestPage() {
   });
   const { data: decorations = [] } = useQuery({
     queryKey: ["public-decorations", slug],
-    queryFn: () => getPublicDecorations({ data: { slug } }),
+    queryFn: () => getPublicDecorations({ data: { slug } }).catch(() => []),
     retry: false,
   });
   const { data: supplies = [] } = useQuery({
     queryKey: ["public-supplies", slug],
-    queryFn: () => getPublicSupplies({ data: { slug } }),
+    queryFn: () => getPublicSupplies({ data: { slug } }).catch(() => []),
     retry: false,
   });
 
+  const [step, setStep] = useState<StepKey>("date");
   const [form, setForm] = useState({
     customer_name: "",
     customer_phone: "",
     event_date: search.date || "",
-    event_location: "",
+    event_time: "",
     event_type: "wedding",
+    wilaya: "",
+    baladiya: "",
+    address: "",
     notes: "",
   });
   const [decQty, setDecQty] = useState<Record<string, number>>({});
   const [supQty, setSupQty] = useState<Record<string, number>>({});
   const [submitting, setSubmitting] = useState(false);
-  const [done, setDone] = useState(false);
+  const [result, setResult] = useState<{ id: string; at: string } | null>(null);
 
-  // Prefill from URL
   useEffect(() => {
     if (search.decoration) setDecQty(q => ({ ...q, [search.decoration!]: q[search.decoration!] || 1 }));
   }, [search.decoration]);
 
   const showPrices = owner?.show_prices ?? true;
+  const stepIdx = STEPS.findIndex(s => s.key === step);
 
   const selectedDecorations = useMemo(
     () => Object.entries(decQty).filter(([, q]) => q > 0).map(([id, qty]) => ({ id, qty })),
@@ -68,34 +99,50 @@ function RequestPage() {
   );
 
   const total = useMemo(() => {
-    const d = selectedDecorations.reduce((s, x) => {
-      const dec = decorations.find(d => d.id === x.id);
-      return s + (dec?.price || 0) * x.qty;
-    }, 0);
-    const su = selectedSupplies.reduce((s, x) => {
-      const sp = supplies.find(d => d.id === x.id);
-      return s + (sp?.cost || 0) * x.qty;
-    }, 0);
+    const d = selectedDecorations.reduce((s, x) => s + ((decorations.find(d => d.id === x.id)?.price) || 0) * x.qty, 0);
+    const su = selectedSupplies.reduce((s, x) => s + ((supplies.find(d => d.id === x.id)?.cost) || 0) * x.qty, 0);
     return d + su;
   }, [selectedDecorations, selectedSupplies, decorations, supplies]);
 
-  async function submit(e: React.FormEvent) {
-    e.preventDefault();
-    if (!form.customer_name.trim()) return toast.error("الاسم مطلوب");
-    if (!form.customer_phone.trim()) return toast.error("رقم الهاتف مطلوب");
-    if (!form.event_date) return toast.error("التاريخ مطلوب");
-    if (selectedDecorations.length === 0 && selectedSupplies.length === 0) {
-      return toast.error("اختر ديكور أو مستلزم واحد على الأقل");
+  function goNext() {
+    if (step === "date") {
+      if (!form.event_date) return toast.error("اختر تاريخ المناسبة");
+      if (!form.event_type) return toast.error("اختر نوع المناسبة");
+      setStep("items");
+    } else if (step === "items") {
+      if (selectedDecorations.length === 0 && selectedSupplies.length === 0)
+        return toast.error("اختر ديكور أو مستلزم واحد على الأقل");
+      setStep("info");
+    } else if (step === "info") {
+      if (!form.customer_name.trim()) return toast.error("الاسم الكامل مطلوب");
+      if (!form.customer_phone.trim()) return toast.error("رقم الهاتف مطلوب");
+      if (!form.wilaya) return toast.error("اختر الولاية");
+      if (!form.baladiya.trim()) return toast.error("اكتب البلدية");
+      setStep("summary");
     }
+  }
+  function goBack() {
+    const i = STEPS.findIndex(s => s.key === step);
+    if (i > 0) setStep(STEPS[i - 1].key);
+  }
+
+  async function submit() {
     setSubmitting(true);
     try {
-      await submitBookingRequest({ data: {
+      const location = [form.address, form.baladiya, form.wilaya].filter(Boolean).join("، ");
+      const notes = [form.event_time ? `الوقت: ${form.event_time}` : "", form.notes].filter(Boolean).join("\n");
+      const res = await submitBookingRequest({ data: {
         slug,
-        ...form,
+        customer_name: form.customer_name,
+        customer_phone: form.customer_phone,
+        event_date: form.event_date,
+        event_type: form.event_type,
+        event_location: location || null,
+        notes: notes || null,
         decorations: selectedDecorations,
         supplies: selectedSupplies,
       } as any });
-      setDone(true);
+      setResult({ id: (res as any).id, at: new Date().toLocaleString("ar-DZ") });
     } catch (err: any) {
       toast.error(err.message || "فشل إرسال الطلب");
     } finally {
@@ -103,129 +150,292 @@ function RequestPage() {
     }
   }
 
-  if (done) {
+  if (result) {
     return (
       <div className="max-w-md mx-auto bg-white rounded-3xl p-8 shadow-xl text-center mt-8">
-        <div className="size-16 mx-auto rounded-2xl bg-green-100 text-green-600 flex items-center justify-center mb-4">
-          <CheckCircle2 className="size-8" />
+        <div className="size-20 mx-auto rounded-full bg-green-100 text-green-600 flex items-center justify-center mb-5 ring-8 ring-green-50">
+          <CheckCircle2 className="size-10" />
         </div>
-        <h1 className="text-xl font-bold bk-text-primary">تم إرسال طلبك بنجاح ✅</h1>
-        <p className="text-sm text-gray-600 mt-2">سيتواصل معك صاحب النشاط قريباً لتأكيد الحجز.</p>
+        <h1 className="text-2xl font-bold bk-text-primary">تم إرسال طلب الحجز بنجاح ✅</h1>
+        <p className="text-sm text-gray-600 mt-2 leading-relaxed">
+          سيتم التواصل معك بعد مراجعة الطلب من قبل صاحب الديكور.
+        </p>
+        <div className="mt-6 bg-[var(--bk-bg)] rounded-2xl p-4 text-right space-y-2.5">
+          <Row label="رقم الطلب" value={<span className="font-mono text-xs">#{result.id.slice(0, 8).toUpperCase()}</span>} />
+          <Row label="تاريخ الإرسال" value={result.at} />
+          <Row label="تاريخ المناسبة" value={form.event_date} />
+          <Row label="الحالة" value={<span className="text-amber-600 font-bold">قيد الانتظار</span>} />
+        </div>
+        <Link to="/booking/$slug" params={{ slug }}
+          className="mt-6 inline-flex items-center gap-2 px-5 py-3 rounded-xl bk-gold font-bold text-sm">
+          العودة للرئيسية
+        </Link>
       </div>
     );
   }
 
   return (
-    <form onSubmit={submit} className="space-y-5 max-w-3xl mx-auto">
-      <header>
-        <h1 className="text-2xl font-bold bk-text-primary flex items-center gap-2">
-          <ShoppingBag className="size-5 bk-text-gold" /> طلب حجز
+    <div className="max-w-3xl mx-auto space-y-5">
+      {/* Header / Stepper */}
+      <header className="bg-white rounded-2xl p-4 shadow-sm">
+        <h1 className="text-xl font-bold bk-text-primary flex items-center gap-2">
+          <ShoppingBag className="size-5 bk-text-gold" /> طلب حجز جديد
         </h1>
-        <p className="text-sm text-gray-600 mt-1">املأ البيانات وأرسل الطلب وسيتم التواصل معك</p>
+        <div className="mt-4 flex items-center gap-1 sm:gap-2">
+          {STEPS.map((s, i) => {
+            const Icon = s.icon;
+            const active = i === stepIdx;
+            const done = i < stepIdx;
+            return (
+              <div key={s.key} className="flex-1 flex items-center gap-1 sm:gap-2 min-w-0">
+                <div className={`size-8 rounded-full flex items-center justify-center shrink-0 transition ${
+                  done ? "bg-green-500 text-white" : active ? "bk-gold" : "bg-gray-100 text-gray-400"
+                }`}>
+                  {done ? <CheckCircle2 className="size-4" /> : <Icon className="size-4" />}
+                </div>
+                <div className={`text-[11px] sm:text-xs font-bold truncate ${active ? "bk-text-primary" : "text-gray-400"}`}>
+                  {s.label}
+                </div>
+                {i < STEPS.length - 1 && <div className={`flex-1 h-0.5 ${done ? "bg-green-500" : "bg-gray-100"}`} />}
+              </div>
+            );
+          })}
+        </div>
       </header>
 
-      <section className="bg-white rounded-2xl p-5 shadow-sm space-y-3">
-        <h2 className="font-bold bk-text-primary text-sm">بياناتك</h2>
-        <Field label="الاسم الكامل *">
-          <input required value={form.customer_name} onChange={e => setForm({ ...form, customer_name: e.target.value })}
-            className="w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm outline-none focus:border-[var(--bk-gold)]" />
-        </Field>
-        <Field label="رقم الهاتف *">
-          <input required type="tel" value={form.customer_phone} onChange={e => setForm({ ...form, customer_phone: e.target.value })}
-            placeholder="0555 12 34 56"
-            className="w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm outline-none focus:border-[var(--bk-gold)]" />
-        </Field>
-        <div className="grid sm:grid-cols-2 gap-3">
-          <Field label="تاريخ المناسبة *">
-            <input required type="date" min={new Date().toISOString().slice(0, 10)}
-              value={form.event_date} onChange={e => setForm({ ...form, event_date: e.target.value })}
-              className="w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm outline-none focus:border-[var(--bk-gold)]" />
-          </Field>
-          <Field label="نوع المناسبة">
-            <select value={form.event_type} onChange={e => setForm({ ...form, event_type: e.target.value })}
-              className="w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm outline-none focus:border-[var(--bk-gold)] bg-white">
-              <option value="wedding">عرس</option>
-              <option value="engagement">خطوبة</option>
-              <option value="birthday">عيد ميلاد</option>
-              <option value="other">أخرى</option>
-            </select>
-          </Field>
-        </div>
-        <Field label="موقع المناسبة">
-          <input value={form.event_location} onChange={e => setForm({ ...form, event_location: e.target.value })}
-            placeholder="المدينة، العنوان..."
-            className="w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm outline-none focus:border-[var(--bk-gold)]" />
-        </Field>
-        <Field label="ملاحظات">
-          <textarea rows={3} value={form.notes} onChange={e => setForm({ ...form, notes: e.target.value })}
-            className="w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm outline-none focus:border-[var(--bk-gold)] resize-none" />
-        </Field>
-      </section>
-
-      {decorations.length > 0 && (
-        <Section title="اختر الديكورات" icon={<Sparkles className="size-4 bk-text-gold" />}>
-          {decorations.map(d => (
-            <PickRow key={d.id}
-              image={d.images?.[0]}
-              name={d.name}
-              meta={d.category || undefined}
-              price={showPrices ? d.price : undefined}
-              qty={decQty[d.id] || 0}
-              onChange={(v) => setDecQty({ ...decQty, [d.id]: v })}
-            />
-          ))}
-        </Section>
-      )}
-
-      {supplies.length > 0 && (
-        <Section title="اختر المستلزمات" icon={<Package className="size-4 bk-text-gold" />}>
-          {supplies.map(s => (
-            <PickRow key={s.id}
-              image={s.images?.[0]}
-              name={s.name}
-              meta={s.category || undefined}
-              price={showPrices ? s.cost : undefined}
-              qty={supQty[s.id] || 0}
-              onChange={(v) => setSupQty({ ...supQty, [s.id]: v })}
-              maxQty={999}
-            />
-          ))}
-        </Section>
-      )}
-
-      <div className="sticky bottom-3 z-20 bg-white rounded-2xl p-4 shadow-2xl border bk-border-gold flex items-center justify-between gap-3">
-        <div>
-          <div className="text-[11px] text-gray-500">الإجمالي التقريبي</div>
-          <div className="text-lg font-bold bk-text-gold">
-            {showPrices ? `${new Intl.NumberFormat("ar-DZ").format(total)} د.ج` : "—"}
+      {/* Step content */}
+      {step === "date" && (
+        <section className="bg-white rounded-2xl p-5 shadow-sm space-y-5 animate-in fade-in">
+          <SectionTitle icon={<CalendarDays className="size-4 bk-text-gold" />} title="متى ستقام مناسبتك؟" />
+          <div className="grid sm:grid-cols-2 gap-3">
+            <Field label="تاريخ المناسبة *" icon={<CalendarDays className="size-3.5" />}>
+              <input required type="date" min={new Date().toISOString().slice(0, 10)}
+                value={form.event_date} onChange={e => setForm({ ...form, event_date: e.target.value })}
+                className={inputCls} />
+            </Field>
+            <Field label="وقت المناسبة (اختياري)" icon={<Clock className="size-3.5" />}>
+              <input type="time" value={form.event_time} onChange={e => setForm({ ...form, event_time: e.target.value })}
+                className={inputCls} />
+            </Field>
           </div>
+          <Field label="نوع المناسبة *">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+              {EVENT_TYPES.map(t => (
+                <button key={t.value} type="button"
+                  onClick={() => setForm({ ...form, event_type: t.value })}
+                  className={`p-3 rounded-xl border-2 text-sm font-bold transition flex flex-col items-center gap-1 ${
+                    form.event_type === t.value
+                      ? "bk-border-gold bg-yellow-50/40 bk-text-primary"
+                      : "border-gray-100 hover:border-gray-200 text-gray-600"
+                  }`}>
+                  <span className="text-xl">{t.emoji}</span>
+                  {t.label}
+                </button>
+              ))}
+            </div>
+          </Field>
+        </section>
+      )}
+
+      {step === "items" && (
+        <div className="space-y-4 animate-in fade-in">
+          {decorations.length === 0 && supplies.length === 0 ? (
+            <div className="bg-white rounded-2xl p-8 shadow-sm text-center text-sm text-gray-500">
+              لا توجد عناصر متاحة حالياً.
+            </div>
+          ) : null}
+
+          {decorations.length > 0 && (
+            <Section title="الديكورات المتاحة" icon={<Sparkles className="size-4 bk-text-gold" />}
+              hint={`تاريخ المناسبة: ${form.event_date}`}>
+              {decorations.map(d => (
+                <PickRow key={d.id}
+                  image={d.images?.[0]}
+                  name={d.name}
+                  meta={d.category || undefined}
+                  price={showPrices ? d.price : undefined}
+                  qty={decQty[d.id] || 0}
+                  onChange={(v) => setDecQty({ ...decQty, [d.id]: v })}
+                  maxQty={d.total_qty || 99}
+                />
+              ))}
+            </Section>
+          )}
+
+          {supplies.length > 0 && (
+            <Section title="المستلزمات المتاحة" icon={<Package className="size-4 bk-text-gold" />}>
+              {supplies.map(s => (
+                <PickRow key={s.id}
+                  image={s.images?.[0]}
+                  name={s.name}
+                  meta={s.category || undefined}
+                  price={showPrices ? s.cost : undefined}
+                  qty={supQty[s.id] || 0}
+                  onChange={(v) => setSupQty({ ...supQty, [s.id]: v })}
+                  maxQty={999}
+                />
+              ))}
+            </Section>
+          )}
         </div>
-        <button type="submit" disabled={submitting}
-          className="bk-gold inline-flex items-center gap-2 px-5 py-3 rounded-xl font-bold text-sm shadow-lg disabled:opacity-60">
-          {submitting ? <Loader2 className="size-4 animate-spin" /> : <Send className="size-4" />}
-          إرسال الطلب
+      )}
+
+      {step === "info" && (
+        <section className="bg-white rounded-2xl p-5 shadow-sm space-y-4 animate-in fade-in">
+          <SectionTitle icon={<User className="size-4 bk-text-gold" />} title="معلومات التواصل" />
+          <div className="grid sm:grid-cols-2 gap-3">
+            <Field label="الاسم الكامل *" icon={<User className="size-3.5" />}>
+              <input required value={form.customer_name} onChange={e => setForm({ ...form, customer_name: e.target.value })}
+                className={inputCls} />
+            </Field>
+            <Field label="رقم الهاتف *" icon={<Phone className="size-3.5" />}>
+              <input required type="tel" value={form.customer_phone} onChange={e => setForm({ ...form, customer_phone: e.target.value })}
+                placeholder="0555 12 34 56" className={inputCls} />
+            </Field>
+            <Field label="الولاية *" icon={<MapPin className="size-3.5" />}>
+              <select value={form.wilaya} onChange={e => setForm({ ...form, wilaya: e.target.value })}
+                className={inputCls + " bg-white"}>
+                <option value="">— اختر الولاية —</option>
+                {WILAYAS.map(w => <option key={w} value={w}>{w}</option>)}
+              </select>
+            </Field>
+            <Field label="البلدية *" icon={<Hash className="size-3.5" />}>
+              <input required value={form.baladiya} onChange={e => setForm({ ...form, baladiya: e.target.value })}
+                className={inputCls} />
+            </Field>
+          </div>
+          <Field label="العنوان (اختياري)">
+            <input value={form.address} onChange={e => setForm({ ...form, address: e.target.value })}
+              placeholder="الحي، الشارع..." className={inputCls} />
+          </Field>
+          <Field label="ملاحظات إضافية">
+            <textarea rows={3} value={form.notes} onChange={e => setForm({ ...form, notes: e.target.value })}
+              className={inputCls + " resize-none"} />
+          </Field>
+        </section>
+      )}
+
+      {step === "summary" && (
+        <section className="bg-white rounded-2xl p-5 shadow-sm space-y-4 animate-in fade-in">
+          <SectionTitle icon={<ClipboardList className="size-4 bk-text-gold" />} title="مراجعة الطلب" />
+
+          <div className="bg-[var(--bk-bg)] rounded-xl p-4 space-y-2">
+            <Row label="تاريخ المناسبة" value={form.event_date + (form.event_time ? ` — ${form.event_time}` : "")} />
+            <Row label="نوع المناسبة" value={EVENT_TYPES.find(t => t.value === form.event_type)?.label || "—"} />
+            <Row label="الاسم" value={form.customer_name} />
+            <Row label="الهاتف" value={form.customer_phone} />
+            <Row label="الموقع" value={[form.address, form.baladiya, form.wilaya].filter(Boolean).join("، ")} />
+          </div>
+
+          {selectedDecorations.length > 0 && (
+            <div>
+              <h3 className="text-xs font-bold bk-text-primary mb-2">الديكورات</h3>
+              <div className="space-y-1.5">
+                {selectedDecorations.map(x => {
+                  const d = decorations.find(d => d.id === x.id);
+                  if (!d) return null;
+                  return (
+                    <div key={x.id} className="flex items-center justify-between text-sm border border-gray-100 rounded-lg px-3 py-2">
+                      <span className="truncate">{d.name} <span className="text-gray-400">× {x.qty}</span></span>
+                      {showPrices && <span className="bk-text-gold font-bold text-xs">
+                        {new Intl.NumberFormat("ar-DZ").format((d.price || 0) * x.qty)} د.ج
+                      </span>}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          {selectedSupplies.length > 0 && (
+            <div>
+              <h3 className="text-xs font-bold bk-text-primary mb-2">المستلزمات</h3>
+              <div className="space-y-1.5">
+                {selectedSupplies.map(x => {
+                  const s = supplies.find(d => d.id === x.id);
+                  if (!s) return null;
+                  return (
+                    <div key={x.id} className="flex items-center justify-between text-sm border border-gray-100 rounded-lg px-3 py-2">
+                      <span className="truncate">{s.name} <span className="text-gray-400">× {x.qty}</span></span>
+                      {showPrices && <span className="bk-text-gold font-bold text-xs">
+                        {new Intl.NumberFormat("ar-DZ").format((s.cost || 0) * x.qty)} د.ج
+                      </span>}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          {showPrices && (
+            <div className="flex items-center justify-between border-t pt-3">
+              <span className="text-sm font-bold bk-text-primary">الإجمالي التقريبي</span>
+              <span className="text-lg font-bold bk-text-gold">
+                {new Intl.NumberFormat("ar-DZ").format(total)} د.ج
+              </span>
+            </div>
+          )}
+        </section>
+      )}
+
+      {/* Footer nav */}
+      <div className="sticky bottom-3 z-20 bg-white rounded-2xl p-3 shadow-2xl border bk-border-gold flex items-center justify-between gap-2">
+        <button type="button" onClick={goBack} disabled={stepIdx === 0}
+          className="inline-flex items-center gap-1 px-4 py-2.5 rounded-xl bg-gray-100 text-sm font-bold disabled:opacity-40">
+          <ChevronRight className="size-4" /> السابق
         </button>
+
+        {step === "summary" ? (
+          <button type="button" onClick={submit} disabled={submitting}
+            className="bk-gold inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-sm shadow-lg disabled:opacity-60">
+            {submitting ? <Loader2 className="size-4 animate-spin" /> : <Send className="size-4" />}
+            إرسال طلب الحجز
+          </button>
+        ) : (
+          <button type="button" onClick={goNext}
+            className="bk-gold inline-flex items-center gap-1 px-5 py-2.5 rounded-xl font-bold text-sm shadow-lg">
+            التالي <ChevronLeft className="size-4" />
+          </button>
+        )}
       </div>
-    </form>
+    </div>
   );
 }
 
-function Field({ label, children }: { label: string; children: React.ReactNode }) {
+const inputCls = "w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm outline-none focus:border-[var(--bk-gold)] transition";
+
+function SectionTitle({ icon, title }: { icon: React.ReactNode; title: string }) {
+  return <h2 className="font-bold bk-text-primary text-base flex items-center gap-2">{icon} {title}</h2>;
+}
+
+function Field({ label, icon, children }: { label: string; icon?: React.ReactNode; children: React.ReactNode }) {
   return (
     <div>
-      <label className="block text-xs font-bold bk-text-primary mb-1.5">{label}</label>
+      <label className="flex items-center gap-1.5 text-xs font-bold bk-text-primary mb-1.5">
+        {icon} {label}
+      </label>
       {children}
     </div>
   );
 }
 
-function Section({ title, icon, children }: { title: string; icon: React.ReactNode; children: React.ReactNode }) {
+function Row({ label, value }: { label: string; value: React.ReactNode }) {
+  return (
+    <div className="flex items-center justify-between text-sm">
+      <span className="text-gray-500 text-xs">{label}</span>
+      <span className="font-bold bk-text-primary">{value || "—"}</span>
+    </div>
+  );
+}
+
+function Section({ title, icon, hint, children }: { title: string; icon: React.ReactNode; hint?: string; children: React.ReactNode }) {
   return (
     <section className="bg-white rounded-2xl p-4 shadow-sm">
-      <h2 className="font-bold bk-text-primary text-sm flex items-center gap-2 mb-3">{icon} {title}</h2>
-      <div className="space-y-2 max-h-96 overflow-y-auto pr-1">
-        {children}
+      <div className="flex items-center justify-between mb-3">
+        <h2 className="font-bold bk-text-primary text-sm flex items-center gap-2">{icon} {title}</h2>
+        {hint && <span className="text-[10px] text-gray-400">{hint}</span>}
       </div>
+      <div className="space-y-2 max-h-96 overflow-y-auto pr-1">{children}</div>
     </section>
   );
 }
@@ -235,7 +445,7 @@ function PickRow({ image, name, meta, price, qty, onChange, maxQty = 99 }: {
   qty: number; onChange: (v: number) => void; maxQty?: number;
 }) {
   return (
-    <div className={`flex items-center gap-3 p-2 rounded-xl border ${qty > 0 ? "bk-border-gold bg-yellow-50/30" : "border-gray-100"}`}>
+    <div className={`flex items-center gap-3 p-2 rounded-xl border transition ${qty > 0 ? "bk-border-gold bg-yellow-50/30" : "border-gray-100"}`}>
       <div className="size-12 rounded-lg bg-gray-100 overflow-hidden shrink-0">
         {image ? <img src={image} alt="" loading="lazy" className="size-full object-cover" /> : null}
       </div>
@@ -250,8 +460,7 @@ function PickRow({ image, name, meta, price, qty, onChange, maxQty = 99 }: {
       </div>
       <div className="flex items-center gap-1 shrink-0">
         <button type="button" onClick={() => onChange(Math.max(0, qty - 1))}
-          className="size-8 rounded-lg bg-gray-100 flex items-center justify-center disabled:opacity-40"
-          disabled={qty === 0}>
+          className="size-8 rounded-lg bg-gray-100 flex items-center justify-center disabled:opacity-40" disabled={qty === 0}>
           <Minus className="size-3.5" />
         </button>
         <span className="w-8 text-center text-sm font-bold">{qty}</span>
