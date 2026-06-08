@@ -2,9 +2,10 @@ import { Link, Outlet, useRouterState, useNavigate } from "@tanstack/react-route
 import {
   LayoutDashboard, CalendarDays, CalendarRange, Sparkles, Package,
   Users, Wallet, Bell, BarChart3, Settings, Search, Plus, Crown, LogOut,
-  MoreHorizontal, X,
+  MoreHorizontal, X, Share2,
 } from "lucide-react";
 import { useState } from "react";
+import { ShareBookingLinkModal } from "@/components/ShareBookingLinkModal";
 import { useNotifications } from "@/lib/db";
 import { useAuth, signOut } from "@/lib/auth";
 import { useBranding } from "@/lib/branding";
@@ -45,6 +46,7 @@ export function AppLayout() {
   const { branding } = useBranding();
   const [moreOpen, setMoreOpen] = useState(false);
   const [fabOpen, setFabOpen] = useState(false);
+  const [shareOpen, setShareOpen] = useState(false);
   const navigate = useNavigate();
 
   const moreItems = [...navItems.filter((i) => !mobilePrimary.includes(i.to)), ...secondaryItems];
@@ -152,6 +154,15 @@ export function AppLayout() {
             </div>
             <div className="flex-1 md:hidden" />
 
+            <button
+              onClick={() => setShareOpen(true)}
+              className="hidden sm:flex items-center gap-2 bg-gradient-gold text-primary hover:opacity-90 transition rounded-xl px-3 lg:px-4 py-2 lg:py-2.5 text-sm font-semibold shadow-gold"
+              title="مشاركة رابط الحجز"
+            >
+              <Share2 className="size-4" />
+              <span className="hidden lg:inline">مشاركة الرابط</span>
+            </button>
+
             <Link to="/notifications" className="relative size-9 sm:size-10 rounded-xl hover:bg-secondary flex items-center justify-center transition">
               <Bell className="size-[18px]" />
               {unread > 0 && (
@@ -173,6 +184,9 @@ export function AppLayout() {
           <Outlet />
         </div>
       </main>
+
+      {/* Share Booking Link Modal */}
+      <ShareBookingLinkModal open={shareOpen} onClose={() => setShareOpen(false)} />
 
       {/* Mobile bottom nav (hidden on md+) */}
       <nav className="md:hidden fixed bottom-0 inset-x-0 z-40 glass border-t border-border/60 safe-area-inset">
@@ -265,6 +279,12 @@ export function AppLayout() {
                   </Link>
                 );
               })}
+              <button
+                onClick={() => { setMoreOpen(false); setShareOpen(true); }}
+                className="flex flex-col items-center justify-center gap-2 py-4 rounded-2xl border border-gold/40 bg-gold/10 text-gold transition">
+                <Share2 className="size-5" />
+                <span className="text-xs font-medium">مشاركة الرابط</span>
+              </button>
             </div>
             <button onClick={() => { setMoreOpen(false); signOut(); }}
               className="mt-4 w-full flex items-center justify-center gap-2 py-3 rounded-2xl border border-destructive/30 text-destructive font-semibold">
