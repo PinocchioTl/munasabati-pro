@@ -24,6 +24,7 @@ import { Route as MainDecorationsRouteImport } from './routes/_main.decorations'
 import { Route as MainCustomersRouteImport } from './routes/_main.customers'
 import { Route as MainCalendarRouteImport } from './routes/_main.calendar'
 import { Route as MainBookingsRouteImport } from './routes/_main.bookings'
+import { Route as MainBookingRequestsRouteImport } from './routes/_main.booking-requests'
 import { Route as MainAnalyticsRouteImport } from './routes/_main.analytics'
 import { Route as BookingSlugIndexRouteImport } from './routes/booking.$slug.index'
 import { Route as BookingSlugSuppliesRouteImport } from './routes/booking.$slug.supplies'
@@ -105,6 +106,11 @@ const MainBookingsRoute = MainBookingsRouteImport.update({
   path: '/bookings',
   getParentRoute: () => MainRoute,
 } as any)
+const MainBookingRequestsRoute = MainBookingRequestsRouteImport.update({
+  id: '/booking-requests',
+  path: '/booking-requests',
+  getParentRoute: () => MainRoute,
+} as any)
 const MainAnalyticsRoute = MainAnalyticsRouteImport.update({
   id: '/analytics',
   path: '/analytics',
@@ -144,6 +150,7 @@ export interface FileRoutesByFullPath {
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
   '/analytics': typeof MainAnalyticsRoute
+  '/booking-requests': typeof MainBookingRequestsRoute
   '/bookings': typeof MainBookingsRoute
   '/calendar': typeof MainCalendarRoute
   '/customers': typeof MainCustomersRoute
@@ -165,6 +172,7 @@ export interface FileRoutesByTo {
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
   '/analytics': typeof MainAnalyticsRoute
+  '/booking-requests': typeof MainBookingRequestsRoute
   '/bookings': typeof MainBookingsRoute
   '/calendar': typeof MainCalendarRoute
   '/customers': typeof MainCustomersRoute
@@ -188,6 +196,7 @@ export interface FileRoutesById {
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
   '/_main/analytics': typeof MainAnalyticsRoute
+  '/_main/booking-requests': typeof MainBookingRequestsRoute
   '/_main/bookings': typeof MainBookingsRoute
   '/_main/calendar': typeof MainCalendarRoute
   '/_main/customers': typeof MainCustomersRoute
@@ -213,6 +222,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/signup'
     | '/analytics'
+    | '/booking-requests'
     | '/bookings'
     | '/calendar'
     | '/customers'
@@ -234,6 +244,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/signup'
     | '/analytics'
+    | '/booking-requests'
     | '/bookings'
     | '/calendar'
     | '/customers'
@@ -256,6 +267,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/signup'
     | '/_main/analytics'
+    | '/_main/booking-requests'
     | '/_main/bookings'
     | '/_main/calendar'
     | '/_main/customers'
@@ -389,6 +401,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MainBookingsRouteImport
       parentRoute: typeof MainRoute
     }
+    '/_main/booking-requests': {
+      id: '/_main/booking-requests'
+      path: '/booking-requests'
+      fullPath: '/booking-requests'
+      preLoaderRoute: typeof MainBookingRequestsRouteImport
+      parentRoute: typeof MainRoute
+    }
     '/_main/analytics': {
       id: '/_main/analytics'
       path: '/analytics'
@@ -436,6 +455,7 @@ declare module '@tanstack/react-router' {
 
 interface MainRouteChildren {
   MainAnalyticsRoute: typeof MainAnalyticsRoute
+  MainBookingRequestsRoute: typeof MainBookingRequestsRoute
   MainBookingsRoute: typeof MainBookingsRoute
   MainCalendarRoute: typeof MainCalendarRoute
   MainCustomersRoute: typeof MainCustomersRoute
@@ -449,6 +469,7 @@ interface MainRouteChildren {
 
 const MainRouteChildren: MainRouteChildren = {
   MainAnalyticsRoute: MainAnalyticsRoute,
+  MainBookingRequestsRoute: MainBookingRequestsRoute,
   MainBookingsRoute: MainBookingsRoute,
   MainCalendarRoute: MainCalendarRoute,
   MainCustomersRoute: MainCustomersRoute,
@@ -505,13 +526,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
