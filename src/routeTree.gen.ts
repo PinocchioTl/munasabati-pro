@@ -27,6 +27,7 @@ import { Route as MainRouteImport } from './routes/_main'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as MunasabtiBookingSlugRouteImport } from './routes/munasabti-booking.$slug'
 import { Route as BookingSplatRouteImport } from './routes/booking.$'
+import { Route as MainMunasabtiAdminRouteImport } from './routes/_main.munasabti-admin'
 import { Route as MunasabtiBookingSlugIndexRouteImport } from './routes/munasabti-booking.$slug.index'
 import { Route as MainMunasabtiManagerIndexRouteImport } from './routes/_main.munasabti-manager.index'
 import { Route as MunasabtiBookingSlugSuppliesRouteImport } from './routes/munasabti-booking.$slug.supplies'
@@ -132,6 +133,11 @@ const BookingSplatRoute = BookingSplatRouteImport.update({
   id: '/booking/$',
   path: '/booking/$',
   getParentRoute: () => rootRouteImport,
+} as any)
+const MainMunasabtiAdminRoute = MainMunasabtiAdminRouteImport.update({
+  id: '/munasabti-admin',
+  path: '/munasabti-admin',
+  getParentRoute: () => MainRoute,
 } as any)
 const MunasabtiBookingSlugIndexRoute =
   MunasabtiBookingSlugIndexRouteImport.update({
@@ -246,6 +252,7 @@ export interface FileRoutesByFullPath {
   '/settings': typeof SettingsRoute
   '/signup': typeof SignupRoute
   '/supplies': typeof SuppliesRoute
+  '/munasabti-admin': typeof MainMunasabtiAdminRoute
   '/booking/$': typeof BookingSplatRoute
   '/munasabti-booking/$slug': typeof MunasabtiBookingSlugRouteWithChildren
   '/munasabti-manager/analytics': typeof MainMunasabtiManagerAnalyticsRoute
@@ -281,6 +288,7 @@ export interface FileRoutesByTo {
   '/settings': typeof SettingsRoute
   '/signup': typeof SignupRoute
   '/supplies': typeof SuppliesRoute
+  '/munasabti-admin': typeof MainMunasabtiAdminRoute
   '/booking/$': typeof BookingSplatRoute
   '/munasabti-manager/analytics': typeof MainMunasabtiManagerAnalyticsRoute
   '/munasabti-manager/booking-requests': typeof MainMunasabtiManagerBookingRequestsRoute
@@ -317,6 +325,7 @@ export interface FileRoutesById {
   '/settings': typeof SettingsRoute
   '/signup': typeof SignupRoute
   '/supplies': typeof SuppliesRoute
+  '/_main/munasabti-admin': typeof MainMunasabtiAdminRoute
   '/booking/$': typeof BookingSplatRoute
   '/munasabti-booking/$slug': typeof MunasabtiBookingSlugRouteWithChildren
   '/_main/munasabti-manager/analytics': typeof MainMunasabtiManagerAnalyticsRoute
@@ -354,6 +363,7 @@ export interface FileRouteTypes {
     | '/settings'
     | '/signup'
     | '/supplies'
+    | '/munasabti-admin'
     | '/booking/$'
     | '/munasabti-booking/$slug'
     | '/munasabti-manager/analytics'
@@ -389,6 +399,7 @@ export interface FileRouteTypes {
     | '/settings'
     | '/signup'
     | '/supplies'
+    | '/munasabti-admin'
     | '/booking/$'
     | '/munasabti-manager/analytics'
     | '/munasabti-manager/booking-requests'
@@ -424,6 +435,7 @@ export interface FileRouteTypes {
     | '/settings'
     | '/signup'
     | '/supplies'
+    | '/_main/munasabti-admin'
     | '/booking/$'
     | '/munasabti-booking/$slug'
     | '/_main/munasabti-manager/analytics'
@@ -593,6 +605,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BookingSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_main/munasabti-admin': {
+      id: '/_main/munasabti-admin'
+      path: '/munasabti-admin'
+      fullPath: '/munasabti-admin'
+      preLoaderRoute: typeof MainMunasabtiAdminRouteImport
+      parentRoute: typeof MainRoute
+    }
     '/munasabti-booking/$slug/': {
       id: '/munasabti-booking/$slug/'
       path: '/'
@@ -709,6 +728,7 @@ declare module '@tanstack/react-router' {
 }
 
 interface MainRouteChildren {
+  MainMunasabtiAdminRoute: typeof MainMunasabtiAdminRoute
   MainMunasabtiManagerAnalyticsRoute: typeof MainMunasabtiManagerAnalyticsRoute
   MainMunasabtiManagerBookingRequestsRoute: typeof MainMunasabtiManagerBookingRequestsRoute
   MainMunasabtiManagerBookingsRoute: typeof MainMunasabtiManagerBookingsRoute
@@ -723,6 +743,7 @@ interface MainRouteChildren {
 }
 
 const MainRouteChildren: MainRouteChildren = {
+  MainMunasabtiAdminRoute: MainMunasabtiAdminRoute,
   MainMunasabtiManagerAnalyticsRoute: MainMunasabtiManagerAnalyticsRoute,
   MainMunasabtiManagerBookingRequestsRoute:
     MainMunasabtiManagerBookingRequestsRoute,
@@ -796,13 +817,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
