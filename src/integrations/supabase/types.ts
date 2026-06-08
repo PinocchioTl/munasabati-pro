@@ -64,30 +64,63 @@ export type Database = {
       }
       profiles: {
         Row: {
+          accent_color: string | null
+          background_color: string | null
           booking_enabled: boolean
+          company_name: string | null
+          cover_url: string | null
           created_at: string
+          description: string | null
           id: string
           last_visit_at: string | null
           link_views: number
+          logo_url: string | null
+          phone: string | null
+          primary_color: string | null
           public_slug: string | null
+          secondary_color: string | null
+          show_prices: boolean
+          tagline: string | null
           updated_at: string
         }
         Insert: {
+          accent_color?: string | null
+          background_color?: string | null
           booking_enabled?: boolean
+          company_name?: string | null
+          cover_url?: string | null
           created_at?: string
+          description?: string | null
           id: string
           last_visit_at?: string | null
           link_views?: number
+          logo_url?: string | null
+          phone?: string | null
+          primary_color?: string | null
           public_slug?: string | null
+          secondary_color?: string | null
+          show_prices?: boolean
+          tagline?: string | null
           updated_at?: string
         }
         Update: {
+          accent_color?: string | null
+          background_color?: string | null
           booking_enabled?: boolean
+          company_name?: string | null
+          cover_url?: string | null
           created_at?: string
+          description?: string | null
           id?: string
           last_visit_at?: string | null
           link_views?: number
+          logo_url?: string | null
+          phone?: string | null
+          primary_color?: string | null
           public_slug?: string | null
+          secondary_color?: string | null
+          show_prices?: boolean
+          tagline?: string | null
           updated_at?: string
         }
         Relationships: []
