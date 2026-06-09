@@ -7,13 +7,31 @@ const sectionSchema = z.object({
   visible: z.boolean(),
 });
 
+// Only http(s) URLs allowed; rejects javascript:, data:, vbscript:, etc.
+const httpUrl = z
+  .string()
+  .trim()
+  .max(200)
+  .refine(
+    (v) => v === "" || /^https?:\/\//i.test(v),
+    { message: "يجب أن يبدأ الرابط بـ http:// أو https://" },
+  )
+  .refine(
+    (v) => {
+      if (!v) return true;
+      try { const u = new URL(v); return u.protocol === "http:" || u.protocol === "https:"; }
+      catch { return false; }
+    },
+    { message: "رابط غير صالح" },
+  );
+
 const socialSchema = z.object({
-  instagram: z.string().trim().max(200).optional().nullable(),
-  snapchat: z.string().trim().max(200).optional().nullable(),
-  tiktok: z.string().trim().max(200).optional().nullable(),
-  twitter: z.string().trim().max(200).optional().nullable(),
-  whatsapp: z.string().trim().max(50).optional().nullable(),
-  facebook: z.string().trim().max(200).optional().nullable(),
+  instagram: httpUrl.optional().nullable(),
+  snapchat: httpUrl.optional().nullable(),
+  tiktok: httpUrl.optional().nullable(),
+  twitter: httpUrl.optional().nullable(),
+  whatsapp: z.string().trim().max(50).regex(/^[+0-9\s-]*$/, "رقم غير صالح").optional().nullable(),
+  facebook: httpUrl.optional().nullable(),
 }).partial();
 
 const saveSchema = z.object({
