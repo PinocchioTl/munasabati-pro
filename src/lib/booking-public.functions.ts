@@ -49,16 +49,14 @@ export const getPublicDecorations = createServerFn({ method: "GET" })
   .handler(async ({ data }) => {
     const owner = await resolveOwner(data.slug);
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const cols = owner.show_prices
-      ? "id, name, category, images, price, total_qty, description"
-      : "id, name, category, images, total_qty, description";
     const { data: rows, error } = await supabaseAdmin
       .from("decorations")
-      .select(cols)
+      .select("id, name, category, images, price, total_qty, description")
       .eq("owner_id", owner.id)
       .order("name");
     if (error) throw new Error(error.message);
-    return rows ?? [];
+    const list = rows ?? [];
+    return owner.show_prices ? list : list.map(({ price: _p, ...r }) => r);
   });
 
 export const getPublicDecoration = createServerFn({ method: "GET" })
@@ -67,31 +65,36 @@ export const getPublicDecoration = createServerFn({ method: "GET" })
     id: z.string().uuid().parse(d.id),
   }))
   .handler(async ({ data }) => {
-    const owner_id = await resolveOwner(data.slug);
+    const owner = await resolveOwner(data.slug);
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { data: row, error } = await supabaseAdmin
       .from("decorations")
       .select("id, name, category, images, price, total_qty, description")
-      .eq("owner_id", owner_id)
+      .eq("owner_id", owner.id)
       .eq("id", data.id)
       .maybeSingle();
     if (error) throw new Error(error.message);
     if (!row) throw new Error("الديكور غير موجود");
+    if (!owner.show_prices) {
+      const { price: _p, ...rest } = row;
+      return rest;
+    }
     return row;
   });
 
 export const getPublicSupplies = createServerFn({ method: "GET" })
   .inputValidator((d: { slug: string }) => ({ slug: slugSchema.parse(d.slug) }))
   .handler(async ({ data }) => {
-    const owner_id = await resolveOwner(data.slug);
+    const owner = await resolveOwner(data.slug);
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { data: rows, error } = await supabaseAdmin
       .from("supplies")
       .select("id, name, category, images, cost, total_qty, notes")
-      .eq("owner_id", owner_id)
+      .eq("owner_id", owner.id)
       .order("name");
     if (error) throw new Error(error.message);
-    return rows ?? [];
+    const list = rows ?? [];
+    return owner.show_prices ? list : list.map(({ cost: _c, ...r }) => r);
   });
 
 /** Return decorations + supplies that still have availability on a given date. */
