@@ -325,4 +325,3 @@ function UserCard({ collapsed }: { collapsed: boolean }) {
 
 // Re-exports kept for compatibility
 export { isActivePath as _isActivePath };
-export const _unused = ChevronLeft && ChevronRight;
