@@ -3,17 +3,17 @@ import { z } from "zod";
 
 const slugSchema = z.string().regex(/^[a-z0-9][a-z0-9-]{2,39}$/, "slug غير صالح");
 
-/** Resolve a public-enabled tenant by slug. Returns owner_id or throws. */
+/** Resolve a public-enabled tenant by slug. Returns { id, show_prices } or throws. */
 async function resolveOwner(slug: string) {
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
   const { data, error } = await supabaseAdmin
     .from("profiles")
-    .select("id, booking_enabled")
+    .select("id, booking_enabled, show_prices")
     .eq("public_slug", slug)
     .maybeSingle();
   if (error) throw new Error(error.message);
   if (!data || !data.booking_enabled) throw new Error("الصفحة غير متوفرة");
-  return data.id as string;
+  return { id: data.id as string, show_prices: !!data.show_prices };
 }
 
 export const getPublicOwner = createServerFn({ method: "GET" })
