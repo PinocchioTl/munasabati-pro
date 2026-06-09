@@ -504,5 +504,3 @@ function StatusPill({ status }: { status: string }) {
   );
 }
 
-// Imports kept for compatibility
-export const _icons = { CheckCircle2 };
