@@ -2,145 +2,164 @@ import { Link, Outlet, useRouterState, useNavigate } from "@tanstack/react-route
 import {
   LayoutDashboard, CalendarDays, CalendarRange, Sparkles, Package,
   Users, Wallet, Bell, BarChart3, Settings, Search, Plus, Crown, LogOut,
-  MoreHorizontal, X, Share2, Inbox, Palette,
+  Share2, Inbox, Palette, PanelLeftClose, PanelLeftOpen,
 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ShareBookingLinkModal } from "@/components/ShareBookingLinkModal";
 import { useNotifications } from "@/lib/db";
 import { useAuth, signOut } from "@/lib/auth";
 import { useBranding } from "@/lib/branding";
 
-// Primary navigation — matches user-requested sidebar order
-const navItems = [
+type NavItem = { to: string; label: string; icon: any; badge?: "notif" };
+
+const primaryNav: NavItem[] = [
   { to: "/munasabti-manager", label: "الرئيسية", icon: LayoutDashboard },
   { to: "/munasabti-manager/bookings", label: "الحجوزات", icon: CalendarDays },
+  { to: "/munasabti-manager/calendar", label: "التقويم", icon: CalendarRange },
   { to: "/munasabti-manager/booking-requests", label: "طلبات الرابط", icon: Inbox },
+];
+
+const catalogNav: NavItem[] = [
   { to: "/munasabti-manager/decorations", label: "الديكورات", icon: Sparkles },
   { to: "/munasabti-manager/supplies", label: "المستلزمات", icon: Package },
   { to: "/munasabti-manager/customers", label: "الزبائن", icon: Users },
-  { to: "/munasabti-manager/profits", label: "الأرباح", icon: Wallet },
-  { to: "/munasabti-manager/booking-page-builder", label: "تخصيص صفحة الحجز", icon: Palette },
-  { to: "/munasabti-manager/notifications", label: "الإشعارات", icon: Bell },
-  { to: "/munasabti-manager/settings", label: "الإعدادات", icon: Settings },
 ];
 
-// Secondary nav — accessible from sidebar (bottom group) and mobile "More" sheet
-const secondaryItems = [
-  { to: "/munasabti-manager/calendar", label: "التقويم", icon: CalendarRange },
+const insightsNav: NavItem[] = [
+  { to: "/munasabti-manager/profits", label: "الأرباح", icon: Wallet },
   { to: "/munasabti-manager/analytics", label: "الإحصائيات", icon: BarChart3 },
 ];
 
-// Mobile bottom-nav primary items (4 + More) — most-used daily actions
-const mobilePrimary = [
-  "/munasabti-manager",
-  "/munasabti-manager/bookings",
-  "/munasabti-manager/decorations",
-  "/munasabti-manager/customers",
+const systemNav: NavItem[] = [
+  { to: "/munasabti-manager/booking-page-builder", label: "تخصيص صفحة الحجز", icon: Palette },
+  { to: "/munasabti-manager/notifications", label: "الإشعارات", icon: Bell, badge: "notif" },
+  { to: "/munasabti-manager/settings", label: "الإعدادات", icon: Settings },
 ];
 
-
-const quickActions = [
-  { to: "/munasabti-manager/bookings", label: "حجز جديد", icon: CalendarDays },
-  { to: "/munasabti-manager/decorations", label: "ديكور جديد", icon: Sparkles },
-  { to: "/munasabti-manager/supplies", label: "مستلزم جديد", icon: Package },
-  { to: "/munasabti-manager/customers", label: "زبون جديد", icon: Users },
+const groups: { label?: string; items: NavItem[] }[] = [
+  { items: primaryNav },
+  { label: "الكتالوج", items: catalogNav },
+  { label: "التحليلات", items: insightsNav },
+  { label: "النظام", items: systemNav },
 ];
+
+// Mobile bottom-nav (5 items)
+const mobileNav: NavItem[] = [
+  { to: "/munasabti-manager", label: "الرئيسية", icon: LayoutDashboard },
+  { to: "/munasabti-manager/bookings", label: "الحجوزات", icon: CalendarDays },
+  { to: "/munasabti-manager/calendar", label: "التقويم", icon: CalendarRange },
+  { to: "/munasabti-manager/booking-requests", label: "الطلبات", icon: Inbox },
+  { to: "/munasabti-manager/settings", label: "المزيد", icon: Settings },
+];
+
+const SIDEBAR_KEY = "mm.sidebar.collapsed";
+
+function isActivePath(pathname: string, to: string) {
+  if (to === "/munasabti-manager") return pathname === to || pathname === `${to}/`;
+  return pathname === to || pathname.startsWith(`${to}/`);
+}
 
 export function AppLayout() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const { data: notifications = [] } = useNotifications();
   const unread = notifications.filter((n) => !n.is_read).length;
   const { branding } = useBranding();
-  const [moreOpen, setMoreOpen] = useState(false);
-  const [fabOpen, setFabOpen] = useState(false);
   const [shareOpen, setShareOpen] = useState(false);
+  const [collapsed, setCollapsed] = useState(false);
   const navigate = useNavigate();
 
-  const moreItems = [...navItems.filter((i) => !mobilePrimary.includes(i.to)), ...secondaryItems];
+  useEffect(() => {
+    try { setCollapsed(localStorage.getItem(SIDEBAR_KEY) === "1"); } catch {}
+  }, []);
+  function toggleCollapsed() {
+    setCollapsed((c) => {
+      const next = !c;
+      try { localStorage.setItem(SIDEBAR_KEY, next ? "1" : "0"); } catch {}
+      return next;
+    });
+  }
+
+  const allItems = groups.flatMap(g => g.items);
+  const currentTitle = allItems.find(i => isActivePath(pathname, i.to))?.label ?? "";
 
   return (
     <div className="min-h-screen bg-background flex w-full" dir="rtl">
-      {/* Sidebar - desktop (lg+) full, tablet (md) compact icons */}
-      <aside className="hidden md:flex md:w-20 lg:w-72 shrink-0 flex-col bg-gradient-luxury text-sidebar-foreground sticky top-0 h-screen border-l border-sidebar-border">
-        <div className="px-3 lg:px-6 py-5 lg:py-7 border-b border-sidebar-border/60">
-          <div className="flex items-center gap-3 justify-center lg:justify-start">
-            <div className="size-11 rounded-2xl bg-gradient-gold flex items-center justify-center shadow-gold overflow-hidden shrink-0">
+      {/* Desktop sidebar */}
+      <aside
+        className={`hidden md:flex shrink-0 flex-col bg-gradient-luxury text-sidebar-foreground sticky top-0 h-screen border-l border-sidebar-border/60 transition-[width] duration-300 ease-out ${
+          collapsed ? "w-[78px]" : "w-72"
+        }`}
+      >
+        {/* Brand */}
+        <div className="px-3 py-5 border-b border-sidebar-border/40">
+          <div className={`flex items-center gap-3 ${collapsed ? "justify-center" : ""}`}>
+            <div className="size-11 rounded-2xl bg-gradient-gold flex items-center justify-center shadow-gold overflow-hidden shrink-0 ring-1 ring-white/10">
               {branding.logoUrl ? (
                 <img src={branding.logoUrl} alt={branding.companyName} className="size-full object-contain" />
               ) : (
                 <Crown className="size-5 text-primary" />
               )}
             </div>
-            <div className="min-w-0 hidden lg:block">
-              <div className="text-base font-bold text-gradient-gold truncate">{branding.companyName}</div>
-              <div className="text-[11px] text-sidebar-foreground/60">نظم ديكوراتك بسهولة</div>
-            </div>
+            {!collapsed && (
+              <div className="min-w-0">
+                <div className="text-base font-bold text-gradient-gold truncate leading-tight">{branding.companyName}</div>
+                <div className="text-[11px] text-sidebar-foreground/60 truncate">إدارة المناسبات</div>
+              </div>
+            )}
           </div>
         </div>
 
-        <nav className="flex-1 overflow-y-auto px-2 lg:px-3 py-4 space-y-0.5">
-          {navItems.map((item) => {
-            const active = item.to === "/" ? pathname === "/" : pathname.startsWith(item.to);
-            const Icon = item.icon;
-            return (
-              <Link
-                key={item.to}
-                to={item.to}
-                title={item.label}
-                className={`flex items-center gap-3 px-3 lg:px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all group relative justify-center lg:justify-start ${
-                  active
-                    ? "bg-sidebar-accent text-sidebar-accent-foreground shadow-soft"
-                    : "text-sidebar-foreground/70 hover:bg-sidebar-accent/40 hover:text-sidebar-foreground"
-                }`}
-              >
-                {active && <span className="hidden lg:block absolute right-0 top-1/2 -translate-y-1/2 h-6 w-1 rounded-l-full bg-gold" />}
-                <Icon className={`size-[18px] shrink-0 transition-transform group-hover:scale-110 ${active ? "text-gold" : ""}`} />
-                <span className="flex-1 hidden lg:inline">{item.label}</span>
-                {item.to === "/munasabti-manager/notifications" && unread > 0 && (
-                  <span className="hidden lg:inline text-[10px] font-bold bg-destructive text-destructive-foreground rounded-full px-1.5 py-0.5 min-w-[18px] text-center">
-                    {unread}
-                  </span>
-                )}
-              </Link>
-            );
-          })}
-
-          <div className="hidden lg:block px-3 pt-5 pb-2 text-[10px] uppercase tracking-wider text-sidebar-foreground/40 font-semibold">
-            المزيد
-          </div>
-          <div className="hidden lg:block h-px bg-sidebar-border/60 mx-3 mb-2 lg:hidden" />
-          {secondaryItems.map((item) => {
-            const active = pathname.startsWith(item.to);
-            const Icon = item.icon;
-            return (
-              <Link
-                key={item.to}
-                to={item.to}
-                title={item.label}
-                className={`flex items-center gap-3 px-3 lg:px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all group relative justify-center lg:justify-start ${
-                  active
-                    ? "bg-sidebar-accent text-sidebar-accent-foreground shadow-soft"
-                    : "text-sidebar-foreground/60 hover:bg-sidebar-accent/40 hover:text-sidebar-foreground"
-                }`}
-              >
-                {active && <span className="hidden lg:block absolute right-0 top-1/2 -translate-y-1/2 h-6 w-1 rounded-l-full bg-gold" />}
-                <Icon className={`size-[18px] shrink-0 transition-transform group-hover:scale-110 ${active ? "text-gold" : ""}`} />
-                <span className="flex-1 hidden lg:inline">{item.label}</span>
-              </Link>
-            );
-          })}
+        {/* Nav groups */}
+        <nav className="flex-1 overflow-y-auto px-2.5 py-4 space-y-5 scrollbar-none">
+          {groups.map((g, gi) => (
+            <div key={gi}>
+              {g.label && !collapsed && (
+                <div className="px-2 mb-1.5 text-[10px] uppercase tracking-[0.14em] text-sidebar-foreground/40 font-bold">
+                  {g.label}
+                </div>
+              )}
+              {g.label && collapsed && (
+                <div className="mx-auto mb-1.5 h-px w-6 bg-sidebar-border/60" />
+              )}
+              <div className="space-y-1">
+                {g.items.map((item) => (
+                  <SidebarItem
+                    key={item.to}
+                    item={item}
+                    active={isActivePath(pathname, item.to)}
+                    collapsed={collapsed}
+                    badge={item.badge === "notif" ? unread : 0}
+                  />
+                ))}
+              </div>
+            </div>
+          ))}
         </nav>
 
-        <UserCard />
-
+        {/* Collapse + user */}
+        <div className="px-2.5 pb-2 pt-1 border-t border-sidebar-border/40">
+          <button
+            onClick={toggleCollapsed}
+            title={collapsed ? "توسيع" : "طي"}
+            className="w-full flex items-center justify-center gap-2 px-2 py-2 rounded-xl text-xs font-medium text-sidebar-foreground/60 hover:text-sidebar-foreground hover:bg-sidebar-accent/40 transition"
+          >
+            {collapsed ? <PanelLeftOpen className="size-4" /> : (
+              <>
+                <PanelLeftClose className="size-4" />
+                <span>طي القائمة</span>
+              </>
+            )}
+          </button>
+        </div>
+        <UserCard collapsed={collapsed} />
       </aside>
-
 
       {/* Main */}
       <main className="flex-1 min-w-0 flex flex-col">
         {/* Topbar */}
         <header className="sticky top-0 z-30 glass border-b border-border/60">
           <div className="flex items-center gap-2 sm:gap-3 px-3 sm:px-4 lg:px-8 h-14 sm:h-16">
+            {/* Mobile brand */}
             <div className="md:hidden flex items-center gap-2 min-w-0">
               <div className="size-9 rounded-xl bg-gradient-gold flex items-center justify-center overflow-hidden shrink-0">
                 {branding.logoUrl ? (
@@ -149,182 +168,160 @@ export function AppLayout() {
                   <Crown className="size-4 text-primary" />
                 )}
               </div>
-              <span className="font-bold text-sm truncate">{branding.companyName}</span>
+              <span className="font-bold text-sm truncate">{currentTitle || branding.companyName}</span>
             </div>
 
-            <div className="hidden md:flex flex-1 max-w-md relative">
+            {/* Desktop page title */}
+            <div className="hidden md:flex items-center gap-2 min-w-0 ml-2">
+              <h1 className="text-base font-bold text-foreground truncate">{currentTitle}</h1>
+            </div>
+
+            {/* Search */}
+            <div className="hidden lg:flex flex-1 max-w-md relative mx-4">
               <Search className="absolute right-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
               <input
                 placeholder="بحث عن حجز، زبون، ديكور..."
                 className="w-full bg-secondary/60 border border-transparent focus:border-ring focus:bg-card rounded-xl pr-10 pl-4 py-2.5 text-sm outline-none transition"
               />
+              <kbd className="absolute left-2 top-1/2 -translate-y-1/2 text-[10px] font-mono text-muted-foreground bg-card border border-border rounded px-1.5 py-0.5">⌘K</kbd>
             </div>
-            <div className="flex-1 md:hidden" />
+            <div className="flex-1 lg:hidden" />
 
+            {/* Share */}
             <button
               onClick={() => setShareOpen(true)}
-              className="hidden sm:flex items-center gap-2 bg-gradient-gold text-primary hover:opacity-90 transition rounded-xl px-3 lg:px-4 py-2 lg:py-2.5 text-sm font-semibold shadow-gold"
+              className="hidden sm:flex items-center gap-2 bg-secondary hover:bg-secondary/80 text-foreground transition rounded-xl px-3 py-2 text-xs font-semibold border border-border"
               title="مشاركة رابط الحجز"
             >
               <Share2 className="size-4" />
-              <span className="hidden lg:inline">مشاركة الرابط</span>
+              <span className="hidden xl:inline">مشاركة الرابط</span>
             </button>
 
-            <Link to="/munasabti-manager/notifications" className="relative size-9 sm:size-10 rounded-xl hover:bg-secondary flex items-center justify-center transition">
+            {/* Notifications */}
+            <Link
+              to="/munasabti-manager/notifications"
+              className="relative size-9 sm:size-10 rounded-xl hover:bg-secondary flex items-center justify-center transition"
+              title="الإشعارات"
+            >
               <Bell className="size-[18px]" />
               {unread > 0 && (
-                <span className="absolute top-2 left-2 size-2 rounded-full bg-destructive ring-2 ring-background" />
+                <span className="absolute -top-0.5 -left-0.5 min-w-[18px] h-[18px] text-[10px] font-bold rounded-full bg-destructive text-destructive-foreground flex items-center justify-center px-1 ring-2 ring-background">
+                  {unread > 9 ? "9+" : unread}
+                </span>
               )}
             </Link>
 
+            {/* Primary action */}
             <button
               onClick={() => navigate({ to: "/munasabti-manager/bookings" })}
-              className="hidden sm:inline-flex items-center gap-2 bg-primary text-primary-foreground hover:opacity-90 transition rounded-xl px-3 lg:px-4 py-2 lg:py-2.5 text-sm font-semibold shadow-elegant"
+              className="inline-flex items-center gap-2 bg-gradient-gold text-primary hover:opacity-95 transition rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 text-sm font-bold shadow-gold"
             >
               <Plus className="size-4" />
-              <span className="hidden lg:inline">حجز جديد</span>
+              <span className="hidden sm:inline">حجز جديد</span>
             </button>
           </div>
         </header>
 
-        <div className="flex-1 min-w-0 max-w-full overflow-x-hidden px-3 sm:px-4 lg:px-8 py-4 sm:py-6 lg:py-8 pb-28 md:pb-8 animate-fade-in">
+        <div className="flex-1 min-w-0 max-w-full overflow-x-hidden px-3 sm:px-4 lg:px-8 py-4 sm:py-6 lg:py-8 pb-24 md:pb-8 animate-fade-in">
           <Outlet />
         </div>
       </main>
 
-      {/* Share Booking Link Modal */}
       <ShareBookingLinkModal open={shareOpen} onClose={() => setShareOpen(false)} />
 
-      {/* Mobile bottom nav (hidden on md+) */}
+      {/* Mobile bottom nav */}
       <nav className="md:hidden fixed bottom-0 inset-x-0 z-40 glass border-t border-border/60 safe-area-inset">
         <div className="grid grid-cols-5 px-1 py-1.5">
-          {mobilePrimary.map((to) => {
-            const item = navItems.find((n) => n.to === to);
-            if (!item) return null;
-            const active = item.to === "/" ? pathname === "/" : pathname.startsWith(item.to);
+          {mobileNav.map((item) => {
+            const active = isActivePath(pathname, item.to);
             const Icon = item.icon;
             return (
-              <Link key={item.to} to={item.to}
-                className={`relative flex flex-col items-center gap-1 py-2 mx-0.5 rounded-xl text-[10px] font-medium transition-all active:scale-95 ${
-                  active ? "text-gold bg-gold/10" : "text-muted-foreground hover:text-foreground"
-                }`}>
-                {active && <span className="absolute top-0 left-1/2 -translate-x-1/2 h-1 w-8 rounded-b-full bg-gold" />}
-                <Icon className={`size-[20px] transition-transform ${active ? "scale-110" : ""}`} />
-                <span>{item.label}</span>
-                {item.to === "/munasabti-manager/notifications" && unread > 0 && (
-                  <span className="absolute top-1 right-3 size-2 rounded-full bg-destructive ring-2 ring-card" />
+              <Link
+                key={item.to}
+                to={item.to}
+                className={`relative flex flex-col items-center gap-0.5 py-2 mx-0.5 rounded-xl text-[10px] font-semibold transition active:scale-95 ${
+                  active ? "text-gold" : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                {active && <span className="absolute top-0 left-1/2 -translate-x-1/2 h-1 w-8 rounded-b-full bg-gradient-gold" />}
+                <div className={`size-9 rounded-xl flex items-center justify-center transition ${active ? "bg-gold/10" : ""}`}>
+                  <Icon className={`size-5 transition-transform ${active ? "scale-110" : ""}`} />
+                </div>
+                <span className="leading-none">{item.label}</span>
+                {item.to === "/munasabti-manager/booking-requests" && unread > 0 && (
+                  <span className="absolute top-1 left-3 size-2 rounded-full bg-destructive ring-2 ring-background" />
                 )}
               </Link>
             );
           })}
-          <button onClick={() => setMoreOpen(true)}
-            className={`relative flex flex-col items-center gap-1 py-2 mx-0.5 rounded-xl text-[10px] font-medium transition-all active:scale-95 ${
-              moreOpen ? "text-gold bg-gold/10" : "text-muted-foreground hover:text-foreground"
-            }`}>
-            <MoreHorizontal className="size-[20px]" />
-            <span>المزيد</span>
-            {unread > 0 && !mobilePrimary.includes("/munasabti-manager/notifications") && (
-              <span className="absolute top-1 right-3 size-2 rounded-full bg-destructive ring-2 ring-card" />
-            )}
-          </button>
         </div>
       </nav>
-
-
-      {/* Floating action button - mobile */}
-      <div className="md:hidden">
-        {fabOpen && (
-          <>
-            <div className="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm animate-fade-in" onClick={() => setFabOpen(false)} />
-            <div className="fixed bottom-36 left-4 z-50 flex flex-col gap-2 items-start">
-              {quickActions.map((a) => {
-                const Icon = a.icon;
-                return (
-                  <button key={a.to}
-                    onClick={() => { setFabOpen(false); navigate({ to: a.to }); }}
-                    className="flex items-center gap-3 bg-card text-foreground rounded-2xl pr-3 pl-4 py-2.5 shadow-elegant text-sm font-semibold border border-border">
-                    <span className="size-9 rounded-xl bg-gradient-gold text-primary flex items-center justify-center">
-                      <Icon className="size-4" />
-                    </span>
-                    {a.label}
-                  </button>
-                );
-              })}
-            </div>
-          </>
-        )}
-        <button
-          onClick={() => setFabOpen((v) => !v)}
-          className="fixed bottom-20 left-4 z-50 size-14 rounded-2xl bg-gradient-gold text-primary shadow-gold flex items-center justify-center active:scale-95 transition"
-          aria-label="إضافة"
-        >
-          {fabOpen ? <X className="size-6" /> : <Plus className="size-6" />}
-        </button>
-      </div>
-
-      {/* "More" bottom sheet */}
-      {moreOpen && (
-        <div className="md:hidden fixed inset-0 z-50">
-          <div className="absolute inset-0 bg-black/50 backdrop-blur-sm animate-fade-in" onClick={() => setMoreOpen(false)} />
-          <div className="absolute bottom-0 inset-x-0 bg-card rounded-t-3xl border-t border-border p-4 pb-8 animate-slide-up">
-            <div className="mx-auto w-12 h-1.5 rounded-full bg-muted mb-4" />
-            <div className="grid grid-cols-3 gap-3">
-              {moreItems.map((item) => {
-                const Icon = item.icon;
-                const active = pathname.startsWith(item.to);
-                return (
-                  <Link key={item.to} to={item.to} onClick={() => setMoreOpen(false)}
-                    className={`flex flex-col items-center justify-center gap-2 py-4 rounded-2xl border transition ${
-                      active ? "border-gold/40 bg-gold/10 text-gold" : "border-border bg-secondary/40 text-foreground"
-                    }`}>
-                    <Icon className="size-5" />
-                    <span className="text-xs font-medium">{item.label}</span>
-                    {item.to === "/munasabti-manager/notifications" && unread > 0 && (
-                      <span className="text-[10px] font-bold bg-destructive text-destructive-foreground rounded-full px-1.5 py-0.5">
-                        {unread}
-                      </span>
-                    )}
-                  </Link>
-                );
-              })}
-              <button
-                onClick={() => { setMoreOpen(false); setShareOpen(true); }}
-                className="flex flex-col items-center justify-center gap-2 py-4 rounded-2xl border border-gold/40 bg-gold/10 text-gold transition">
-                <Share2 className="size-5" />
-                <span className="text-xs font-medium">مشاركة الرابط</span>
-              </button>
-            </div>
-            <button onClick={() => { setMoreOpen(false); signOut(); }}
-              className="mt-4 w-full flex items-center justify-center gap-2 py-3 rounded-2xl border border-destructive/30 text-destructive font-semibold">
-              <LogOut className="size-4" />
-              تسجيل الخروج
-            </button>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
 
-function UserCard() {
+function SidebarItem({ item, active, collapsed, badge }: { item: NavItem; active: boolean; collapsed: boolean; badge: number }) {
+  const Icon = item.icon;
+  return (
+    <Link
+      to={item.to}
+      title={collapsed ? item.label : undefined}
+      className={`relative flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all group ${
+        collapsed ? "justify-center" : ""
+      } ${
+        active
+          ? "bg-sidebar-accent text-sidebar-accent-foreground shadow-soft"
+          : "text-sidebar-foreground/70 hover:bg-sidebar-accent/40 hover:text-sidebar-foreground"
+      }`}
+    >
+      {active && (
+        <span className="absolute right-0 top-1/2 -translate-y-1/2 h-7 w-1 rounded-l-full bg-gradient-gold" />
+      )}
+      <Icon className={`size-[18px] shrink-0 transition-transform group-hover:scale-110 ${active ? "text-gold" : ""}`} />
+      {!collapsed && <span className="flex-1 truncate">{item.label}</span>}
+      {!collapsed && badge > 0 && (
+        <span className="text-[10px] font-bold bg-destructive text-destructive-foreground rounded-full px-1.5 py-0.5 min-w-[18px] text-center">
+          {badge > 9 ? "9+" : badge}
+        </span>
+      )}
+      {collapsed && badge > 0 && (
+        <span className="absolute top-1 left-1 size-2 rounded-full bg-destructive ring-2 ring-[color:var(--sidebar)]" />
+      )}
+    </Link>
+  );
+}
+
+function UserCard({ collapsed }: { collapsed: boolean }) {
   const { user } = useAuth();
   const name = (user?.user_metadata?.full_name as string) || user?.email?.split("@")[0] || "مستخدم";
   const initial = name.charAt(0).toUpperCase();
   return (
-    <div className="p-3 lg:p-4 border-t border-sidebar-border/60">
-      <div className="rounded-2xl bg-sidebar-accent/40 p-2 lg:p-3 backdrop-blur flex items-center gap-3 justify-center lg:justify-start">
-        <div className="size-10 rounded-full bg-gradient-gold flex items-center justify-center text-primary font-bold shrink-0">
+    <div className="p-3 border-t border-sidebar-border/40">
+      <div className={`rounded-2xl bg-sidebar-accent/40 backdrop-blur flex items-center gap-3 ${
+        collapsed ? "p-1.5 justify-center" : "p-2.5"
+      }`}>
+        <div className="size-10 rounded-full bg-gradient-gold flex items-center justify-center text-primary font-bold shrink-0 ring-2 ring-white/10">
           {initial}
         </div>
-        <div className="min-w-0 flex-1 hidden lg:block">
-          <div className="text-sm font-semibold truncate">{name}</div>
-          <div className="text-[11px] text-sidebar-foreground/60 truncate">{user?.email}</div>
-        </div>
-        <button onClick={() => signOut()} title="تسجيل الخروج"
-          className="hidden lg:flex size-9 rounded-xl hover:bg-destructive/20 text-sidebar-foreground/70 hover:text-destructive items-center justify-center transition shrink-0">
-          <LogOut className="size-4" />
-        </button>
+        {!collapsed && (
+          <>
+            <div className="min-w-0 flex-1">
+              <div className="text-sm font-semibold truncate">{name}</div>
+              <div className="text-[11px] text-sidebar-foreground/60 truncate">{user?.email}</div>
+            </div>
+            <button
+              onClick={() => signOut()}
+              title="تسجيل الخروج"
+              className="size-9 rounded-xl hover:bg-destructive/20 text-sidebar-foreground/70 hover:text-destructive flex items-center justify-center transition shrink-0"
+            >
+              <LogOut className="size-4" />
+            </button>
+          </>
+        )}
       </div>
     </div>
   );
 }
+
+// Re-exports kept for compatibility
+export { isActivePath as _isActivePath };
