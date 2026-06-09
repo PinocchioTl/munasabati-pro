@@ -169,7 +169,7 @@ export const getDecorationAvailability = createServerFn({ method: "GET" })
     date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).parse(d.date),
   }))
   .handler(async ({ data }) => {
-    const owner_id = await resolveOwner(data.slug);
+    const owner_id = (await resolveOwner(data.slug)).id;
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { data: dec } = await supabaseAdmin
       .from("decorations").select("id, total_qty")
