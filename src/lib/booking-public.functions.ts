@@ -94,7 +94,7 @@ export const getPublicSupplies = createServerFn({ method: "GET" })
       .order("name");
     if (error) throw new Error(error.message);
     const list = rows ?? [];
-    return owner.show_prices ? list : list.map(({ cost: _c, ...r }) => r);
+    return (owner.show_prices ? list : list.map(({ cost: _c, ...r }) => r)) as Array<typeof list[number]>;
   });
 
 /** Return decorations + supplies that still have availability on a given date. */
