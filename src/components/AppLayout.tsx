@@ -2,7 +2,7 @@ import { Link, Outlet, useRouterState, useNavigate } from "@tanstack/react-route
 import {
   LayoutDashboard, CalendarDays, CalendarRange, Sparkles, Package,
   Users, Wallet, Bell, BarChart3, Settings, Search, Plus, Crown, LogOut,
-  Share2, Inbox, Palette, ChevronLeft, ChevronRight, PanelLeftClose, PanelLeftOpen,
+  Share2, Inbox, Palette, PanelLeftClose, PanelLeftOpen,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { ShareBookingLinkModal } from "@/components/ShareBookingLinkModal";
