@@ -47,12 +47,15 @@ export const getPublicGallery = createServerFn({ method: "GET" })
 export const getPublicDecorations = createServerFn({ method: "GET" })
   .inputValidator((d: { slug: string }) => ({ slug: slugSchema.parse(d.slug) }))
   .handler(async ({ data }) => {
-    const owner_id = await resolveOwner(data.slug);
+    const owner = await resolveOwner(data.slug);
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const cols = owner.show_prices
+      ? "id, name, category, images, price, total_qty, description"
+      : "id, name, category, images, total_qty, description";
     const { data: rows, error } = await supabaseAdmin
       .from("decorations")
-      .select("id, name, category, images, price, total_qty, description")
-      .eq("owner_id", owner_id)
+      .select(cols)
+      .eq("owner_id", owner.id)
       .order("name");
     if (error) throw new Error(error.message);
     return rows ?? [];
