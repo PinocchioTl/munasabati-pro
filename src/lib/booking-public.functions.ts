@@ -77,7 +77,7 @@ export const getPublicDecoration = createServerFn({ method: "GET" })
     if (!row) throw new Error("الديكور غير موجود");
     if (!owner.show_prices) {
       const { price: _p, ...rest } = row;
-      return rest;
+      return rest as typeof row;
     }
     return row;
   });
