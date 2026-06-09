@@ -10,6 +10,7 @@ import { DemoModePanel } from "@/components/DemoModePanel";
 import {
   CalendarDays, Sparkles, Wallet, AlertTriangle, Plus, Clock, MapPin,
   Inbox, ArrowUpRight, TrendingUp, Crown, ChevronLeft, Bell, Phone,
+  AlertCircle, Activity, Package,
 } from "lucide-react";
 import { ResponsiveContainer, Area, AreaChart, Tooltip, XAxis, YAxis, CartesianGrid } from "recharts";
 
