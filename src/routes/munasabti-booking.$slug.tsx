@@ -1,7 +1,8 @@
-import { createFileRoute, Link, Outlet, useParams } from "@tanstack/react-router";
+import { createFileRoute, Outlet, useParams } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { getPublicOwner } from "@/lib/booking-public.functions";
-import { Crown, Loader2, Sparkles, Home, Package, ShoppingBag, Phone, EyeOff } from "lucide-react";
+import { Crown, Loader2, Phone, EyeOff } from "lucide-react";
+import { FloatingContact } from "@/components/booking/FloatingContact";
 
 export const Route = createFileRoute("/munasabti-booking/$slug")({
   component: BookingShell,
@@ -43,7 +44,9 @@ function BookingShell() {
     "--bk-bg": owner.background_color || "#FAF7F2",
   } as React.CSSProperties;
 
-  // Disabled state: show custom message, no tabs/outlet
+  const social = (owner as any).social_links || {};
+  const whatsapp = social.whatsapp || "";
+
   if (!owner.booking_enabled) {
     return (
       <div dir="rtl" lang="ar" style={cssVars} className="min-h-screen flex items-center justify-center p-6" data-bk-root>
@@ -70,33 +73,26 @@ function BookingShell() {
     <div dir="rtl" lang="ar" style={cssVars} className="min-h-screen flex flex-col" data-bk-root>
       <style>{baseStyles}</style>
 
-      <header className="sticky top-0 z-30 bk-primary shadow-lg">
+      <header className="sticky top-0 z-30 bk-primary shadow-lg backdrop-blur supports-[backdrop-filter]:bg-opacity-95">
         <div className="max-w-6xl mx-auto px-4 py-3 flex items-center gap-3">
-          <Link to="/munasabti-booking/$slug" params={{ slug }} className="flex items-center gap-3 min-w-0 flex-1">
-            <div className="size-10 rounded-xl bg-white/10 flex items-center justify-center overflow-hidden shrink-0">
+          <a href={`/munasabti-booking/${slug}`} className="flex items-center gap-3 min-w-0 flex-1">
+            <div className="size-10 rounded-xl bg-white/10 flex items-center justify-center overflow-hidden shrink-0 ring-2 ring-white/10">
               {owner.logo_url ? <img src={owner.logo_url} alt="" className="size-full object-contain" /> : <Crown className="bk-text-gold size-5" />}
             </div>
             <div className="min-w-0">
               <div className="font-bold text-sm sm:text-base truncate">{owner.company_name || "Munasabati Booking"}</div>
               {owner.tagline && <div className="text-[10px] sm:text-xs opacity-80 truncate">{owner.tagline}</div>}
             </div>
-          </Link>
+          </a>
           {owner.phone && (
             <a href={`tel:${owner.phone}`} className="hidden sm:flex items-center gap-1.5 text-xs font-bold px-3 py-2 rounded-xl bg-white/10 hover:bg-white/20 transition">
               <Phone className="size-3.5" /> {owner.phone}
             </a>
           )}
         </div>
-
-        <nav className="max-w-6xl mx-auto px-2 sm:px-4 flex gap-1 overflow-x-auto scrollbar-none border-t border-white/10">
-          <TabLink slug={slug} to="/munasabti-booking/$slug" icon={<Home className="size-3.5" />} label="الرئيسية" exact />
-          <TabLink slug={slug} to="/munasabti-booking/$slug/decorations" icon={<Sparkles className="size-3.5" />} label="الديكورات" />
-          <TabLink slug={slug} to="/munasabti-booking/$slug/supplies" icon={<Package className="size-3.5" />} label="المستلزمات" />
-          <TabLink slug={slug} to="/munasabti-booking/$slug/request" icon={<ShoppingBag className="size-3.5" />} label="طلب حجز" />
-        </nav>
       </header>
 
-      <main className="flex-1 max-w-6xl mx-auto w-full px-4 py-6 sm:py-8">
+      <main className="flex-1 max-w-6xl mx-auto w-full px-4 py-6 sm:py-8 pb-32 lg:pb-8">
         <Outlet />
       </main>
 
@@ -106,6 +102,8 @@ function BookingShell() {
           <div className="mt-1">مدعوم بواسطة <span className="bk-text-gold font-bold">Munasabati</span></div>
         </div>
       </footer>
+
+      <FloatingContact phone={owner.phone} whatsapp={whatsapp} />
     </div>
   );
 }
@@ -117,18 +115,5 @@ const baseStyles = `
   [data-bk-root] .bk-text-primary{color:var(--bk-primary)}
   [data-bk-root] .bk-text-gold{color:var(--bk-gold)}
   [data-bk-root] .bk-border-gold{border-color:var(--bk-gold)}
+  [data-bk-root] .scrollbar-none::-webkit-scrollbar{display:none}
 `;
-
-function TabLink({ slug, to, icon, label, exact }: { slug: string; to: string; icon: React.ReactNode; label: string; exact?: boolean }) {
-  return (
-    <Link
-      to={to as any}
-      params={{ slug } as any}
-      activeOptions={{ exact: !!exact }}
-      className="flex items-center gap-1.5 px-3 sm:px-4 py-2.5 text-xs sm:text-sm font-bold whitespace-nowrap text-white/80 hover:text-white transition border-b-2 border-transparent [&.active]:border-[var(--bk-gold)] [&.active]:text-white"
-      activeProps={{ className: "active" }}
-    >
-      {icon} {label}
-    </Link>
-  );
-}

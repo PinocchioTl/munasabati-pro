@@ -44,6 +44,29 @@ export const getPublicGallery = createServerFn({ method: "GET" })
     return rows ?? [];
   });
 
+/** Public-facing trust stats: completed events, distinct customers, gallery count. */
+export const getPublicStats = createServerFn({ method: "GET" })
+  .inputValidator((d: { slug: string }) => ({ slug: slugSchema.parse(d.slug) }))
+  .handler(async ({ data }) => {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data: owner } = await supabaseAdmin
+      .from("profiles").select("id").eq("public_slug", data.slug).maybeSingle();
+    if (!owner) return { events: 0, customers: 0, gallery: 0 };
+    const [evRes, cuRes, gaRes] = await Promise.all([
+      supabaseAdmin.from("bookings").select("id", { count: "exact", head: true })
+        .eq("owner_id", owner.id).in("status", ["completed", "confirmed", "in_progress"]),
+      supabaseAdmin.from("clients").select("id", { count: "exact", head: true })
+        .eq("owner_id", owner.id),
+      supabaseAdmin.from("gallery_images").select("id", { count: "exact", head: true })
+        .eq("owner_id", owner.id),
+    ]);
+    return {
+      events: evRes.count ?? 0,
+      customers: cuRes.count ?? 0,
+      gallery: gaRes.count ?? 0,
+    };
+  });
+
 export const getPublicDecorations = createServerFn({ method: "GET" })
   .inputValidator((d: { slug: string }) => ({ slug: slugSchema.parse(d.slug) }))
   .handler(async ({ data }) => {
