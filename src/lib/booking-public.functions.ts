@@ -104,7 +104,8 @@ export const getAvailableForDate = createServerFn({ method: "GET" })
     date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).parse(d.date),
   }))
   .handler(async ({ data }) => {
-    const owner_id = await resolveOwner(data.slug);
+    const owner = await resolveOwner(data.slug);
+    const owner_id = owner.id;
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
     const [decRes, supRes, bookingsRes, reqRes] = await Promise.all([
@@ -143,12 +144,19 @@ export const getAvailableForDate = createServerFn({ method: "GET" })
         supUsed[i.id] = (supUsed[i.id] || 0) + (i.qty || 0);
     }
 
-    const decorations = (decRes.data ?? [])
+    const decorationsAll = (decRes.data ?? [])
       .map(d => ({ ...d, available: Math.max((d.total_qty || 0) - (decUsed[d.id] || 0), 0) }))
       .filter(d => d.available > 0);
-    const supplies = (supRes.data ?? [])
+    const suppliesAll = (supRes.data ?? [])
       .map(s => ({ ...s, available: Math.max((s.total_qty || 0) - (supUsed[s.id] || 0), 0) }))
       .filter(s => s.available > 0);
+
+    const decorations = owner.show_prices
+      ? decorationsAll
+      : decorationsAll.map(({ price: _p, ...r }) => r) as typeof decorationsAll;
+    const supplies = owner.show_prices
+      ? suppliesAll
+      : suppliesAll.map(({ cost: _c, ...r }) => r) as typeof suppliesAll;
 
     return { decorations, supplies };
   });
