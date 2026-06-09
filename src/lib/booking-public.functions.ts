@@ -56,7 +56,7 @@ export const getPublicDecorations = createServerFn({ method: "GET" })
       .order("name");
     if (error) throw new Error(error.message);
     const list = rows ?? [];
-    return owner.show_prices ? list : list.map(({ price: _p, ...r }) => r);
+    return (owner.show_prices ? list : list.map(({ price: _p, ...r }) => r)) as Array<typeof list[number]>;
   });
 
 export const getPublicDecoration = createServerFn({ method: "GET" })
