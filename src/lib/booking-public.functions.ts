@@ -209,7 +209,7 @@ const requestSchema = z.object({
 export const submitBookingRequest = createServerFn({ method: "POST" })
   .inputValidator((d: unknown) => requestSchema.parse(d))
   .handler(async ({ data }) => {
-    const owner_id = await resolveOwner(data.slug);
+    const owner_id = (await resolveOwner(data.slug)).id;
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { data: row, error } = await supabaseAdmin
       .from("booking_requests")
