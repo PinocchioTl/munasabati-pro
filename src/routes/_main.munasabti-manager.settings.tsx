@@ -484,8 +484,8 @@ function BackupSection() {
               <div className="font-bold text-sm mb-2">طريقة الاستيراد</div>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                 {([
-                  { v: "merge", label: "دمج", desc: "إضافة بدون حذف" },
-                  { v: "skip", label: "تخطي المكرر", desc: "إضافة الجديد فقط" },
+                  { v: "merge", label: "دمج", desc: "إضافة بدون حذف", danger: false },
+                  { v: "skip", label: "تخطي المكرر", desc: "إضافة الجديد فقط", danger: false },
                   { v: "replace", label: "استبدال", desc: "حذف ثم استيراد", danger: true },
                 ] as const).map(opt => (
                   <button key={opt.v} onClick={() => setMode(opt.v)}
