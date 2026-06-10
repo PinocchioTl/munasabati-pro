@@ -19,8 +19,38 @@ const rand = (n: number) => Math.floor(Math.random() * n);
 const pick = <T,>(arr: T[]) => arr[rand(arr.length)];
 const range = (n: number) => Array.from({ length: n }, (_, i) => i);
 
-const img = (seed: string | number, w = 800, h = 600) =>
-  `https://picsum.photos/seed/${encodeURIComponent(String(seed))}/${w}/${h}`;
+// Event/decoration themed images via loremflickr (Flickr CC, keyword-driven, deterministic via lock)
+const TOPIC_KEYWORDS: Record<string, string> = {
+  wedding: "wedding,decoration,reception",
+  engagement: "engagement,party,flowers",
+  birthday: "birthday,party,balloons",
+  graduation: "graduation,ceremony,party",
+  baby: "babyshower,party,decoration",
+  party: "party,celebration,decoration",
+  chair: "chair,banquet,wedding",
+  table: "table,banquet,wedding",
+  fabric: "wedding,chair,fabric",
+  tablecloth: "tablecloth,banquet,wedding",
+  flowers: "flowers,bouquet,wedding",
+  lights: "chandelier,lights,wedding",
+  curtains: "curtain,stage,wedding",
+  backdrop: "photobooth,backdrop,wedding",
+  speaker: "speaker,event,stage",
+  screen: "screen,led,event",
+  "party-supply": "party,supplies,celebration",
+};
+const seedHash = (s: string) => {
+  let h = 0;
+  for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0;
+  return h;
+};
+const img = (seed: string | number, w = 800, h = 600) => {
+  const s = String(seed);
+  const topicKey = Object.keys(TOPIC_KEYWORDS).find((k) => s.startsWith(k)) || "wedding";
+  const kw = TOPIC_KEYWORDS[topicKey];
+  return `https://loremflickr.com/${w}/${h}/${encodeURIComponent(kw)}/all?lock=${seedHash(s)}`;
+};
+
 
 const dayOffsetISO = (n: number) => {
   const d = new Date();
