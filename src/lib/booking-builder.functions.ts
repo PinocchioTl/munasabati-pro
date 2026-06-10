@@ -30,7 +30,7 @@ const socialSchema = z.object({
   snapchat: httpUrl.optional().nullable(),
   tiktok: httpUrl.optional().nullable(),
   twitter: httpUrl.optional().nullable(),
-  whatsapp: z.string().trim().max(50).regex(/^[+0-9\s-]*$/, "رقم غير صالح").optional().nullable(),
+  whatsapp: z.string().trim().max(200).regex(/^(https?:\/\/\S+|[+0-9\s-]*)$/, "رقم أو رابط واتساب غير صالح").optional().nullable(),
   facebook: httpUrl.optional().nullable(),
 }).partial();
 
