@@ -12,7 +12,11 @@ import { BookingLinkSettings } from "@/components/BookingLinkSettings";
 import { Link2 } from "lucide-react";
 import { PhoneInput } from "@/components/PhoneInput";
 import { supabase } from "@/integrations/supabase/client";
-import { exportAllData, downloadBundle, importBundle, type BackupBundle } from "@/lib/backup";
+import {
+  exportData, downloadBundle, importBundle, summarizeBundle,
+  USER_SELECTABLE, TABLE_LABELS,
+  type BackupBundle, type TableName, type ImportMode,
+} from "@/lib/backup";
 import { useQueryClient } from "@tanstack/react-query";
 
 export const Route = createFileRoute("/_main/munasabti-manager/settings")({
@@ -302,15 +306,20 @@ function BackupSection() {
   const qc = useQueryClient();
   const [busy, setBusy] = useState<"export" | "import" | null>(null);
   const [pending, setPending] = useState<BackupBundle | null>(null);
+  const [mode, setMode] = useState<ImportMode>("merge");
 
-  async function handleExport() {
+  // Export selection
+  const [exportPickerOpen, setExportPickerOpen] = useState(false);
+  const [exportSel, setExportSel] = useState<Set<TableName>>(new Set(USER_SELECTABLE));
+
+  async function runExport(selection: TableName[]) {
     try {
       setBusy("export");
-      const bundle = await exportAllData();
+      const bundle = await exportData(selection);
       downloadBundle(bundle);
-      const counts = Object.entries(bundle.tables)
-        .map(([k, v]) => `${k}: ${v?.length ?? 0}`).join(" • ");
-      toast.success("تم تصدير النسخة الاحتياطية", { description: counts });
+      const total = Object.values(bundle.tables).reduce((s, a) => s + (a?.length || 0), 0);
+      toast.success("تم تصدير النسخة الاحتياطية", { description: `${total} سجل` });
+      setExportPickerOpen(false);
     } catch (e: any) {
       toast.error("فشل التصدير", { description: e.message });
     } finally {
@@ -339,14 +348,19 @@ function BackupSection() {
     inp.click();
   }
 
-  async function runImport(mode: "merge" | "replace") {
+  async function runImport() {
     if (!pending) return;
     try {
       setBusy("import");
       const res = await importBundle(pending, mode);
       await qc.invalidateQueries();
-      toast.success(mode === "replace" ? "تم استبدال البيانات" : "تم دمج البيانات",
-        { description: `حجوزات: ${res.bookings} • زبائن: ${res.clients} • ديكورات: ${res.decorations} • مستلزمات: ${res.supplies}` });
+      const summary = Object.entries(res).map(([k, v]) => `${TABLE_LABELS[k as TableName] || k}: ${v}`).join(" • ");
+      toast.success(
+        mode === "replace" ? "تم استبدال البيانات"
+        : mode === "skip" ? "تم تخطي المكررات"
+        : "تم دمج البيانات",
+        { description: summary || "لا تغييرات" },
+      );
       setPending(null);
     } catch (e: any) {
       toast.error("فشل الاستيراد", { description: e.message });
@@ -355,25 +369,33 @@ function BackupSection() {
     }
   }
 
+  const pendingSummary = pending ? summarizeBundle(pending) : [];
+
   return (
-    <SectionShell icon={<Database />} title="النسخ الاحتياطي" desc="إدارة بيانات التطبيق والنسخ التلقائية">
+    <SectionShell icon={<Database />} title="النسخ الاحتياطي" desc="تصدير، استيراد، واستعادة بيانات حسابك">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <ActionCard
           icon={<Download className="size-5" />}
-          title="تصدير البيانات"
-          desc="تنزيل كل الحجوزات والزبائن والديكورات والمستلزمات والأرباح والإشعارات بصيغة JSON"
+          title="تصدير كامل"
+          desc="تصدير كل البيانات: النشاط، الإعدادات، الديكورات، المستلزمات، الزبائن، الحجوزات، الفواتير..."
           accent="success"
-          onClick={handleExport}
-          actionLabel={busy === "export" ? "جاري التصدير..." : "تصدير الآن"}
+          onClick={() => runExport([...USER_SELECTABLE])}
+          actionLabel={busy === "export" ? "جاري التصدير..." : "تصدير الكل"}
         />
         <ActionCard
           icon={<Upload className="size-5" />}
-          title="استيراد البيانات"
-          desc="استرجاع من ملف JSON مع خيار الدمج أو الاستبدال"
+          title="استيراد نسخة"
+          desc="استرجاع من ملف JSON مع خيارات الدمج، الاستبدال، أو تخطي المكرر"
           accent="info"
           onClick={pickFile}
           actionLabel="اختيار ملف"
         />
+      </div>
+
+      <div className="mt-3">
+        <Button variant="outline" size="sm" onClick={() => setExportPickerOpen(true)}>
+          <Download className="size-4" /> تصدير جزئي (اختيار الجداول)
+        </Button>
       </div>
 
       <Divider className="my-4" />
@@ -383,38 +405,112 @@ function BackupSection() {
           ملاحظات هامة
         </div>
         <ul className="list-disc pr-5 space-y-1">
-          <li>التصدير يحفظ نسخة كاملة من بيانات حسابك فقط.</li>
-          <li><b>الدمج</b>: يضيف البيانات الواردة بجانب الحالية بدون حذف.</li>
-          <li><b>الاستبدال</b>: يحذف جميع بياناتك الحالية ثم يستورد ملف النسخة — لا يمكن التراجع.</li>
-          <li>سيتم إنشاء معرفات جديدة لكل عنصر للحفاظ على سلامة العلاقات.</li>
+          <li>التصدير يحفظ نسخة كاملة من بيانات حسابك فقط مع جميع الروابط بين الحجوزات والزبائن والديكورات.</li>
+          <li><b>دمج</b>: يضيف البيانات الواردة بجانب الحالية بدون حذف.</li>
+          <li><b>تخطي المكرر</b>: يضيف فقط الديكورات/المستلزمات/الزبائن غير الموجودين بالاسم.</li>
+          <li><b>استبدال</b>: يحذف بيانات الجداول الموجودة في الملف ثم يستوردها — لا يمكن التراجع.</li>
+          <li>يتم إنشاء معرفات جديدة وإعادة ربط جميع العلاقات تلقائياً.</li>
         </ul>
       </div>
 
+      {/* Partial export modal */}
+      {exportPickerOpen && (
+        <div className="fixed inset-0 z-[60] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4" onClick={() => !busy && setExportPickerOpen(false)}>
+          <div className="bg-card rounded-2xl p-6 w-full max-w-md space-y-4 shadow-luxury max-h-[85vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+            <div className="font-bold text-lg">اختر الجداول للتصدير</div>
+            <div className="space-y-2">
+              {USER_SELECTABLE.map(t => {
+                const checked = exportSel.has(t);
+                return (
+                  <label key={t} className="flex items-center gap-3 p-3 rounded-xl bg-secondary/40 cursor-pointer hover:bg-secondary/60">
+                    <input
+                      type="checkbox"
+                      checked={checked}
+                      onChange={(e) => {
+                        const next = new Set(exportSel);
+                        if (e.target.checked) next.add(t); else next.delete(t);
+                        setExportSel(next);
+                      }}
+                      className="size-4 accent-gold"
+                    />
+                    <span className="text-sm font-bold flex-1">{TABLE_LABELS[t]}</span>
+                  </label>
+                );
+              })}
+            </div>
+            <div className="flex gap-2 justify-end">
+              <Button variant="outline" onClick={() => setExportPickerOpen(false)}>إلغاء</Button>
+              <Button variant="gold" loading={busy === "export"} disabled={exportSel.size === 0}
+                onClick={() => runExport([...exportSel])}>
+                تصدير {exportSel.size} جدول
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Import preview + mode modal */}
       {pending && (
         <div className="fixed inset-0 z-[60] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4" onClick={() => !busy && setPending(null)}>
-          <div className="bg-card rounded-2xl p-6 w-full max-w-md space-y-4 shadow-luxury" onClick={(e) => e.stopPropagation()}>
+          <div className="bg-card rounded-2xl p-6 w-full max-w-lg space-y-4 shadow-luxury max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
             <div className="flex items-center gap-3">
               <div className="size-11 rounded-2xl bg-warning/15 text-warning flex items-center justify-center">
                 <AlertTriangle className="size-5" />
               </div>
               <div>
-                <div className="font-bold text-base">تأكيد الاستيراد</div>
-                <div className="text-xs text-muted-foreground">اختر طريقة دمج البيانات الواردة</div>
+                <div className="font-bold text-base">معاينة الاستيراد</div>
+                <div className="text-xs text-muted-foreground">
+                  نسخة بتاريخ {new Date(pending.exported_at).toLocaleString("ar")}
+                </div>
               </div>
             </div>
-            <div className="text-xs bg-secondary/50 rounded-xl p-3 leading-relaxed">
-              تم تحميل النسخة بتاريخ <b>{new Date(pending.exported_at).toLocaleString("ar")}</b>.<br />
-              ستضيف: حجوزات {pending.tables.bookings?.length ?? 0} • زبائن {pending.tables.clients?.length ?? 0} • ديكورات {pending.tables.decorations?.length ?? 0} • مستلزمات {pending.tables.supplies?.length ?? 0}.
+
+            <div className="rounded-xl bg-secondary/40 p-3 max-h-56 overflow-y-auto">
+              {pendingSummary.length === 0 ? (
+                <div className="text-xs text-muted-foreground">الملف فارغ</div>
+              ) : (
+                <div className="grid grid-cols-2 gap-2">
+                  {pendingSummary.map(s => (
+                    <div key={s.table} className="flex items-center justify-between text-xs bg-card/60 rounded-lg px-3 py-2">
+                      <span className="text-muted-foreground">{s.label}</span>
+                      <span className="font-bold text-gold">{s.count}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-              <Button variant="outline" disabled={!!busy} onClick={() => runImport("merge")}>
-                دمج مع الحالية
-              </Button>
-              <Button variant="destructive" disabled={!!busy} onClick={() => runImport("replace")} loading={busy === "import"}>
-                استبدال (حذف الكل)
+
+            <div>
+              <div className="font-bold text-sm mb-2">طريقة الاستيراد</div>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                {([
+                  { v: "merge", label: "دمج", desc: "إضافة بدون حذف" },
+                  { v: "skip", label: "تخطي المكرر", desc: "إضافة الجديد فقط" },
+                  { v: "replace", label: "استبدال", desc: "حذف ثم استيراد", danger: true },
+                ] as const).map(opt => (
+                  <button key={opt.v} onClick={() => setMode(opt.v)}
+                    className={`text-right p-3 rounded-xl border-2 transition ${
+                      mode === opt.v
+                        ? opt.danger ? "border-destructive bg-destructive/10" : "border-gold bg-gold/10"
+                        : "border-border/60 bg-card hover:bg-secondary/40"
+                    }`}>
+                    <div className="font-bold text-sm">{opt.label}</div>
+                    <div className="text-[10px] text-muted-foreground mt-0.5">{opt.desc}</div>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="flex gap-2 justify-end pt-2">
+              <Button variant="outline" disabled={!!busy} onClick={() => setPending(null)}>إلغاء</Button>
+              <Button
+                variant={mode === "replace" ? "destructive" : "gold"}
+                loading={busy === "import"}
+                onClick={runImport}
+              >
+                تأكيد الاستيراد
               </Button>
             </div>
-            <button onClick={() => !busy && setPending(null)} className="w-full text-xs text-muted-foreground hover:text-foreground py-2">إلغاء</button>
           </div>
         </div>
       )}
