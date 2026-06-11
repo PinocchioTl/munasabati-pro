@@ -129,7 +129,7 @@ function BookingsPage() {
             ] as const).map((r) => (
               <button key={r.id} onClick={() => setDateRange(r.id)}
                 className={`px-3 py-1.5 rounded-lg text-[11px] font-semibold whitespace-nowrap transition shrink-0 ${
-                  dateRange === r.id ? "bg-gold text-primary shadow-soft" : "bg-secondary/60 hover:bg-secondary"
+                  dateRange === r.id ? "bg-gold text-gold-foreground shadow-soft" : "bg-secondary/60 hover:bg-secondary"
                 }`}>{r.label}</button>
             ))}
           </div>
