@@ -103,8 +103,9 @@ export function GlobalSearch() {
   }, [q, bookings, clients, decorations, supplies]);
 
 
-  function go(to: string) {
-    navigate({ to });
+  function go(r: Result) {
+    const url = r.q ? `${r.to}?q=${encodeURIComponent(r.q)}` : r.to;
+    navigate({ to: url });
     setOpen(false);
     setQ("");
   }
