@@ -33,7 +33,7 @@ function CustomersPage() {
   const upsert = useUpsertClient();
   const del = useDeleteClient();
 
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState(() => typeof window !== "undefined" ? new URLSearchParams(window.location.search).get("q") ?? "" : "");
   const [filter, setFilter] = useState<FilterId>("all");
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [editing, setEditing] = useState<Client | null>(null);
