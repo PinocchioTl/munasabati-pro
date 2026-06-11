@@ -16,7 +16,7 @@ function SuppliesPage() {
   const [editing, setEditing] = useState<Supply | null>(null);
   const { data: supplies = [], isLoading } = useSupplies();
   const { data: bookings = [] } = useBookings();
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState(() => typeof window !== "undefined" ? new URLSearchParams(window.location.search).get("q") ?? "" : "");
   const [cat, setCat] = useState("الكل");
   const [statusFilter, setStatusFilter] = useState<"all" | "available" | "low" | "unavailable">("all");
   const [checkDate, setCheckDate] = useState(() => new Date().toISOString().slice(0, 10));

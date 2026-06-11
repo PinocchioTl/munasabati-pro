@@ -18,7 +18,7 @@ export const Route = createFileRoute("/_main/munasabti-manager/bookings")({
 function BookingsPage() {
   const [filter, setFilter] = useState<BookingStatus | "all">("all");
   const [eventFilter, setEventFilter] = useState<string>("all");
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState(() => typeof window !== "undefined" ? new URLSearchParams(window.location.search).get("q") ?? "" : "");
   const [view, setView] = useState<"cards" | "timeline">("cards");
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<any>(null);

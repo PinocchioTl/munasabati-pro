@@ -16,7 +16,7 @@ function DecorationsPage() {
   const [editing, setEditing] = useState<Decoration | null>(null);
   const { data: decorations = [], isLoading } = useDecorations();
   const [cat, setCat] = useState("الكل");
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState(() => typeof window !== "undefined" ? new URLSearchParams(window.location.search).get("q") ?? "" : "");
   const [lightbox, setLightbox] = useState<{ src: string; name: string } | null>(null);
 
   const categories = useMemo(() =>

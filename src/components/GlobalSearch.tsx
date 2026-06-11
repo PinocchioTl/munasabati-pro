@@ -10,6 +10,7 @@ type Result = {
   label: string;
   sub?: string;
   to: string;
+  q?: string;
   icon: any;
 };
 
@@ -66,7 +67,8 @@ export function GlobalSearch() {
       if (matches(q, [b.customer_name, b.phone, b.event_date]) || phoneMatch(b.phone)) {
         out.push({
           id: `b-${b.id}`, type: "booking", label: b.customer_name || "حجز",
-          sub: [b.event_date, b.phone].filter(Boolean).join(" • "), to: "/munasabti-manager/bookings", icon: CalendarDays,
+          sub: [b.event_date, b.phone].filter(Boolean).join(" • "),
+          to: "/munasabti-manager/bookings", q: b.customer_name || b.phone || "", icon: CalendarDays,
         });
       }
     }
@@ -74,7 +76,8 @@ export function GlobalSearch() {
       if (matches(q, [c.name, c.phone, c.address]) || phoneMatch(c.phone)) {
         out.push({
           id: `c-${c.id}`, type: "client", label: c.name,
-          sub: c.phone ?? undefined, to: "/munasabti-manager/customers", icon: Users,
+          sub: c.phone ?? undefined,
+          to: "/munasabti-manager/customers", q: c.name || c.phone || "", icon: Users,
         });
       }
     }
@@ -82,7 +85,8 @@ export function GlobalSearch() {
       if (matches(q, [d.name, d.category])) {
         out.push({
           id: `d-${d.id}`, type: "decoration", label: d.name,
-          sub: d.category ?? undefined, to: "/munasabti-manager/decorations", icon: Sparkles,
+          sub: d.category ?? undefined,
+          to: "/munasabti-manager/decorations", q: d.name || "", icon: Sparkles,
         });
       }
     }
@@ -90,7 +94,8 @@ export function GlobalSearch() {
       if (matches(q, [s.name, s.category])) {
         out.push({
           id: `s-${s.id}`, type: "supply", label: s.name,
-          sub: s.category ?? undefined, to: "/munasabti-manager/supplies", icon: Package,
+          sub: s.category ?? undefined,
+          to: "/munasabti-manager/supplies", q: s.name || "", icon: Package,
         });
       }
     }
@@ -98,8 +103,9 @@ export function GlobalSearch() {
   }, [q, bookings, clients, decorations, supplies]);
 
 
-  function go(to: string) {
-    navigate({ to });
+  function go(r: Result) {
+    const url = r.q ? `${r.to}?q=${encodeURIComponent(r.q)}` : r.to;
+    navigate({ to: url });
     setOpen(false);
     setQ("");
   }
@@ -113,7 +119,7 @@ export function GlobalSearch() {
         onFocus={() => setOpen(true)}
         onKeyDown={(e) => {
           if (e.key === "Escape") { setOpen(false); (e.target as HTMLInputElement).blur(); }
-          if (e.key === "Enter" && results[0]) go(results[0].to);
+          if (e.key === "Enter" && results[0]) go(results[0]);
         }}
         placeholder="بحث عن حجز، زبون، ديكور..."
         className="w-full bg-secondary/60 border border-transparent focus:border-ring focus:bg-card rounded-xl pr-10 pl-4 py-2.5 text-sm outline-none transition"
@@ -128,7 +134,7 @@ export function GlobalSearch() {
               return (
                 <button
                   key={r.id}
-                  onClick={() => go(r.to)}
+                  onClick={() => go(r)}
                   className="w-full flex items-center gap-3 px-4 py-2.5 hover:bg-secondary/60 transition text-right"
                 >
                   <Icon className="size-4 text-muted-foreground shrink-0" />
