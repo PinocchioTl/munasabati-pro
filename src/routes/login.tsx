@@ -10,14 +10,6 @@ export const Route = createFileRoute("/login")({
   component: LoginPage,
 });
 
-async function logAttempt(identifier: string, success: boolean, error?: string) {
-  try {
-    await supabase.from("login_attempts").insert({
-      identifier, method: "email", success, error_message: error ?? null,
-      user_agent: typeof navigator !== "undefined" ? navigator.userAgent : null,
-    });
-  } catch {}
-}
 
 function LoginPage() {
   const navigate = useNavigate();
@@ -34,7 +26,6 @@ function LoginPage() {
     setLoading(true);
     const { error } = await supabase.auth.signInWithPassword({ email: email.trim(), password });
     setLoading(false);
-    await logAttempt(email.trim(), !error, error?.message);
     if (error) return setError(error.message.includes("Invalid") ? "البريد أو كلمة المرور غير صحيحة" : error.message);
     toast.success("تم تسجيل الدخول بنجاح");
     navigate({ to: "/munasabti-manager" });
