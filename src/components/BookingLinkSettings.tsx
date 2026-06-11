@@ -12,6 +12,7 @@ import {
   getMyBookingLink, updateSlug, toggleBookingEnabled, checkSlugAvailability,
 } from "@/lib/booking-link.functions";
 import { ShareBookingLinkModal } from "@/components/ShareBookingLinkModal";
+import { PUBLIC_BOOKING_ORIGIN, bookingUrl } from "@/lib/booking-url";
 
 const SLUG_RE = /^[a-z0-9][a-z0-9-]{2,39}$/;
 
