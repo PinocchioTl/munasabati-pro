@@ -68,14 +68,16 @@ export function BrandingProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => { fetchBranding(); }, [fetchBranding]);
 
-  // Apply CSS variables + document title
+  // Apply CSS variables + document title.
+  // primaryColor = brand accent (gold) → buttons, ring, sidebar accent
+  // secondaryColor = brand dark → sidebar background
   useEffect(() => {
     const root = document.documentElement;
+    root.style.setProperty("--primary", branding.primaryColor);
     root.style.setProperty("--gold", branding.primaryColor);
     root.style.setProperty("--ring", branding.primaryColor);
     root.style.setProperty("--sidebar-primary", branding.primaryColor);
     root.style.setProperty("--sidebar-ring", branding.primaryColor);
-    root.style.setProperty("--primary", branding.secondaryColor);
     root.style.setProperty("--sidebar", branding.secondaryColor);
     root.style.setProperty("--info", branding.accentColor);
     root.style.setProperty("--background", branding.backgroundColor);
