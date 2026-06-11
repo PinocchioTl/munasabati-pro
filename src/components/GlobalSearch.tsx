@@ -10,6 +10,7 @@ type Result = {
   label: string;
   sub?: string;
   to: string;
+  q?: string;
   icon: any;
 };
 
