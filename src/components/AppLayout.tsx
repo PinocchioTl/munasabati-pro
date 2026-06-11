@@ -9,6 +9,7 @@ import { ShareBookingLinkModal } from "@/components/ShareBookingLinkModal";
 import { useNotifications } from "@/lib/db";
 import { useAuth, signOut } from "@/lib/auth";
 import { useBranding } from "@/lib/branding";
+import { GlobalSearch } from "@/components/GlobalSearch";
 
 type NavItem = { to: string; label: string; icon: any; badge?: "notif" };
 
