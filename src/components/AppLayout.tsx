@@ -183,7 +183,7 @@ export function AppLayout() {
                 placeholder="بحث عن حجز، زبون، ديكور..."
                 className="w-full bg-secondary/60 border border-transparent focus:border-ring focus:bg-card rounded-xl pr-10 pl-4 py-2.5 text-sm outline-none transition"
               />
-              <kbd className="absolute left-2 top-1/2 -translate-y-1/2 text-[10px] font-mono text-muted-foreground bg-card border border-border rounded px-1.5 py-0.5">⌘K</kbd>
+              
             </div>
             <div className="flex-1 lg:hidden" />
 
