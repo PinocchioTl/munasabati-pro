@@ -40,7 +40,7 @@ export function BookingLinkSettings() {
     if (data?.public_slug) setSlug(data.public_slug);
   }, [data?.public_slug]);
 
-  const { PUBLIC_BOOKING_ORIGIN: origin, bookingUrl } = require("@/lib/booking-url") as typeof import("@/lib/booking-url");
+  const origin = PUBLIC_BOOKING_ORIGIN;
   const currentSlug = data?.public_slug ?? "";
   const currentUrl = bookingUrl(currentSlug);
   const previewUrl = slug && SLUG_RE.test(slug) ? bookingUrl(slug) : "";
