@@ -54,13 +54,20 @@ export function BrandingProvider({ children }: { children: ReactNode }) {
       .eq("id", user.id)
       .maybeSingle();
     if (data) {
+      // Treat legacy palette values as unset so the new theme takes over
+      const LEGACY = new Set([
+        "#111827", "#2563EB", "#F9FAFB",
+        "#561C24", "#6D2932", "#C7B7A3", "#E8D8C4",
+      ]);
+      const clean = (v: string | null | undefined, fallback: string) =>
+        !v || LEGACY.has(v.toUpperCase()) ? fallback : v;
       setBranding({
         companyName: data.company_name?.trim() || DEFAULTS.companyName,
         logoUrl: data.logo_url || DEFAULTS.logoUrl,
-        primaryColor: data.primary_color || DEFAULTS.primaryColor,
-        secondaryColor: data.secondary_color || DEFAULTS.secondaryColor,
-        accentColor: data.accent_color || DEFAULTS.accentColor,
-        backgroundColor: data.background_color || DEFAULTS.backgroundColor,
+        primaryColor: clean(data.primary_color, DEFAULTS.primaryColor),
+        secondaryColor: clean(data.secondary_color, DEFAULTS.secondaryColor),
+        accentColor: clean(data.accent_color, DEFAULTS.accentColor),
+        backgroundColor: clean(data.background_color, DEFAULTS.backgroundColor),
       });
     }
     setLoading(false);
