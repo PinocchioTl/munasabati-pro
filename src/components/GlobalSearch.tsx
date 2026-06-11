@@ -119,7 +119,7 @@ export function GlobalSearch() {
         onFocus={() => setOpen(true)}
         onKeyDown={(e) => {
           if (e.key === "Escape") { setOpen(false); (e.target as HTMLInputElement).blur(); }
-          if (e.key === "Enter" && results[0]) go(results[0].to);
+          if (e.key === "Enter" && results[0]) go(results[0]);
         }}
         placeholder="بحث عن حجز، زبون، ديكور..."
         className="w-full bg-secondary/60 border border-transparent focus:border-ring focus:bg-card rounded-xl pr-10 pl-4 py-2.5 text-sm outline-none transition"
