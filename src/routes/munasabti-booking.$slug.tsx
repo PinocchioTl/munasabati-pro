@@ -38,10 +38,10 @@ function BookingShell() {
   }
 
   const cssVars = {
-    "--bk-primary": owner.secondary_color || "#5D0A13",
+    "--bk-primary": owner.secondary_color || "#1E1B2E",
     "--bk-gold": owner.primary_color || "#D4AF37",
     "--bk-button": (owner as any).button_color || owner.primary_color || "#D4AF37",
-    "--bk-bg": owner.background_color || "#FAF7F2",
+    "--bk-bg": owner.background_color || "#F5F3EE",
   } as React.CSSProperties;
 
   const social = (owner as any).social_links || {};
