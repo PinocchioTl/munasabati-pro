@@ -217,6 +217,11 @@ export async function importBundle(rawBundle: any, mode: ImportMode): Promise<Re
   }
 
 
+  // Current user — required for owner_id on every insert (RLS)
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) throw new Error("يجب تسجيل الدخول لاستيراد النسخة الاحتياطية");
+  const ownerId = user.id;
+
   const present = ALL_TABLES.filter(t => Array.isArray(bundle.tables[t]) && (bundle.tables[t] as any[]).length > 0);
 
   if (mode === "replace") {
@@ -236,13 +241,10 @@ export async function importBundle(rawBundle: any, mode: ImportMode): Promise<Re
 
   // profiles: update single row for current user
   if (bundle.tables.profiles?.length) {
-    const { data: { user } } = await supabase.auth.getUser();
-    if (user) {
-      const src = bundle.tables.profiles[0];
-      const payload = strip(src, ["id", "public_slug"]); // never overwrite our slug or id
-      const { error } = await supabase.from("profiles").update(payload).eq("id", user.id);
-      if (!error) stats.profiles = 1;
-    }
+    const src = bundle.tables.profiles[0];
+    const payload = strip(src, ["id", "public_slug"]); // never overwrite our slug or id
+    const { error } = await supabase.from("profiles").update(payload).eq("id", ownerId);
+    if (!error) stats.profiles = 1;
   }
 
   // Helper: insert a row, remap id; respect "skip" mode by name when possible
@@ -257,13 +259,14 @@ export async function importBundle(rawBundle: any, mode: ImportMode): Promise<Re
       const key = (row[dedupeField] ?? "").toString().trim().toLowerCase();
       if (key && existing.has(key)) return;
     }
-    const payload = strip(row, ["id"]);
+    const payload = { ...strip(row, ["id"]), owner_id: ownerId };
     const { data, error } = await supabase.from(table as any).insert(payload).select("id").single();
     if (error) throw new Error(`${TABLE_LABELS[table as TableName]}: ${error.message}`);
     const newId = (data as any)?.id;
     if (oldId && newId) remap[table].set(oldId, newId);
     stats[table] = (stats[table] || 0) + 1;
   }
+
 
   // event_types, clients, decorations, supplies (parents)
   for (const t of ["event_types", "clients", "decorations", "supplies"] as const) {
