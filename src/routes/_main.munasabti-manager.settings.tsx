@@ -336,11 +336,12 @@ function BackupSection() {
       if (!f) return;
       try {
         const text = await f.text();
-        const parsed = JSON.parse(text) as BackupBundle;
-        if (parsed?.app !== "munasabati" || !parsed?.tables) {
+        const parsed = JSON.parse(text);
+        if (parsed?.app !== "munasabati" || (!parsed?.tables && !parsed?.data)) {
           throw new Error("الملف ليس نسخة احتياطية صحيحة لـ Munasabati");
         }
         setPending(parsed);
+
       } catch (e: any) {
         toast.error("ملف غير صالح", { description: e.message });
       }
