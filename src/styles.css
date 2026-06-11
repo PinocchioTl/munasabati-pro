@@ -75,8 +75,8 @@
 :root {
   --radius: 1rem;
 
-  --brand-primary: oklch(0.27 0.08 18);     /* #561C24 */
-  --brand-secondary: oklch(0.33 0.09 18);   /* #6D2932 */
+  --brand-primary: oklch(0.48 0.16 18);     /* brighter burgundy */
+  --brand-secondary: oklch(0.56 0.17 20);   /* brighter wine */
   --brand-sand: oklch(0.76 0.028 70);       /* #C7B7A3 */
   --brand-beige: oklch(0.88 0.025 75);      /* #E8D8C4 */
   --brand-cream: oklch(0.955 0.014 78);     /* lighter beige for cards */
