@@ -13,7 +13,7 @@ import { Link2 } from "lucide-react";
 import { PhoneInput } from "@/components/PhoneInput";
 import { supabase } from "@/integrations/supabase/client";
 import {
-  exportData, downloadBundle, importBundle, summarizeBundle,
+  exportData, downloadBundle, importBundle, summarizeBundle, adaptLegacyBundle,
   USER_SELECTABLE, TABLE_LABELS,
   type BackupBundle, type TableName, type ImportMode,
 } from "@/lib/backup";
@@ -336,11 +336,14 @@ function BackupSection() {
       if (!f) return;
       try {
         const text = await f.text();
-        const parsed = JSON.parse(text) as BackupBundle;
-        if (parsed?.app !== "munasabati" || !parsed?.tables) {
+        const raw = JSON.parse(text);
+        if (raw?.app !== "munasabati" || (!raw?.tables && !raw?.data)) {
           throw new Error("الملف ليس نسخة احتياطية صحيحة لـ Munasabati");
         }
+        const parsed = adaptLegacyBundle(raw);
         setPending(parsed);
+
+
       } catch (e: any) {
         toast.error("ملف غير صالح", { description: e.message });
       }
