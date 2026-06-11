@@ -177,14 +177,8 @@ export function AppLayout() {
             </div>
 
             {/* Search */}
-            <div className="hidden lg:flex flex-1 max-w-md relative mx-4">
-              <Search className="absolute right-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
-              <input
-                placeholder="بحث عن حجز، زبون، ديكور..."
-                className="w-full bg-secondary/60 border border-transparent focus:border-ring focus:bg-card rounded-xl pr-10 pl-4 py-2.5 text-sm outline-none transition"
-              />
-              
-            </div>
+            <GlobalSearch />
+
             <div className="flex-1 lg:hidden" />
 
             {/* Share */}
