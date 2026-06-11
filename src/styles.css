@@ -75,69 +75,78 @@
 :root {
   --radius: 1rem;
 
-  --brand-primary: oklch(0.48 0.16 18);     /* brighter burgundy */
-  --brand-secondary: oklch(0.56 0.17 20);   /* brighter wine */
-  --brand-sand: oklch(0.76 0.028 70);       /* #C7B7A3 */
-  --brand-beige: oklch(0.88 0.025 75);      /* #E8D8C4 */
-  --brand-cream: oklch(0.955 0.014 78);     /* lighter beige for cards */
-  --brand-ink: oklch(0.22 0.06 18);         /* burgundy ink */
+  /* Munasabati Pro — Premium palette */
+  --brand-dark: oklch(0.20 0.04 285);       /* #1E1B2E Luxury Dark */
+  --brand-deep: oklch(0.28 0.06 280);       /* #2D2A4A Deep Purple */
+  --brand-gold: oklch(0.78 0.135 85);       /* #D4AF37 Premium Gold */
+  --brand-gold-soft: oklch(0.86 0.10 88);   /* lighter gold for hover/gradient */
+  --brand-bg: oklch(0.96 0.008 85);         /* #F5F3EE Soft background */
+  --brand-surface: oklch(1 0 0);            /* #FFFFFF cards */
+  --brand-ink: oklch(0.20 0.04 285);
+
+  /* Back-compat aliases */
+  --brand-primary: var(--brand-gold);
+  --brand-secondary: var(--brand-dark);
+  --brand-sand: var(--brand-gold-soft);
+  --brand-beige: var(--brand-bg);
+  --brand-cream: var(--brand-surface);
 
   /* Surfaces */
-  --background: var(--brand-beige);
+  --background: var(--brand-bg);
   --foreground: var(--brand-ink);
 
-  --card: var(--brand-cream);
+  --card: var(--brand-surface);
   --card-foreground: var(--brand-ink);
 
-  --popover: oklch(0.98 0.008 78);
+  --popover: var(--brand-surface);
   --popover-foreground: var(--brand-ink);
 
-  /* Primary — Dark Burgundy */
-  --primary: var(--brand-primary);
-  --primary-foreground: oklch(0.97 0.012 78);
+  /* Primary buttons = Gold */
+  --primary: var(--brand-gold);
+  --primary-foreground: var(--brand-dark);
 
-  /* Secondary — Deep Wine */
-  --secondary: var(--brand-secondary);
-  --secondary-foreground: oklch(0.97 0.012 78);
+  /* Secondary = Luxury Dark */
+  --secondary: var(--brand-dark);
+  --secondary-foreground: oklch(0.97 0.006 85);
 
-  --muted: var(--brand-sand);
-  --muted-foreground: oklch(0.38 0.04 22);
+  --muted: oklch(0.93 0.008 85);
+  --muted-foreground: oklch(0.45 0.03 285);
 
-  --accent: oklch(0.82 0.025 72);
-  --accent-foreground: var(--brand-primary);
+  --accent: var(--brand-gold-soft);
+  --accent-foreground: var(--brand-dark);
 
-  /* Gold token kept for backward compatibility, mapped to Warm Sand */
-  --gold: var(--brand-sand);
-  --gold-foreground: var(--brand-primary);
+  /* Gold token */
+  --gold: var(--brand-gold);
+  --gold-foreground: var(--brand-dark);
 
-  --success: oklch(0.55 0.13 155);
+  --success: oklch(0.62 0.13 155);
   --success-foreground: oklch(0.99 0 0);
-  --warning: oklch(0.72 0.15 60);
-  --warning-foreground: var(--brand-ink);
-  --info: oklch(0.5 0.1 230);
+  --warning: var(--brand-gold);
+  --warning-foreground: var(--brand-dark);
+  --info: oklch(0.55 0.1 250);
   --info-foreground: oklch(0.99 0 0);
-  --destructive: oklch(0.5 0.2 25);
+  --destructive: oklch(0.55 0.2 25);
   --destructive-foreground: oklch(0.99 0 0);
 
-  --border: oklch(0.78 0.025 65);
-  --input: oklch(0.82 0.022 70);
-  --ring: var(--brand-primary);
+  --border: oklch(0.88 0.01 285);
+  --input: oklch(0.92 0.008 285);
+  --ring: var(--brand-gold);
 
-  --chart-1: var(--brand-primary);
-  --chart-2: var(--brand-secondary);
-  --chart-3: var(--brand-sand);
-  --chart-4: oklch(0.55 0.13 155);
-  --chart-5: oklch(0.5 0.1 230);
+  --chart-1: var(--brand-gold);
+  --chart-2: var(--brand-deep);
+  --chart-3: var(--brand-dark);
+  --chart-4: oklch(0.62 0.13 155);
+  --chart-5: oklch(0.55 0.1 250);
 
-  /* Sidebar = dark burgundy with sand accents */
-  --sidebar: var(--brand-primary);
-  --sidebar-foreground: oklch(0.92 0.018 78);
-  --sidebar-primary: var(--brand-sand);
-  --sidebar-primary-foreground: var(--brand-primary);
-  --sidebar-accent: var(--brand-secondary);
-  --sidebar-accent-foreground: oklch(0.97 0.012 78);
-  --sidebar-border: oklch(0.36 0.08 18);
-  --sidebar-ring: var(--brand-sand);
+  /* Sidebar = Luxury Dark with gold accents */
+  --sidebar: var(--brand-dark);
+  --sidebar-foreground: oklch(0.92 0.012 85);
+  --sidebar-primary: var(--brand-gold);
+  --sidebar-primary-foreground: var(--brand-dark);
+  --sidebar-accent: var(--brand-deep);
+  --sidebar-accent-foreground: oklch(0.97 0.006 85);
+  --sidebar-border: oklch(0.32 0.05 282);
+  --sidebar-ring: var(--brand-gold);
 }
 
 
