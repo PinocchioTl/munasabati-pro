@@ -18,7 +18,7 @@ function BookingShell() {
 
   if (isLoading) {
     return (
-      <div dir="rtl" className="min-h-screen flex items-center justify-center bg-[#FAF7F2]">
+      <div dir="rtl" className="min-h-screen flex items-center justify-center bg-[#F5F3EE]">
         <Loader2 className="size-8 animate-spin text-[#D4AF37]" />
       </div>
     );
