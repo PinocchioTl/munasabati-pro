@@ -13,7 +13,7 @@ import { Link2 } from "lucide-react";
 import { PhoneInput } from "@/components/PhoneInput";
 import { supabase } from "@/integrations/supabase/client";
 import {
-  exportData, downloadBundle, importBundle, summarizeBundle,
+  exportData, downloadBundle, importBundle, summarizeBundle, adaptLegacyBundle,
   USER_SELECTABLE, TABLE_LABELS,
   type BackupBundle, type TableName, type ImportMode,
 } from "@/lib/backup";
