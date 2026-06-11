@@ -54,18 +54,24 @@ export function GlobalSearch() {
 
   const results = useMemo<Result[]>(() => {
     if (!q.trim()) return [];
+    const digitsOnly = (v: unknown) => String(v ?? "")
+      .replace(/[\u0660-\u0669]/g, (d) => String(d.charCodeAt(0) - 0x0660))
+      .replace(/[\u06F0-\u06F9]/g, (d) => String(d.charCodeAt(0) - 0x06F0))
+      .replace(/\D+/g, "");
+    const qDigits = digitsOnly(q);
+    const phoneMatch = (phone: unknown) => qDigits.length >= 2 && digitsOnly(phone).includes(qDigits);
     const out: Result[] = [];
     for (const p of PAGES) if (matches(q, [p.label])) out.push(p);
     for (const b of bookings as any[]) {
-      if (matches(q, [b.customer_name, b.phone, b.event_date])) {
+      if (matches(q, [b.customer_name, b.phone, b.event_date]) || phoneMatch(b.phone)) {
         out.push({
           id: `b-${b.id}`, type: "booking", label: b.customer_name || "حجز",
-          sub: b.event_date, to: "/munasabti-manager/bookings", icon: CalendarDays,
+          sub: [b.event_date, b.phone].filter(Boolean).join(" • "), to: "/munasabti-manager/bookings", icon: CalendarDays,
         });
       }
     }
     for (const c of clients as any[]) {
-      if (matches(q, [c.name, c.phone, c.address])) {
+      if (matches(q, [c.name, c.phone, c.address]) || phoneMatch(c.phone)) {
         out.push({
           id: `c-${c.id}`, type: "client", label: c.name,
           sub: c.phone ?? undefined, to: "/munasabti-manager/customers", icon: Users,
@@ -90,6 +96,7 @@ export function GlobalSearch() {
     }
     return out.slice(0, 20);
   }, [q, bookings, clients, decorations, supplies]);
+
 
   function go(to: string) {
     navigate({ to });
