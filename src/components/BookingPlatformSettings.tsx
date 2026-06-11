@@ -4,6 +4,7 @@ import { Link2, Upload, Loader2, Check, Copy, ImageIcon, Globe } from "lucide-re
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
+import { bookingUrl } from "@/lib/booking-url";
 
 export function BookingPlatformSettings() {
   const { user } = useAuth();
