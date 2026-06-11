@@ -5,6 +5,7 @@ import QRCode from "qrcode";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { Button } from "@/components/ui-bits";
+import { bookingUrl } from "@/lib/booking-url";
 
 interface Props {
   open: boolean;
@@ -18,8 +19,7 @@ export function ShareBookingLinkModal({ open, onClose }: Props) {
   const [copied, setCopied] = useState(false);
   const [qrDataUrl, setQrDataUrl] = useState<string>("");
 
-  const origin = typeof window !== "undefined" ? window.location.origin : "";
-  const url = slug ? `${origin}/munasabti-booking/${slug}` : "";
+  const url = bookingUrl(slug);
 
   useEffect(() => {
     if (!open || !user) {

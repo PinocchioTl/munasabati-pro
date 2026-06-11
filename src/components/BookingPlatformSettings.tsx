@@ -4,6 +4,7 @@ import { Link2, Upload, Loader2, Check, Copy, ImageIcon, Globe } from "lucide-re
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
+import { bookingUrl } from "@/lib/booking-url";
 
 export function BookingPlatformSettings() {
   const { user } = useAuth();
@@ -74,7 +75,7 @@ export function BookingPlatformSettings() {
     toast.success("تم حفظ إعدادات الحجز");
   }
 
-  const url = slug ? `${typeof window !== "undefined" ? window.location.origin : ""}/munasabti-booking/${slug}` : "";
+  const url = bookingUrl(slug);
 
   if (loading) return <Card className="p-8 text-center"><Loader2 className="size-6 animate-spin mx-auto" /></Card>;
 

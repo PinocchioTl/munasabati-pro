@@ -18,19 +18,19 @@ function BookingShell() {
 
   if (isLoading) {
     return (
-      <div dir="rtl" className="min-h-screen flex items-center justify-center bg-[#FAF7F2]">
+      <div dir="rtl" className="min-h-screen flex items-center justify-center bg-[#F5F3EE]">
         <Loader2 className="size-8 animate-spin text-[#D4AF37]" />
       </div>
     );
   }
   if (error || !owner) {
     return (
-      <div dir="rtl" className="min-h-screen flex items-center justify-center bg-[#FAF7F2] p-6">
+      <div dir="rtl" className="min-h-screen flex items-center justify-center bg-[#F5F3EE] p-6">
         <div className="max-w-md text-center">
-          <div className="size-16 mx-auto rounded-2xl bg-[#5D0A13] text-[#D4AF37] flex items-center justify-center mb-4">
+          <div className="size-16 mx-auto rounded-2xl bg-[#1E1B2E] text-[#D4AF37] flex items-center justify-center mb-4">
             <Crown />
           </div>
-          <h1 className="text-xl font-bold text-[#5D0A13]">الصفحة غير متوفرة</h1>
+          <h1 className="text-xl font-bold text-[#1E1B2E]">الصفحة غير متوفرة</h1>
           <p className="text-sm text-muted-foreground mt-2">رابط الحجز غير صحيح.</p>
         </div>
       </div>
@@ -38,10 +38,10 @@ function BookingShell() {
   }
 
   const cssVars = {
-    "--bk-primary": owner.secondary_color || "#5D0A13",
+    "--bk-primary": owner.secondary_color || "#1E1B2E",
     "--bk-gold": owner.primary_color || "#D4AF37",
     "--bk-button": (owner as any).button_color || owner.primary_color || "#D4AF37",
-    "--bk-bg": owner.background_color || "#FAF7F2",
+    "--bk-bg": owner.background_color || "#F5F3EE",
   } as React.CSSProperties;
 
   const social = (owner as any).social_links || {};
