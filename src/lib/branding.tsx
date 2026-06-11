@@ -17,10 +17,10 @@ export interface Branding {
 const DEFAULTS: Branding = {
   companyName: "Munasabati",
   logoUrl: logoAsset,
-  primaryColor: "#D4AF37",
-  secondaryColor: "#111827",
-  accentColor: "#2563EB",
-  backgroundColor: "#F9FAFB",
+  primaryColor: "#D4AF37",      // Premium Gold — primary buttons & accents
+  secondaryColor: "#1E1B2E",    // Luxury Dark — sidebar & headings
+  accentColor: "#2D2A4A",       // Deep Purple — secondary surfaces
+  backgroundColor: "#F5F3EE",   // Soft sand background
 };
 
 interface Ctx {
@@ -54,13 +54,20 @@ export function BrandingProvider({ children }: { children: ReactNode }) {
       .eq("id", user.id)
       .maybeSingle();
     if (data) {
+      // Treat legacy palette values as unset so the new theme takes over
+      const LEGACY = new Set([
+        "#111827", "#2563EB", "#F9FAFB",
+        "#561C24", "#6D2932", "#C7B7A3", "#E8D8C4",
+      ]);
+      const clean = (v: string | null | undefined, fallback: string) =>
+        !v || LEGACY.has(v.toUpperCase()) ? fallback : v;
       setBranding({
         companyName: data.company_name?.trim() || DEFAULTS.companyName,
         logoUrl: data.logo_url || DEFAULTS.logoUrl,
-        primaryColor: data.primary_color || DEFAULTS.primaryColor,
-        secondaryColor: data.secondary_color || DEFAULTS.secondaryColor,
-        accentColor: data.accent_color || DEFAULTS.accentColor,
-        backgroundColor: data.background_color || DEFAULTS.backgroundColor,
+        primaryColor: clean(data.primary_color, DEFAULTS.primaryColor),
+        secondaryColor: clean(data.secondary_color, DEFAULTS.secondaryColor),
+        accentColor: clean(data.accent_color, DEFAULTS.accentColor),
+        backgroundColor: clean(data.background_color, DEFAULTS.backgroundColor),
       });
     }
     setLoading(false);
@@ -68,14 +75,16 @@ export function BrandingProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => { fetchBranding(); }, [fetchBranding]);
 
-  // Apply CSS variables + document title
+  // Apply CSS variables + document title.
+  // primaryColor = brand accent (gold) → buttons, ring, sidebar accent
+  // secondaryColor = brand dark → sidebar background
   useEffect(() => {
     const root = document.documentElement;
+    root.style.setProperty("--primary", branding.primaryColor);
     root.style.setProperty("--gold", branding.primaryColor);
     root.style.setProperty("--ring", branding.primaryColor);
     root.style.setProperty("--sidebar-primary", branding.primaryColor);
     root.style.setProperty("--sidebar-ring", branding.primaryColor);
-    root.style.setProperty("--primary", branding.secondaryColor);
     root.style.setProperty("--sidebar", branding.secondaryColor);
     root.style.setProperty("--info", branding.accentColor);
     root.style.setProperty("--background", branding.backgroundColor);

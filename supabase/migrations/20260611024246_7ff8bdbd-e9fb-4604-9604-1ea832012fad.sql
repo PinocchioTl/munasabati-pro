@@ -1,0 +1,1 @@
+UPDATE public.profiles SET primary_color = NULL, secondary_color = NULL, accent_color = NULL, background_color = NULL;
