@@ -279,7 +279,7 @@ export async function importBundle(rawBundle: any, mode: ImportMode): Promise<Re
   // gallery_images
   if (bundle.tables.gallery_images?.length) {
     for (const g of bundle.tables.gallery_images) {
-      const payload = strip(g, ["id"]);
+      const payload = { ...strip(g, ["id"]), owner_id: ownerId };
       const { error } = await supabase.from("gallery_images").insert(payload);
       if (!error) stats.gallery_images = (stats.gallery_images || 0) + 1;
     }
@@ -302,20 +302,20 @@ export async function importBundle(rawBundle: any, mode: ImportMode): Promise<Re
     const booking_id = remap.bookings.get(bd.booking_id);
     const decoration_id = remap.decorations.get(bd.decoration_id);
     if (!booking_id || !decoration_id) continue;
-    const { error } = await supabase.from("booking_decorations").insert({ booking_id, decoration_id, qty: bd.qty || 1 });
+    const { error } = await supabase.from("booking_decorations").insert({ booking_id, decoration_id, qty: bd.qty || 1, owner_id: ownerId } as any);
     if (!error) stats.booking_decorations = (stats.booking_decorations || 0) + 1;
   }
   for (const bs of bundle.tables.booking_supplies || []) {
     const booking_id = remap.bookings.get(bs.booking_id);
     const supply_id = remap.supplies.get(bs.supply_id);
     if (!booking_id || !supply_id) continue;
-    const { error } = await supabase.from("booking_supplies" as any).insert({ booking_id, supply_id, qty: bs.qty || 1 });
+    const { error } = await supabase.from("booking_supplies" as any).insert({ booking_id, supply_id, qty: bs.qty || 1, owner_id: ownerId });
     if (!error) stats.booking_supplies = (stats.booking_supplies || 0) + 1;
   }
 
   // booking_requests (standalone — no FK remap needed)
   for (const br of bundle.tables.booking_requests || []) {
-    const payload = strip(br, ["id"]);
+    const payload = { ...strip(br, ["id"]), owner_id: ownerId };
     const { error } = await supabase.from("booking_requests").insert(payload);
     if (!error) stats.booking_requests = (stats.booking_requests || 0) + 1;
   }
@@ -334,27 +334,28 @@ export async function importBundle(rawBundle: any, mode: ImportMode): Promise<Re
   for (const it of bundle.tables.invoice_items || []) {
     const invoice_id = remap.invoices.get(it.invoice_id);
     if (!invoice_id) continue;
-    const payload = strip({ ...it, invoice_id }, ["id"]);
+    const payload = { ...strip({ ...it, invoice_id }, ["id"]), owner_id: ownerId };
     const { error } = await supabase.from("invoice_items").insert(payload);
     if (!error) stats.invoice_items = (stats.invoice_items || 0) + 1;
   }
 
   // expenses (remap booking_id)
   for (const e of bundle.tables.expenses || []) {
-    const payload = strip({
-      ...e,
-      booking_id: e.booking_id ? remap.bookings.get(e.booking_id) ?? null : null,
-    }, ["id"]);
+    const payload = {
+      ...strip({ ...e, booking_id: e.booking_id ? remap.bookings.get(e.booking_id) ?? null : null }, ["id"]),
+      owner_id: ownerId,
+    };
     const { error } = await supabase.from("expenses").insert(payload);
     if (!error) stats.expenses = (stats.expenses || 0) + 1;
   }
 
   // notifications
   for (const n of bundle.tables.notifications || []) {
-    const payload = strip(n, ["id"]);
+    const payload = { ...strip(n, ["id"]), owner_id: ownerId };
     const { error } = await supabase.from("notifications").insert(payload);
     if (!error) stats.notifications = (stats.notifications || 0) + 1;
   }
 
   return stats;
 }
+
