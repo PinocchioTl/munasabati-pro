@@ -39,10 +39,10 @@ export function BookingLinkSettings() {
     if (data?.public_slug) setSlug(data.public_slug);
   }, [data?.public_slug]);
 
-  const origin = typeof window !== "undefined" ? window.location.origin : "";
+  const { PUBLIC_BOOKING_ORIGIN: origin, bookingUrl } = require("@/lib/booking-url") as typeof import("@/lib/booking-url");
   const currentSlug = data?.public_slug ?? "";
-  const currentUrl = currentSlug ? `${origin}/munasabti-booking/${currentSlug}` : "";
-  const previewUrl = slug && SLUG_RE.test(slug) ? `${origin}/munasabti-booking/${slug}` : "";
+  const currentUrl = bookingUrl(currentSlug);
+  const previewUrl = slug && SLUG_RE.test(slug) ? bookingUrl(slug) : "";
 
   // Generate QR for current saved url
   useEffect(() => {
