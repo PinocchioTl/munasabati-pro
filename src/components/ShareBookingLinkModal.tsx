@@ -5,6 +5,7 @@ import QRCode from "qrcode";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { Button } from "@/components/ui-bits";
+import { bookingUrl } from "@/lib/booking-url";
 
 interface Props {
   open: boolean;
