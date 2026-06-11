@@ -19,8 +19,7 @@ export function ShareBookingLinkModal({ open, onClose }: Props) {
   const [copied, setCopied] = useState(false);
   const [qrDataUrl, setQrDataUrl] = useState<string>("");
 
-  const origin = typeof window !== "undefined" ? window.location.origin : "";
-  const url = slug ? `${origin}/munasabti-booking/${slug}` : "";
+  const url = bookingUrl(slug);
 
   useEffect(() => {
     if (!open || !user) {
