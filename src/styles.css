@@ -105,9 +105,9 @@
   --primary: var(--brand-gold);
   --primary-foreground: var(--brand-dark);
 
-  /* Secondary = Luxury Dark */
-  --secondary: var(--brand-dark);
-  --secondary-foreground: oklch(0.97 0.006 85);
+  /* Secondary = light neutral surface (chips, ghost buttons, hover) */
+  --secondary: oklch(0.94 0.006 85);
+  --secondary-foreground: var(--brand-dark);
 
   --muted: oklch(0.93 0.008 85);
   --muted-foreground: oklch(0.45 0.03 285);
