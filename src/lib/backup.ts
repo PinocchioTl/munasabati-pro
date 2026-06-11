@@ -167,10 +167,55 @@ async function getExistingNames(table: TableName, field = "name"): Promise<Set<s
   return new Set((data || []).map((r: any) => (r[field] ?? "").toString().trim().toLowerCase()).filter(Boolean));
 }
 
-export async function importBundle(bundle: BackupBundle, mode: ImportMode): Promise<Record<string, number>> {
+export function adaptLegacyBundle(raw: any): BackupBundle {
+  // v2 already: pass through
+  if (raw && raw.tables && typeof raw.tables === "object") return raw as BackupBundle;
+  // v1.x: { app, version, data: { customers, decorations, supplies, bookings, invoices, profits, notifications, settings } }
+  if (!raw || raw.app !== "munasabati" || !raw.data) {
+    throw new Error("ملف غير صالح");
+  }
+  const d = raw.data || {};
+  const tables: Partial<Record<TableName, any[]>> = {};
+  if (Array.isArray(d.customers) && d.customers.length) tables.clients = d.customers;
+  if (Array.isArray(d.clients) && d.clients.length) tables.clients = d.clients;
+  if (Array.isArray(d.decorations) && d.decorations.length) tables.decorations = d.decorations;
+  if (Array.isArray(d.supplies) && d.supplies.length) tables.supplies = d.supplies;
+  if (Array.isArray(d.notifications) && d.notifications.length) tables.notifications = d.notifications;
+  if (Array.isArray(d.invoices) && d.invoices.length) tables.invoices = d.invoices;
+  if (Array.isArray(d.expenses) && d.expenses.length) tables.expenses = d.expenses;
+  if (Array.isArray(d.profits) && d.profits.length) tables.expenses = d.profits; // legacy alias
+  if (d.settings && typeof d.settings === "object") tables.profiles = [d.settings];
+
+  if (Array.isArray(d.bookings) && d.bookings.length) {
+    const bks: any[] = [];
+    const bd: any[] = [];
+    const bs: any[] = [];
+    for (const b of d.bookings) {
+      const items = b.items || {};
+      const { items: _i, ...rest } = b;
+      bks.push(rest);
+      for (const x of items.decorations || []) bd.push({ booking_id: b.id, decoration_id: x.id, qty: x.qty || 1 });
+      for (const x of items.supplies || []) bs.push({ booking_id: b.id, supply_id: x.id, qty: x.qty || 1 });
+    }
+    tables.bookings = bks;
+    if (bd.length) tables.booking_decorations = bd;
+    if (bs.length) tables.booking_supplies = bs;
+  }
+
+  return {
+    version: 2,
+    exported_at: raw.export_date || new Date().toISOString(),
+    app: "munasabati",
+    tables,
+  };
+}
+
+export async function importBundle(rawBundle: any, mode: ImportMode): Promise<Record<string, number>> {
+  const bundle = adaptLegacyBundle(rawBundle);
   if (!bundle || bundle.app !== "munasabati" || !bundle.tables) {
     throw new Error("ملف غير صالح");
   }
+
 
   const present = ALL_TABLES.filter(t => Array.isArray(bundle.tables[t]) && (bundle.tables[t] as any[]).length > 0);
 
