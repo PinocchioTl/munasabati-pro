@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-import { Eye, EyeOff, Mail, Lock, User, UserPlus, Building2 } from "lucide-react";
+import { Eye, EyeOff, Mail, Lock, User, UserPlus, CheckCircle2 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { AuthShell, Field, inputCls } from "@/components/AuthShell";
@@ -29,7 +29,6 @@ function passwordStrength(p: string) {
 
 function SignupPage() {
   const navigate = useNavigate();
-  const [companyName, setCompanyName] = useState("");
   const [fullName, setFullName] = useState("");
   const [countryCode, setCountryCode] = useState("+213");
   const [phone, setPhone] = useState("");
@@ -45,7 +44,6 @@ function SignupPage() {
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError("");
-    if (!companyName.trim()) return setError("يجب إدخال اسم الشركة");
     if (!fullName.trim()) return setError("يجب إدخال الاسم الكامل");
     if (!phone.trim()) return setError("يجب إدخال رقم الهاتف");
     if (!email.trim()) return setError("يجب إدخال البريد الإلكتروني");
@@ -59,7 +57,7 @@ function SignupPage() {
       password,
       options: {
         emailRedirectTo: `${window.location.origin}/`,
-        data: { full_name: fullName, company_name: companyName, phone: fullPhone },
+        data: { full_name: fullName.trim(), company_name: fullName.trim(), phone: fullPhone },
       },
     });
 
@@ -82,23 +80,15 @@ function SignupPage() {
   return (
     <AuthShell
       title="أنشئ حساباً جديداً"
-      subtitle=""
-      footer={<>لديك حساب بالفعل؟ <Link to="/login" className="font-semibold text-foreground hover:text-gold">سجل الدخول</Link></>}
+      subtitle="ابدأ إدارة مناسباتك باحترافية خلال دقائق"
+      footer={<>لديك حساب بالفعل؟ <Link to="/login" className="mr-1 font-bold text-gold transition hover:text-foreground">سجّل الدخول</Link></>}
     >
       <form onSubmit={onSubmit} className="space-y-4">
-        <Field label="اسم الشركة">
+        <Field label="الاسم">
           <div className="relative">
-            <Building2 className="absolute right-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
-            <input value={companyName} onChange={(e) => setCompanyName(e.target.value)}
-              className={`${inputCls} pr-10`} placeholder="شركة الأعراس الفاخرة" />
-          </div>
-        </Field>
-
-        <Field label="الاسم الكامل">
-          <div className="relative">
-            <User className="absolute right-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+            <User className="absolute right-4 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
             <input value={fullName} onChange={(e) => setFullName(e.target.value)}
-              className={`${inputCls} pr-10`} placeholder="محمد عبدالله" />
+              className={`${inputCls} pr-11`} placeholder="الاسم الكامل" autoComplete="name" maxLength={100} />
           </div>
         </Field>
 
@@ -109,19 +99,20 @@ function SignupPage() {
 
         <Field label="البريد الإلكتروني">
           <div className="relative">
-            <Mail className="absolute right-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+            <Mail className="absolute right-4 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
             <input type="email" value={email} onChange={(e) => setEmail(e.target.value)}
-              className={`${inputCls} pr-10`} placeholder="you@example.com" autoComplete="email" />
+              className={`${inputCls} pr-11 text-left`} dir="ltr" placeholder="you@example.com" autoComplete="email" />
           </div>
         </Field>
 
         <Field label="كلمة المرور">
           <div className="relative">
-            <Lock className="absolute right-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+            <Lock className="absolute right-4 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
             <input type={show ? "text" : "password"} value={password} onChange={(e) => setPassword(e.target.value)}
-              className={`${inputCls} pr-10 pl-10`} placeholder="••••••••" autoComplete="new-password" />
+              className={`${inputCls} pr-11 pl-11 text-left`} dir="ltr" placeholder="••••••••" autoComplete="new-password" />
             <button type="button" onClick={() => setShow(!show)}
-              className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground">
+              aria-label={show ? "إخفاء كلمة المرور" : "إظهار كلمة المرور"}
+              className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground transition hover:text-gold">
               {show ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
             </button>
           </div>
@@ -139,15 +130,16 @@ function SignupPage() {
 
         <Field label="تأكيد كلمة المرور">
           <div className="relative">
-            <Lock className="absolute right-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+            <Lock className="absolute right-4 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
             <input type={show ? "text" : "password"} value={confirm} onChange={(e) => setConfirm(e.target.value)}
-              className={`${inputCls} pr-10`} placeholder="••••••••" autoComplete="new-password" />
+              className={`${inputCls} pr-11 pl-11 text-left`} dir="ltr" placeholder="••••••••" autoComplete="new-password" />
+            {confirm && password === confirm && <CheckCircle2 className="absolute left-4 top-1/2 size-4 -translate-y-1/2 text-success" />}
           </div>
         </Field>
 
-        {error && <div className="rounded-xl bg-destructive/10 border border-destructive/30 text-destructive text-xs px-3 py-2">{error}</div>}
+        {error && <div role="alert" className="rounded-2xl border border-destructive/25 bg-destructive/10 px-4 py-3 text-xs leading-5 text-destructive">{error}</div>}
 
-        <Button type="submit" loading={loading} className="w-full" size="lg" variant="gold">
+        <Button type="submit" loading={loading} className="w-full rounded-2xl py-3.5 shadow-gold transition hover:-translate-y-0.5" size="lg" variant="gold">
           <UserPlus className="size-4" /> إنشاء الحساب
         </Button>
 
