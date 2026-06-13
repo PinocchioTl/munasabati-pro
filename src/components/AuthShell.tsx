@@ -4,9 +4,44 @@ import { CalendarCheck2, ChartNoAxesCombined, Sparkles } from "lucide-react";
 import logo from "@/assets/logo.png";
 import authIllustration from "@/assets/auth-events-illustration.jpg";
 
-export function AuthShell({ title, subtitle, children, footer }: {
-  title: string; subtitle?: string; children: ReactNode; footer?: ReactNode;
+export function AuthShell({ title, subtitle, children, footer, variant = "split" }: {
+  title: string; subtitle?: string; children: ReactNode; footer?: ReactNode; variant?: "split" | "immersive";
 }) {
+  if (variant === "immersive") {
+    return (
+      <main dir="rtl" className="relative min-h-screen overflow-hidden bg-sidebar" data-auth-immersive>
+        <img
+          src={authIllustration}
+          alt="قاعة مناسبات فاخرة مزينة بالورود"
+          width={1024}
+          height={1280}
+          fetchPriority="high"
+          className="absolute inset-0 size-full object-cover object-center"
+        />
+        <div className="absolute inset-0 bg-sidebar/30" />
+        <div className="absolute inset-0 bg-gradient-to-b from-sidebar/10 via-transparent to-sidebar/20" />
+        <div className="pointer-events-none absolute inset-3 border border-gold/35 sm:inset-6" />
+        <div className="pointer-events-none absolute inset-6 border border-gold/15 sm:inset-10" />
+
+        <section className="relative z-10 flex min-h-screen items-center justify-center px-4 py-8 sm:px-6">
+          <div className="w-full max-w-[390px] animate-in fade-in zoom-in-95 duration-500 rounded-[2rem] border border-gold/35 bg-sidebar/95 px-6 py-8 text-sidebar-foreground shadow-luxury backdrop-blur-md sm:px-9 sm:py-10">
+            <header className="mb-7 text-center">
+              <Link to="/login" className="mx-auto mb-4 grid size-16 place-items-center overflow-hidden rounded-2xl border border-gold/35 bg-sidebar-accent/50 p-2 shadow-gold">
+                <img src={logo} alt="Munasabati Pro" className="size-full object-contain" />
+              </Link>
+              <div className="text-xl font-bold tracking-[0.16em] text-gold">MUNASABATI</div>
+              <div className="mt-0.5 text-[9px] font-bold tracking-[0.45em] text-gold/75">PRO</div>
+              <h1 className="mt-5 text-xl font-bold text-sidebar-foreground sm:text-2xl">{title}</h1>
+              {subtitle && <p className="mt-2 text-xs leading-6 text-sidebar-foreground/65">{subtitle}</p>}
+            </header>
+            {children}
+            {footer && <div className="mt-6 border-t border-gold/15 pt-5 text-center text-xs text-sidebar-foreground/65">{footer}</div>}
+          </div>
+        </section>
+      </main>
+    );
+  }
+
   return (
     <main dir="rtl" className="min-h-screen bg-background lg:grid lg:grid-cols-[minmax(0,1.05fr)_minmax(480px,.95fr)]">
       <section className="relative hidden min-h-screen overflow-hidden bg-sidebar lg:flex lg:flex-col lg:justify-between" aria-label="مزايا Munasabati Pro">

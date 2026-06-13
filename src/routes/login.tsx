@@ -34,11 +34,12 @@ function LoginPage() {
 
   return (
     <AuthShell
-      title="مرحباً بعودتك"
-      subtitle="سجّل الدخول للوصول إلى مساحة عملك وإدارة مناسباتك"
+      variant="immersive"
+      title="مرحباً بك في مناسباتي برو"
+      subtitle="إدارة مناسباتك باحترافية في مكان واحد"
       footer={<>ليس لديك حساب؟ <Link to="/signup" className="mr-1 font-bold text-gold transition hover:text-foreground">أنشئ حساباً جديداً</Link></>}
     >
-      <form onSubmit={onSubmit} className="space-y-5">
+      <form onSubmit={onSubmit} className="space-y-4">
         <Field label="البريد الإلكتروني">
           <div className="relative">
             <Mail className="absolute right-4 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
@@ -65,8 +66,8 @@ function LoginPage() {
           </label>
           <Link to="/forgot-password" className="font-bold text-gold transition hover:text-foreground">نسيت كلمة المرور؟</Link>
         </div>
-        {error && <div role="alert" className="rounded-2xl border border-destructive/25 bg-destructive/10 px-4 py-3 text-xs leading-5 text-destructive">{error}</div>}
-        <Button type="submit" loading={loading} className="w-full rounded-2xl py-3.5 shadow-gold transition hover:-translate-y-0.5" size="lg" variant="gold">
+        {error && <div role="alert" className="rounded-xl border border-destructive/40 bg-destructive/15 px-4 py-3 text-xs leading-5 text-destructive-foreground">{error}</div>}
+        <Button type="submit" loading={loading} className="w-full rounded-lg py-3.5 shadow-gold transition hover:-translate-y-0.5" size="lg" variant="gold">
           <LogIn className="size-4" /> تسجيل الدخول
         </Button>
       </form>
