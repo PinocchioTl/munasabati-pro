@@ -79,6 +79,9 @@ export function BrandingProvider({ children }: { children: ReactNode }) {
   // The product theme is controlled centrally in styles.css; account branding
   // remains available for logos, names, and the public booking experience.
   useEffect(() => {
+    const root = document.documentElement;
+    ["--primary", "--gold", "--ring", "--sidebar-primary", "--sidebar-ring", "--sidebar", "--info", "--background"]
+      .forEach((property) => root.style.removeProperty(property));
     document.title = `${branding.companyName} — مناسبتي`;
   }, [branding]);
 
