@@ -8,7 +8,7 @@ import {
 import {
   CalendarDays, CheckCircle2, ChevronLeft, ChevronRight, Loader2, Minus, Plus,
   Send, ShoppingBag, Sparkles, Package, User, ClipboardList, Phone, MapPin,
-  ZoomIn, FileText,
+  ZoomIn, FileText, CakeSlice, Gem, GraduationCap, PartyPopper, HeartHandshake,
 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
@@ -24,16 +24,17 @@ export const Route = createFileRoute("/munasabti-booking/$slug/request")({
 });
 
 const EVENT_TYPES = [
-  { value: "wedding", label: "عرس", emoji: "💍" },
-  { value: "engagement", label: "خطوبة", emoji: "💐" },
-  { value: "birthday", label: "عيد ميلاد", emoji: "🎂" },
-  { value: "graduation", label: "حفل تخرج", emoji: "🎓" },
-  { value: "other", label: "مناسبة أخرى", emoji: "🎉" },
+  { value: "wedding", label: "عرس", icon: Gem },
+  { value: "engagement", label: "خطوبة", icon: HeartHandshake },
+  { value: "birthday", label: "عيد ميلاد", icon: CakeSlice },
+  { value: "graduation", label: "حفل تخرج", icon: GraduationCap },
+  { value: "other", label: "مناسبة أخرى", icon: PartyPopper },
 ];
 
-type StepKey = "date" | "decorations" | "supplies" | "info" | "review";
+type StepKey = "date" | "event" | "decorations" | "supplies" | "info" | "review";
 const STEPS: { key: StepKey; label: string; icon: any }[] = [
   { key: "date", label: "التاريخ", icon: CalendarDays },
+  { key: "event", label: "نوع المناسبة", icon: PartyPopper },
   { key: "decorations", label: "الديكورات", icon: Sparkles },
   { key: "supplies", label: "المستلزمات", icon: Package },
   { key: "info", label: "بياناتك", icon: User },
@@ -74,7 +75,10 @@ function RequestPage() {
   const supplies = avail?.supplies ?? [];
 
   useEffect(() => {
-    if (search.decoration) setDecQty(q => ({ ...q, [search.decoration!]: q[search.decoration!] || 1 }));
+    if (search.decoration) {
+      const decorationId = search.decoration;
+      setDecQty(q => ({ ...q, [decorationId]: q[decorationId] || 1 }));
+    }
   }, [search.decoration]);
 
   const showPrices = owner?.show_prices ?? true;
@@ -113,6 +117,8 @@ function RequestPage() {
   function goNext() {
     if (step === "date") {
       if (!form.event_date) return toast.error("اختر تاريخ المناسبة أولاً");
+      setStep("event");
+    } else if (step === "event") {
       if (!form.event_type) return toast.error("اختر نوع المناسبة");
       setStep("decorations");
     } else if (step === "decorations") {
@@ -183,8 +189,13 @@ function RequestPage() {
     <div className="flex flex-col lg:flex-row gap-5">
       <div className="flex-1 min-w-0 space-y-5">
         {/* Stepper */}
-        <header className="bg-white rounded-2xl p-3 sm:p-4 shadow-sm">
-          <div className="flex items-center gap-1 sm:gap-2">
+        <header className="bg-white rounded-2xl p-3 sm:p-4 shadow-sm overflow-hidden">
+          <div className="flex items-center justify-between gap-3 mb-3">
+            <span className="text-xs font-bold bk-text-gold">الخطوة {stepIdx + 1} من {STEPS.length}</span>
+            <span className="text-[11px] text-gray-400">{STEPS[stepIdx]?.label}</span>
+          </div>
+          <div className="overflow-x-auto scrollbar-none pb-1">
+          <div className="flex items-center gap-2 min-w-[640px]">
             {STEPS.map((s, i) => {
               const Icon = s.icon;
               const active = i === stepIdx;
@@ -203,11 +214,12 @@ function RequestPage() {
                 </div>
               );
             })}
-          </div>
+          </div></div>
         </header>
 
         {/* Step content */}
-        {step === "date" && <StepDate form={form} setForm={setForm} />}
+        {step === "date" && <StepDate form={form} setForm={setForm} showEventType={false} />}
+        {step === "event" && <StepDate form={form} setForm={setForm} showDate={false} />}
 
         {step === "decorations" && (
           <StepItems
@@ -281,13 +293,14 @@ function RequestPage() {
 
 /* ──────────────── Step components ──────────────── */
 
-function StepDate({ form, setForm }: any) {
+function StepDate({ form, setForm, showDate = true, showEventType = true }: any) {
   return (
     <section className="bg-white rounded-2xl p-5 sm:p-6 shadow-sm space-y-5 animate-in fade-in">
       <SectionTitle icon={<CalendarDays className="size-5 bk-text-gold" />} title="متى ستقام مناسبتك؟" />
       <p className="text-xs text-gray-500 -mt-3">
         نعرض لك فقط الديكورات والمستلزمات المتوفرة في التاريخ الذي تختاره.
       </p>
+      {showDate && (
       <Field label="تاريخ المناسبة *" icon={<CalendarDays className="size-3.5" />}>
         <input
           required
@@ -298,25 +311,30 @@ function StepDate({ form, setForm }: any) {
           className={inputCls + " text-base py-3.5"}
         />
       </Field>
+      )}
+      {showEventType && (
       <Field label="نوع المناسبة *">
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-          {EVENT_TYPES.map(t => (
+          {EVENT_TYPES.map(t => {
+            const EventIcon = t.icon;
+            return (
             <button
               key={t.value}
               type="button"
               onClick={() => setForm({ ...form, event_type: t.value })}
               className={`p-4 rounded-xl border-2 text-sm font-bold transition flex flex-col items-center gap-1.5 ${
                 form.event_type === t.value
-                  ? "bk-border-gold bg-yellow-50/40 bk-text-primary scale-[1.02]"
+                  ? "bk-border-gold bg-[color-mix(in_oklab,var(--bk-gold)_12%,transparent)] bk-text-primary scale-[1.02]"
                   : "border-gray-100 hover:border-gray-200 text-gray-600"
               }`}
             >
-              <span className="text-2xl">{t.emoji}</span>
+              <EventIcon className="size-7 bk-text-gold" strokeWidth={1.6} />
               {t.label}
             </button>
-          ))}
+          )})}
         </div>
       </Field>
+      )}
     </section>
   );
 }
@@ -404,15 +422,18 @@ function ItemCard({
       <button
         type="button"
         onClick={() => images.length > 0 && onOpenImages(images, 0)}
-        className="relative w-full aspect-[4/3] bg-gray-100 group cursor-zoom-in"
+        className="relative w-full aspect-[4/3] bg-[linear-gradient(135deg,var(--bk-plum),color-mix(in_oklab,var(--bk-gold-soft)_55%,var(--bk-plum)))] group cursor-zoom-in overflow-hidden"
         disabled={images.length === 0}
       >
         {cover ? (
           <img src={cover} alt={item.name} loading="lazy" decoding="async"
             className="size-full object-cover group-hover:scale-105 transition duration-500" />
         ) : (
-          <div className="size-full flex items-center justify-center text-gray-300">
-            <Sparkles className="size-8" />
+          <div className="size-full flex flex-col items-center justify-center text-[#F5F0E6] gap-2">
+            <span className="size-14 rounded-full bg-white/10 border border-white/20 flex items-center justify-center backdrop-blur">
+              <Sparkles className="size-7 bk-text-gold" />
+            </span>
+            <span className="text-xs font-bold">الصورة قريباً</span>
           </div>
         )}
         {images.length > 1 && (
@@ -421,16 +442,16 @@ function ItemCard({
           </div>
         )}
         {item.category && (
-          <span className="absolute top-2 right-2 text-[10px] font-bold px-2 py-0.5 rounded-full bg-white/95 bk-text-primary">
+          <span className="absolute top-2 right-2 text-[10px] font-bold px-2.5 py-1 rounded-full bg-[color-mix(in_oklab,var(--bk-primary)_72%,transparent)] backdrop-blur text-white border border-white/20">
             {item.category}
           </span>
         )}
-        <span className="absolute bottom-2 left-2 text-[10px] font-bold px-2 py-0.5 rounded-full bg-green-500 text-white">
+        <span className="absolute top-2 left-2 text-[10px] font-bold px-2.5 py-1 rounded-full bg-[color-mix(in_oklab,var(--bk-primary)_72%,transparent)] backdrop-blur text-white border border-white/20">
           متاح: {item.available}
         </span>
       </button>
 
-      <div className="p-3 space-y-2">
+      <div className="p-4 space-y-2.5 bg-[color-mix(in_oklab,var(--bk-plum)_84%,transparent)] border-t border-[color-mix(in_oklab,var(--bk-gold)_18%,transparent)]">
         <div className="font-bold text-sm bk-text-primary truncate">{item.name}</div>
         {(item.description || item.notes) && (
           <p className="text-[11px] text-gray-500 line-clamp-2">{item.description || item.notes}</p>

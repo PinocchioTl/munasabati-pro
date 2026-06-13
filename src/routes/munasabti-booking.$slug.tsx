@@ -38,10 +38,13 @@ function BookingShell() {
   }
 
   const cssVars = {
-    "--bk-primary": owner.secondary_color || "#1E1B2E",
-    "--bk-gold": owner.primary_color || "#D4AF37",
-    "--bk-button": (owner as any).button_color || owner.primary_color || "#D4AF37",
-    "--bk-bg": owner.background_color || "#F5F3EE",
+    "--bk-primary": "#1C1430",
+    "--bk-deep": "#15101F",
+    "--bk-plum": "#2E2049",
+    "--bk-gold": "#C9A24B",
+    "--bk-gold-soft": "#F4D98A",
+    "--bk-button": "#C9A24B",
+    "--bk-bg": "#1C1430",
   } as React.CSSProperties;
 
   const social = (owner as any).social_links || {};
@@ -73,7 +76,7 @@ function BookingShell() {
     <div dir="rtl" lang="ar" style={cssVars} className="min-h-screen flex flex-col" data-bk-root>
       <style>{baseStyles}</style>
 
-      <header className="sticky top-0 z-30 bk-primary border-b bk-border-gold shadow-xl backdrop-blur supports-[backdrop-filter]:bg-opacity-95">
+      <header className="sticky top-0 z-30 bk-primary border-b bk-border-gold shadow-xl backdrop-blur-xl">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-3.5 flex items-center gap-3">
           <a href={`/munasabti-booking/${slug}`} className="flex items-center gap-3 min-w-0 flex-1">
             <div className="size-10 rounded-lg bg-white/5 border bk-border-gold flex items-center justify-center overflow-hidden shrink-0">
@@ -96,7 +99,7 @@ function BookingShell() {
         <Outlet />
       </main>
 
-      <footer className="bk-primary mt-12 py-6">
+      <footer className="bk-primary mt-12 py-7 border-t bk-border-gold">
         <div className="max-w-6xl mx-auto px-4 text-center text-xs opacity-80">
           <div className="font-bold">{owner.company_name}</div>
           <div className="mt-1">مدعوم بواسطة <span className="bk-text-gold font-bold">Munasabati</span></div>
@@ -109,14 +112,17 @@ function BookingShell() {
 }
 
 const baseStyles = `
-  [data-bk-root]{background:var(--bk-bg);color:var(--bk-primary);font-family:inherit;background-image:linear-gradient(90deg,color-mix(in oklab,var(--bk-gold) 7%,transparent) 1px,transparent 1px),linear-gradient(color-mix(in oklab,var(--bk-gold) 5%,transparent) 1px,transparent 1px);background-size:72px 72px}
+  [data-bk-root]{background:var(--bk-bg);color:#F5F0E6;font-family:'Tajawal',sans-serif;background-image:radial-gradient(circle,color-mix(in oklab,var(--bk-gold) 14%,transparent) 1px,transparent 1px),radial-gradient(circle at 85% 10%,color-mix(in oklab,var(--bk-plum) 70%,transparent),transparent 35%);background-size:30px 30px,100% 100%}
   [data-bk-root] .bk-primary{background:var(--bk-primary);color:#fff}
-  [data-bk-root] .bk-gold{background:var(--bk-button);color:var(--bk-primary)}
+  [data-bk-root] .bk-gold{background:linear-gradient(135deg,var(--bk-gold-soft),var(--bk-button));color:var(--bk-plum)}
   [data-bk-root] .bk-text-primary{color:var(--bk-primary)}
   [data-bk-root] .bk-text-gold{color:var(--bk-gold)}
   [data-bk-root] .bk-border-gold{border-color:var(--bk-gold)}
-  [data-bk-root] main .bg-white{background:color-mix(in oklab,#fff 97%,var(--bk-gold) 3%);border:1px solid color-mix(in oklab,var(--bk-gold) 25%,transparent);box-shadow:0 16px 40px -30px color-mix(in oklab,var(--bk-primary) 35%,transparent)}
-  [data-bk-root] main input,[data-bk-root] main textarea,[data-bk-root] main select{background:color-mix(in oklab,#fff 94%,var(--bk-gold) 6%);border-color:color-mix(in oklab,var(--bk-gold) 30%,transparent)}
+  [data-bk-root] main .bg-white{background:color-mix(in oklab,var(--bk-plum) 72%,transparent);color:#F5F0E6;border:1px solid color-mix(in oklab,var(--bk-gold) 20%,transparent);box-shadow:0 20px 55px -30px #08050f;backdrop-filter:blur(20px)}
+  [data-bk-root] main .bk-text-primary{color:#F5F0E6}
+  [data-bk-root] main :is(.text-gray-400,.text-gray-500,.text-gray-600,.text-gray-700){color:#C9BFD6}
+  [data-bk-root] main input,[data-bk-root] main textarea,[data-bk-root] main select{background:color-mix(in oklab,var(--bk-deep) 76%,transparent);color:#F5F0E6;border-color:color-mix(in oklab,var(--bk-gold) 28%,transparent);color-scheme:dark}
+  [data-bk-root] main input::placeholder,[data-bk-root] main textarea::placeholder{color:#9e94aa}
   [data-bk-root] main :is(h1,h2,h3){letter-spacing:-.015em}
   [data-bk-root] .scrollbar-none::-webkit-scrollbar{display:none}
 `;

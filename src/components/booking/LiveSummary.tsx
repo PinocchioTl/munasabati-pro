@@ -27,7 +27,7 @@ export function LiveSummary({
     <>
       {/* Desktop sidebar */}
       <aside className="hidden lg:block sticky top-24 self-start w-full max-w-xs">
-        <div className="bg-white rounded-2xl shadow-lg border bk-border-gold/40 p-5">
+        <div className="rounded-2xl shadow-2xl border border-[color-mix(in_oklab,var(--bk-gold)_30%,transparent)] bg-[color-mix(in_oklab,var(--bk-plum)_78%,transparent)] backdrop-blur-xl p-5 text-[#F5F0E6]">
           <Header date={date} count={count} />
           <Body decorations={decorations} supplies={supplies} showPrices={showPrices} currency={currency} />
           {showPrices && count > 0 && <Total total={total} currency={currency} />}
@@ -35,7 +35,7 @@ export function LiveSummary({
       </aside>
 
       {/* Mobile collapsible bottom bar */}
-      <div className="lg:hidden fixed bottom-0 inset-x-0 z-30 bg-white border-t shadow-2xl print:hidden">
+      <div className="lg:hidden fixed bottom-0 inset-x-0 z-30 bg-[color-mix(in_oklab,var(--bk-plum)_94%,transparent)] backdrop-blur-xl border-t border-[color-mix(in_oklab,var(--bk-gold)_30%,transparent)] text-[#F5F0E6] shadow-2xl print:hidden">
         <button
           type="button"
           onClick={() => setOpen(o => !o)}
@@ -76,8 +76,8 @@ export function LiveSummary({
 function Header({ date, count }: { date?: string; count: number }) {
   return (
     <div className="mb-4 pb-3 border-b">
-      <div className="text-xs text-gray-500 mb-1">ملخص الطلب</div>
-      <div className="font-bold bk-text-primary flex items-center gap-2 text-sm">
+      <div className="text-base font-bold text-[#F5F0E6] mb-2">ملخص الطلب</div>
+      <div className="font-bold text-[#F5F0E6] flex items-center gap-2 text-sm">
         <CalendarDays className="size-4 bk-text-gold" />
         {date || "اختر التاريخ"}
       </div>
@@ -131,8 +131,8 @@ function SummaryGroup({ title, items, showPrices, currency }: {
 function Total({ total, currency }: { total: number; currency: string }) {
   return (
     <div className="mt-4 pt-3 border-t flex items-center justify-between">
-      <span className="text-xs font-bold bk-text-primary">الإجمالي التقريبي</span>
-      <span className="text-base font-bold bk-text-gold">
+      <span className="text-xs font-bold text-[#F5F0E6]">الإجمالي التقريبي</span>
+      <span className="text-xl font-bold bk-text-gold">
         {new Intl.NumberFormat("ar-DZ").format(total)} {currency}
       </span>
     </div>
