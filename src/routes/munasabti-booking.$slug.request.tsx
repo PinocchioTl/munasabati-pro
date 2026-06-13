@@ -189,8 +189,13 @@ function RequestPage() {
     <div className="flex flex-col lg:flex-row gap-5">
       <div className="flex-1 min-w-0 space-y-5">
         {/* Stepper */}
-        <header className="bg-white rounded-2xl p-3 sm:p-4 shadow-sm">
-          <div className="flex items-center gap-1 sm:gap-2">
+        <header className="bg-white rounded-2xl p-3 sm:p-4 shadow-sm overflow-hidden">
+          <div className="flex items-center justify-between gap-3 mb-3">
+            <span className="text-xs font-bold bk-text-gold">الخطوة {stepIdx + 1} من {STEPS.length}</span>
+            <span className="text-[11px] text-gray-400">{STEPS[stepIdx]?.label}</span>
+          </div>
+          <div className="overflow-x-auto scrollbar-none pb-1">
+          <div className="flex items-center gap-2 min-w-[640px]">
             {STEPS.map((s, i) => {
               const Icon = s.icon;
               const active = i === stepIdx;
@@ -209,11 +214,12 @@ function RequestPage() {
                 </div>
               );
             })}
-          </div>
+          </div></div>
         </header>
 
         {/* Step content */}
-        {step === "date" && <StepDate form={form} setForm={setForm} />}
+        {step === "date" && <StepDate form={form} setForm={setForm} showEventType={false} />}
+        {step === "event" && <StepDate form={form} setForm={setForm} showDate={false} />}
 
         {step === "decorations" && (
           <StepItems
@@ -287,13 +293,14 @@ function RequestPage() {
 
 /* ──────────────── Step components ──────────────── */
 
-function StepDate({ form, setForm }: any) {
+function StepDate({ form, setForm, showDate = true, showEventType = true }: any) {
   return (
     <section className="bg-white rounded-2xl p-5 sm:p-6 shadow-sm space-y-5 animate-in fade-in">
       <SectionTitle icon={<CalendarDays className="size-5 bk-text-gold" />} title="متى ستقام مناسبتك؟" />
       <p className="text-xs text-gray-500 -mt-3">
         نعرض لك فقط الديكورات والمستلزمات المتوفرة في التاريخ الذي تختاره.
       </p>
+      {showDate && (
       <Field label="تاريخ المناسبة *" icon={<CalendarDays className="size-3.5" />}>
         <input
           required
@@ -304,25 +311,30 @@ function StepDate({ form, setForm }: any) {
           className={inputCls + " text-base py-3.5"}
         />
       </Field>
+      )}
+      {showEventType && (
       <Field label="نوع المناسبة *">
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-          {EVENT_TYPES.map(t => (
+          {EVENT_TYPES.map(t => {
+            const EventIcon = t.icon;
+            return (
             <button
               key={t.value}
               type="button"
               onClick={() => setForm({ ...form, event_type: t.value })}
               className={`p-4 rounded-xl border-2 text-sm font-bold transition flex flex-col items-center gap-1.5 ${
                 form.event_type === t.value
-                  ? "bk-border-gold bg-yellow-50/40 bk-text-primary scale-[1.02]"
+                  ? "bk-border-gold bg-[color-mix(in_oklab,var(--bk-gold)_12%,transparent)] bk-text-primary scale-[1.02]"
                   : "border-gray-100 hover:border-gray-200 text-gray-600"
               }`}
             >
-              <span className="text-2xl">{t.emoji}</span>
+              <EventIcon className="size-7 bk-text-gold" strokeWidth={1.6} />
               {t.label}
             </button>
-          ))}
+          )})}
         </div>
       </Field>
+      )}
     </section>
   );
 }
