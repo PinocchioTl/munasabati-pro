@@ -8,7 +8,7 @@ import {
 import {
   CalendarDays, CheckCircle2, ChevronLeft, ChevronRight, Loader2, Minus, Plus,
   Send, ShoppingBag, Sparkles, Package, User, ClipboardList, Phone, MapPin,
-  ZoomIn, FileText,
+  ZoomIn, FileText, CakeSlice, Gem, GraduationCap, PartyPopper, HeartHandshake,
 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
@@ -24,16 +24,17 @@ export const Route = createFileRoute("/munasabti-booking/$slug/request")({
 });
 
 const EVENT_TYPES = [
-  { value: "wedding", label: "عرس", emoji: "💍" },
-  { value: "engagement", label: "خطوبة", emoji: "💐" },
-  { value: "birthday", label: "عيد ميلاد", emoji: "🎂" },
-  { value: "graduation", label: "حفل تخرج", emoji: "🎓" },
-  { value: "other", label: "مناسبة أخرى", emoji: "🎉" },
+  { value: "wedding", label: "عرس", icon: Gem },
+  { value: "engagement", label: "خطوبة", icon: HeartHandshake },
+  { value: "birthday", label: "عيد ميلاد", icon: CakeSlice },
+  { value: "graduation", label: "حفل تخرج", icon: GraduationCap },
+  { value: "other", label: "مناسبة أخرى", icon: PartyPopper },
 ];
 
-type StepKey = "date" | "decorations" | "supplies" | "info" | "review";
+type StepKey = "date" | "event" | "decorations" | "supplies" | "info" | "review";
 const STEPS: { key: StepKey; label: string; icon: any }[] = [
   { key: "date", label: "التاريخ", icon: CalendarDays },
+  { key: "event", label: "نوع المناسبة", icon: PartyPopper },
   { key: "decorations", label: "الديكورات", icon: Sparkles },
   { key: "supplies", label: "المستلزمات", icon: Package },
   { key: "info", label: "بياناتك", icon: User },
@@ -74,7 +75,10 @@ function RequestPage() {
   const supplies = avail?.supplies ?? [];
 
   useEffect(() => {
-    if (search.decoration) setDecQty(q => ({ ...q, [search.decoration!]: q[search.decoration!] || 1 }));
+    if (search.decoration) {
+      const decorationId = search.decoration;
+      setDecQty(q => ({ ...q, [decorationId]: q[decorationId] || 1 }));
+    }
   }, [search.decoration]);
 
   const showPrices = owner?.show_prices ?? true;
@@ -113,6 +117,8 @@ function RequestPage() {
   function goNext() {
     if (step === "date") {
       if (!form.event_date) return toast.error("اختر تاريخ المناسبة أولاً");
+      setStep("event");
+    } else if (step === "event") {
       if (!form.event_type) return toast.error("اختر نوع المناسبة");
       setStep("decorations");
     } else if (step === "decorations") {
