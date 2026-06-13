@@ -73,10 +73,10 @@ function BookingShell() {
     <div dir="rtl" lang="ar" style={cssVars} className="min-h-screen flex flex-col" data-bk-root>
       <style>{baseStyles}</style>
 
-      <header className="sticky top-0 z-30 bk-primary shadow-lg backdrop-blur supports-[backdrop-filter]:bg-opacity-95">
-        <div className="max-w-6xl mx-auto px-4 py-3 flex items-center gap-3">
+      <header className="sticky top-0 z-30 bk-primary border-b bk-border-gold shadow-xl backdrop-blur supports-[backdrop-filter]:bg-opacity-95">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-3.5 flex items-center gap-3">
           <a href={`/munasabti-booking/${slug}`} className="flex items-center gap-3 min-w-0 flex-1">
-            <div className="size-10 rounded-xl bg-white/10 flex items-center justify-center overflow-hidden shrink-0 ring-2 ring-white/10">
+            <div className="size-10 rounded-lg bg-white/5 border bk-border-gold flex items-center justify-center overflow-hidden shrink-0">
               {owner.logo_url ? <img src={owner.logo_url} alt="" className="size-full object-contain" /> : <Crown className="bk-text-gold size-5" />}
             </div>
             <div className="min-w-0">
@@ -92,7 +92,7 @@ function BookingShell() {
         </div>
       </header>
 
-      <main className="flex-1 max-w-6xl mx-auto w-full px-4 py-6 sm:py-8 pb-32 lg:pb-8">
+      <main className="flex-1 max-w-6xl mx-auto w-full px-4 sm:px-6 py-6 sm:py-9 pb-32 lg:pb-10">
         <Outlet />
       </main>
 
@@ -109,11 +109,14 @@ function BookingShell() {
 }
 
 const baseStyles = `
-  [data-bk-root]{background:var(--bk-bg);color:#1a1a1a;font-family:inherit}
+  [data-bk-root]{background:var(--bk-bg);color:var(--bk-primary);font-family:inherit;background-image:linear-gradient(90deg,color-mix(in oklab,var(--bk-gold) 7%,transparent) 1px,transparent 1px),linear-gradient(color-mix(in oklab,var(--bk-gold) 5%,transparent) 1px,transparent 1px);background-size:72px 72px}
   [data-bk-root] .bk-primary{background:var(--bk-primary);color:#fff}
   [data-bk-root] .bk-gold{background:var(--bk-button);color:var(--bk-primary)}
   [data-bk-root] .bk-text-primary{color:var(--bk-primary)}
   [data-bk-root] .bk-text-gold{color:var(--bk-gold)}
   [data-bk-root] .bk-border-gold{border-color:var(--bk-gold)}
+  [data-bk-root] main .bg-white{background:color-mix(in oklab,#fff 97%,var(--bk-gold) 3%);border:1px solid color-mix(in oklab,var(--bk-gold) 25%,transparent);box-shadow:0 16px 40px -30px color-mix(in oklab,var(--bk-primary) 35%,transparent)}
+  [data-bk-root] main input,[data-bk-root] main textarea,[data-bk-root] main select{background:color-mix(in oklab,#fff 94%,var(--bk-gold) 6%);border-color:color-mix(in oklab,var(--bk-gold) 30%,transparent)}
+  [data-bk-root] main :is(h1,h2,h3){letter-spacing:-.015em}
   [data-bk-root] .scrollbar-none::-webkit-scrollbar{display:none}
 `;

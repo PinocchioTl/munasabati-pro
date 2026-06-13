@@ -84,17 +84,17 @@ export function AppLayout() {
   const currentTitle = allItems.find(i => isActivePath(pathname, i.to))?.label ?? "";
 
   return (
-    <div className="min-h-screen bg-background flex w-full" dir="rtl">
+    <div className="min-h-screen bg-background flex w-full" dir="rtl" data-manager-root>
       {/* Desktop sidebar */}
       <aside
-        className={`hidden md:flex shrink-0 flex-col bg-gradient-luxury text-sidebar-foreground sticky top-0 h-screen border-l border-sidebar-border/60 transition-[width] duration-300 ease-out ${
-          collapsed ? "w-[78px]" : "w-72"
+        className={`hidden md:flex shrink-0 flex-col bg-sidebar text-sidebar-foreground sticky top-0 h-screen border-l border-gold/35 transition-[width] duration-300 ease-out shadow-luxury ${
+          collapsed ? "w-[78px]" : "w-64"
         }`}
       >
         {/* Brand */}
-        <div className="px-3 py-5 border-b border-sidebar-border/40">
+        <div className="px-4 py-5 border-b border-gold/20">
           <div className={`flex items-center gap-3 ${collapsed ? "justify-center" : ""}`}>
-            <div className="size-11 rounded-2xl bg-gradient-gold flex items-center justify-center shadow-gold overflow-hidden shrink-0 ring-1 ring-white/10">
+            <div className="size-11 rounded-xl border border-gold/45 bg-sidebar-accent flex items-center justify-center overflow-hidden shrink-0">
               {branding.logoUrl ? (
                 <img src={branding.logoUrl} alt={branding.companyName} className="size-full object-contain" />
               ) : (
@@ -103,8 +103,8 @@ export function AppLayout() {
             </div>
             {!collapsed && (
               <div className="min-w-0">
-                <div className="text-base font-bold text-gradient-gold truncate leading-tight">{branding.companyName}</div>
-                <div className="text-[11px] text-sidebar-foreground/60 truncate">إدارة المناسبات</div>
+                <div className="text-base font-bold text-gold truncate leading-tight tracking-wide">{branding.companyName}</div>
+                <div className="text-[10px] text-sidebar-foreground/50 truncate tracking-[0.18em]">MUNASABATI PRO</div>
               </div>
             )}
           </div>
@@ -156,9 +156,9 @@ export function AppLayout() {
       </aside>
 
       {/* Main */}
-      <main className="flex-1 min-w-0 flex flex-col">
+      <main className="flex-1 min-w-0 flex flex-col" data-manager-main>
         {/* Topbar */}
-        <header className="sticky top-0 z-30 glass border-b border-border/60">
+        <header className="sticky top-0 z-30 bg-card/92 backdrop-blur-xl border-b border-gold/20 shadow-soft">
           <div className="flex items-center gap-2 sm:gap-3 px-3 sm:px-4 lg:px-8 h-14 sm:h-16">
             {/* Mobile brand */}
             <div className="md:hidden flex items-center gap-2 min-w-0">
@@ -217,7 +217,7 @@ export function AppLayout() {
           </div>
         </header>
 
-        <div className="flex-1 min-w-0 max-w-full overflow-x-hidden px-3 sm:px-4 lg:px-8 py-4 sm:py-6 lg:py-8 pb-24 md:pb-8 animate-fade-in">
+        <div className="flex-1 min-w-0 max-w-full overflow-x-hidden px-3 sm:px-5 lg:px-8 py-4 sm:py-6 lg:py-8 pb-24 md:pb-8 animate-fade-in" data-manager-content>
           <Outlet />
         </div>
       </main>
@@ -265,7 +265,7 @@ function SidebarItem({ item, active, collapsed, badge }: { item: NavItem; active
         collapsed ? "justify-center" : ""
       } ${
         active
-          ? "bg-sidebar-accent text-sidebar-accent-foreground shadow-soft"
+          ? "bg-sidebar-accent text-gold border border-gold/20 shadow-soft"
           : "text-sidebar-foreground/70 hover:bg-sidebar-accent/40 hover:text-sidebar-foreground"
       }`}
     >

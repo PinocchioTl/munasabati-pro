@@ -4,7 +4,7 @@ import { Inbox, Loader2 } from "lucide-react";
 
 export function Card({ children, className = "" }: { children: ReactNode; className?: string }) {
   return (
-    <div className={`bg-card rounded-2xl border border-border/70 shadow-elegant hover-lift ${className}`}>
+    <div className={`bg-card rounded-xl border border-gold/20 shadow-elegant hover-lift ${className}`}>
       {children}
     </div>
   );
@@ -12,8 +12,9 @@ export function Card({ children, className = "" }: { children: ReactNode; classN
 
 export function SectionHeader({ title, subtitle, action }: { title: string; subtitle?: string; action?: ReactNode }) {
   return (
-    <div className="flex items-end justify-between gap-4 mb-6">
+    <div className="flex items-end justify-between gap-4 mb-6 border-b border-gold/20 pb-4">
       <div>
+        <div className="munasabati-rule mb-2" />
         <h1 className="text-2xl lg:text-3xl font-bold tracking-tight">{title}</h1>
         {subtitle && <p className="text-sm text-muted-foreground mt-1">{subtitle}</p>}
       </div>
