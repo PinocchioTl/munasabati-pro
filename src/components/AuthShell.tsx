@@ -4,11 +4,9 @@ import { CalendarCheck2, ChartNoAxesCombined, Sparkles } from "lucide-react";
 import logo from "@/assets/logo.png";
 import authIllustration from "@/assets/auth-events-illustration.jpg";
 
-export function AuthShell({ title, subtitle, children, footer }: {
+export function AuthShell({ title, subtitle, children, footer, variant = "split" }: {
   title: string; subtitle?: string; children: ReactNode; footer?: ReactNode; variant?: "split" | "immersive";
 }) {
-  const variant = arguments[0].variant ?? "split";
-
   if (variant === "immersive") {
     return (
       <main dir="rtl" className="relative min-h-screen overflow-hidden bg-sidebar" data-auth-immersive>
