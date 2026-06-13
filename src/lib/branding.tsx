@@ -76,19 +76,9 @@ export function BrandingProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => { fetchBranding(); }, [fetchBranding]);
 
-  // Apply CSS variables + document title.
-  // primaryColor = brand accent (gold) → buttons, ring, sidebar accent
-  // secondaryColor = brand dark → sidebar background
+  // The product theme is controlled centrally in styles.css; account branding
+  // remains available for logos, names, and the public booking experience.
   useEffect(() => {
-    const root = document.documentElement;
-    root.style.setProperty("--primary", branding.primaryColor);
-    root.style.setProperty("--gold", branding.primaryColor);
-    root.style.setProperty("--ring", branding.primaryColor);
-    root.style.setProperty("--sidebar-primary", branding.primaryColor);
-    root.style.setProperty("--sidebar-ring", branding.primaryColor);
-    root.style.setProperty("--sidebar", branding.secondaryColor);
-    root.style.setProperty("--info", branding.accentColor);
-    root.style.setProperty("--background", branding.backgroundColor);
     document.title = `${branding.companyName} — مناسبتي`;
   }, [branding]);
 
