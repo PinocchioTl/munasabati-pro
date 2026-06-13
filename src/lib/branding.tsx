@@ -17,10 +17,10 @@ export interface Branding {
 const DEFAULTS: Branding = {
   companyName: "Munasabati",
   logoUrl: logoAsset,
-  primaryColor: "#D4AF37",      // Premium Gold — primary buttons & accents
-  secondaryColor: "#1E1B2E",    // Luxury Dark — sidebar & headings
-  accentColor: "#2D2A4A",       // Deep Purple — secondary surfaces
-  backgroundColor: "#F5F3EE",   // Soft sand background
+  primaryColor: "#C9A24B",      // Royal Gold — primary buttons & accents
+  secondaryColor: "#1C1430",    // Midnight Purple — sidebar & topbar
+  accentColor: "#2E2049",       // Deep Plum — secondary surfaces
+  backgroundColor: "#1C1430",   // Midnight Purple — application background
 };
 
 interface Ctx {
@@ -58,6 +58,7 @@ export function BrandingProvider({ children }: { children: ReactNode }) {
       const LEGACY = new Set([
         "#111827", "#2563EB", "#F9FAFB",
         "#561C24", "#6D2932", "#C7B7A3", "#E8D8C4",
+        "#D4AF37", "#1E1B2E", "#2D2A4A", "#F5F3EE",
       ]);
       const clean = (v: string | null | undefined, fallback: string) =>
         !v || LEGACY.has(v.toUpperCase()) ? fallback : v;
