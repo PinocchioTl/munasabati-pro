@@ -422,15 +422,18 @@ function ItemCard({
       <button
         type="button"
         onClick={() => images.length > 0 && onOpenImages(images, 0)}
-        className="relative w-full aspect-[4/3] bg-gray-100 group cursor-zoom-in"
+        className="relative w-full aspect-[4/3] bg-[linear-gradient(135deg,var(--bk-plum),color-mix(in_oklab,var(--bk-gold-soft)_55%,var(--bk-plum)))] group cursor-zoom-in overflow-hidden"
         disabled={images.length === 0}
       >
         {cover ? (
           <img src={cover} alt={item.name} loading="lazy" decoding="async"
             className="size-full object-cover group-hover:scale-105 transition duration-500" />
         ) : (
-          <div className="size-full flex items-center justify-center text-gray-300">
-            <Sparkles className="size-8" />
+          <div className="size-full flex flex-col items-center justify-center text-[#F5F0E6] gap-2">
+            <span className="size-14 rounded-full bg-white/10 border border-white/20 flex items-center justify-center backdrop-blur">
+              <Sparkles className="size-7 bk-text-gold" />
+            </span>
+            <span className="text-xs font-bold">الصورة قريباً</span>
           </div>
         )}
         {images.length > 1 && (
@@ -439,16 +442,16 @@ function ItemCard({
           </div>
         )}
         {item.category && (
-          <span className="absolute top-2 right-2 text-[10px] font-bold px-2 py-0.5 rounded-full bg-white/95 bk-text-primary">
+          <span className="absolute top-2 right-2 text-[10px] font-bold px-2.5 py-1 rounded-full bg-[color-mix(in_oklab,var(--bk-primary)_72%,transparent)] backdrop-blur text-white border border-white/20">
             {item.category}
           </span>
         )}
-        <span className="absolute bottom-2 left-2 text-[10px] font-bold px-2 py-0.5 rounded-full bg-green-500 text-white">
+        <span className="absolute top-2 left-2 text-[10px] font-bold px-2.5 py-1 rounded-full bg-[color-mix(in_oklab,var(--bk-primary)_72%,transparent)] backdrop-blur text-white border border-white/20">
           متاح: {item.available}
         </span>
       </button>
 
-      <div className="p-3 space-y-2">
+      <div className="p-4 space-y-2.5 bg-[color-mix(in_oklab,var(--bk-plum)_84%,transparent)] border-t border-[color-mix(in_oklab,var(--bk-gold)_18%,transparent)]">
         <div className="font-bold text-sm bk-text-primary truncate">{item.name}</div>
         {(item.description || item.notes) && (
           <p className="text-[11px] text-gray-500 line-clamp-2">{item.description || item.notes}</p>
