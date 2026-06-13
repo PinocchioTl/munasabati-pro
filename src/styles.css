@@ -310,6 +310,33 @@
   background: linear-gradient(90deg, var(--gold), color-mix(in oklab, var(--gold) 15%, transparent));
 }
 
+/* Immersive login — palace composition from the Munasabati identity */
+[data-auth-immersive] label > span:first-child {
+  color: color-mix(in oklab, var(--sidebar-foreground) 78%, transparent);
+}
+
+[data-auth-immersive] input:not([type="checkbox"]) {
+  border-radius: 0.625rem;
+  border-color: color-mix(in oklab, var(--gold) 26%, transparent);
+  background: color-mix(in oklab, var(--sidebar) 84%, transparent);
+  color: var(--sidebar-foreground);
+  box-shadow: inset 0 1px 0 color-mix(in oklab, white 5%, transparent);
+}
+
+[data-auth-immersive] input:not([type="checkbox"])::placeholder {
+  color: color-mix(in oklab, var(--sidebar-foreground) 38%, transparent);
+}
+
+[data-auth-immersive] input:not([type="checkbox"]):focus {
+  border-color: var(--gold);
+  background: color-mix(in oklab, var(--sidebar) 72%, transparent);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--gold) 12%, transparent);
+}
+
+[data-auth-immersive] form .text-muted-foreground {
+  color: color-mix(in oklab, var(--sidebar-foreground) 55%, transparent);
+}
+
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
