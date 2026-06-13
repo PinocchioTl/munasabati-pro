@@ -21,7 +21,7 @@ export function AuthShell({ title, subtitle, children, footer, variant = "split"
         <div className="absolute inset-0 bg-sidebar/10" />
 
         <section className="relative z-10 flex min-h-screen items-center justify-center px-5 py-6">
-          <div className="w-full max-w-[300px] -translate-y-1 animate-in fade-in duration-500 px-1 text-sidebar-foreground">
+          <div className="w-full max-w-[340px] -translate-y-1 animate-in fade-in duration-500 rounded-[48%_48%_2.25rem_2.25rem/18%_18%_2.25rem_2.25rem] bg-sidebar/92 px-6 py-8 text-sidebar-foreground shadow-luxury backdrop-blur-[2px] sm:px-7">
             <header className="mb-5 text-center">
               <Link to="/login" aria-label="Munasabati Pro" className="mx-auto mb-2.5 grid size-11 place-items-center text-gold">
                 <Gem className="size-10 stroke-[1.15]" />
