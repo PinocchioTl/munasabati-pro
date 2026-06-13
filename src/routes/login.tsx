@@ -37,29 +37,29 @@ function LoginPage() {
       variant="immersive"
       title="مرحباً بك في مناسباتي برو"
       subtitle="إدارة مناسباتك باحترافية في مكان واحد"
-      footer={<>ليس لديك حساب؟ <Link to="/signup" className="mr-1 font-bold text-gold transition hover:text-foreground">أنشئ حساباً جديداً</Link></>}
+      footer={<>ليس لديك حساب؟ <Link to="/signup" className="mr-1 font-bold text-gold underline underline-offset-4 transition hover:text-gold-light">إنشاء حساب جديد</Link></>}
     >
-      <form onSubmit={onSubmit} className="space-y-3" data-compact-login>
+      <form onSubmit={onSubmit} className="space-y-4" data-auth-form>
         <Field label="البريد الإلكتروني">
           <div className="relative">
-            <Mail className="absolute right-4 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+            <Mail className="absolute left-4 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
             <input type="email" value={email} onChange={(e) => setEmail(e.target.value)}
-              className={`${inputCls} pr-10 text-right`} dir="rtl" placeholder="البريد الإلكتروني" autoComplete="email" aria-label="البريد الإلكتروني" />
+              className={`${inputCls} pl-11 text-right`} dir="rtl" placeholder="البريد الإلكتروني" autoComplete="email" aria-label="البريد الإلكتروني" />
           </div>
         </Field>
         <Field label="كلمة المرور">
           <div className="relative">
-            <Lock className="absolute right-4 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+            <Lock className="absolute left-4 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
             <input type={show ? "text" : "password"} value={password} onChange={(e) => setPassword(e.target.value)}
-              className={`${inputCls} pr-10 pl-10 text-right`} dir="rtl" placeholder="كلمة المرور" autoComplete="current-password" aria-label="كلمة المرور" />
+              className={`${inputCls} pl-20 text-right`} dir="rtl" placeholder="كلمة المرور" autoComplete="current-password" aria-label="كلمة المرور" />
             <button type="button" onClick={() => setShow(!show)}
               aria-label={show ? "إخفاء كلمة المرور" : "إظهار كلمة المرور"}
-              className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground transition hover:text-gold">
+              className="absolute left-11 top-1/2 -translate-y-1/2 text-muted-foreground transition hover:text-gold">
               {show ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
             </button>
           </div>
         </Field>
-        <div className="flex items-center justify-between gap-3 text-[10px]">
+        <div className="flex items-center justify-between gap-3 text-xs">
           <label className="flex cursor-pointer items-center gap-2 text-muted-foreground">
             <span className={`grid size-4 place-items-center rounded border transition ${remember ? "border-gold bg-gold text-gold-foreground" : "border-border bg-background"}`}>{remember && <Check className="size-3" />}</span>
             <input type="checkbox" checked={remember} onChange={(event) => setRemember(event.target.checked)} className="sr-only" /> تذكرني
@@ -67,7 +67,7 @@ function LoginPage() {
           <Link to="/forgot-password" className="font-bold text-gold transition hover:text-foreground">نسيت كلمة المرور؟</Link>
         </div>
         {error && <div role="alert" className="rounded-xl border border-destructive/40 bg-destructive/15 px-4 py-3 text-xs leading-5 text-destructive-foreground">{error}</div>}
-        <Button type="submit" loading={loading} className="w-full rounded-md py-2.5 shadow-gold transition hover:-translate-y-0.5" size="md" variant="gold">
+        <Button type="submit" loading={loading} className="w-full rounded-xl py-3 shadow-gold transition hover:-translate-y-0.5" size="md" variant="gold">
           تسجيل الدخول
         </Button>
       </form>
