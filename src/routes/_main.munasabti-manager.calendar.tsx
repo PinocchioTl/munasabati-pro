@@ -27,7 +27,7 @@ const statusColor: Record<BookingStatus, { bg: string; text: string; ring: strin
   confirmed:   { bg: "bg-success/15", text: "text-success", ring: "ring-success/40", dot: "bg-success", chip: "bg-success/15 text-success border-success/30" },
   pending:     { bg: "bg-warning/15", text: "text-warning", ring: "ring-warning/40", dot: "bg-warning", chip: "bg-warning/15 text-warning border-warning/30" },
   in_progress: { bg: "bg-info/15", text: "text-info", ring: "ring-info/40", dot: "bg-info", chip: "bg-info/15 text-info border-info/30" },
-  completed:   { bg: "bg-[oklch(0.55_0.18_295)]/15", text: "text-[oklch(0.65_0.22_295)]", ring: "ring-[oklch(0.55_0.18_295)]/40", dot: "bg-[oklch(0.55_0.18_295)]", chip: "bg-[oklch(0.55_0.18_295)]/15 text-[oklch(0.65_0.22_295)] border-[oklch(0.55_0.18_295)]/30" },
+  completed:   { bg: "bg-info/15", text: "text-info", ring: "ring-info/40", dot: "bg-info", chip: "bg-info/15 text-info border-info/30" },
   cancelled:   { bg: "bg-destructive/15", text: "text-destructive", ring: "ring-destructive/40", dot: "bg-destructive", chip: "bg-destructive/15 text-destructive border-destructive/30" },
 };
 
@@ -163,13 +163,13 @@ function CalendarPage() {
       </div>
 
       {/* ===== View Switcher ===== */}
-      <Card className="p-4 lg:p-6 backdrop-blur-xl bg-card/70 border-border/60">
+      <Card className="p-4 lg:p-6 backdrop-blur-xl bg-card/95 border-gold/20">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5">
-          <div className="flex items-center gap-1 p-1 bg-secondary/60 rounded-xl w-fit">
+           <div className="flex items-center gap-1 p-1 bg-secondary rounded-xl w-fit border border-gold/10">
             {(["month","week","day"] as ViewMode[]).map(v => (
               <button key={v} onClick={() => setView(v)}
                 className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition ${
-                  view === v ? "bg-card text-foreground shadow-soft" : "text-muted-foreground hover:text-foreground"
+                   view === v ? "bg-gradient-gold text-primary-foreground shadow-gold" : "text-muted-foreground hover:text-foreground"
                 }`}>
                 {v === "month" ? "شهر" : v === "week" ? "أسبوع" : "يوم"}
               </button>
@@ -227,8 +227,8 @@ function CalendarPage() {
                         className={`group relative text-right min-h-[88px] lg:min-h-[110px] rounded-2xl border p-2 transition-all hover:-translate-y-0.5 hover:shadow-elegant overflow-hidden ${
                           isToday ? "border-gold/60 bg-gradient-to-br from-gold/10 to-transparent shadow-gold/30 shadow-lg" :
                           hasConflict ? "border-destructive/40 bg-destructive/5" :
-                          busy ? "border-gold/30 bg-card/80 backdrop-blur" :
-                          "border-border/60 bg-card/40 backdrop-blur hover:bg-card/80"
+                          busy ? "border-gold/30 bg-card backdrop-blur" :
+                          i % 2 === 0 ? "border-gold/15 bg-card/80 backdrop-blur hover:bg-card" : "border-gold/10 bg-secondary/80 backdrop-blur hover:bg-card"
                         }`}>
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-1">
@@ -271,7 +271,7 @@ function CalendarPage() {
                       className={`text-right min-h-[200px] rounded-2xl border p-3 backdrop-blur transition hover:-translate-y-0.5 hover:shadow-elegant ${
                         isToday ? "border-gold/60 bg-gradient-to-br from-gold/10 to-transparent" :
                         conflicts.size ? "border-destructive/40 bg-destructive/5" :
-                        "border-border/60 bg-card/50"
+                         "border-gold/15 bg-card/90"
                       }`}>
                       <div className="text-center pb-2 border-b border-border/40">
                         <div className="text-[10px] text-muted-foreground">{shortDayNames[d.getDay()]}</div>
@@ -430,7 +430,7 @@ function CalendarPage() {
 function NavBtn({ children, onClick }: { children: React.ReactNode; onClick: () => void }) {
   return (
     <button onClick={onClick}
-      className="size-9 rounded-xl bg-secondary/60 hover:bg-secondary flex items-center justify-center transition active:scale-95">
+      className="size-9 rounded-xl bg-secondary border border-gold/10 hover:border-gold/30 hover:bg-card flex items-center justify-center transition active:scale-95">
       {children}
     </button>
   );
@@ -440,12 +440,12 @@ function GlassStat({ icon, label, value, accent = "text-foreground", progress, s
   icon: React.ReactNode; label: string; value: string | number; accent?: string; progress?: number; small?: boolean;
 }) {
   return (
-    <div className="relative overflow-hidden rounded-2xl border border-border/60 bg-card/60 backdrop-blur-xl p-4 shadow-soft hover:shadow-elegant transition">
+    <div className="relative overflow-hidden rounded-2xl border border-gold/20 bg-card backdrop-blur-xl p-4 shadow-soft hover:shadow-elegant transition">
       <div className="flex items-center justify-between">
         <div className="text-[11px] text-muted-foreground font-semibold">{label}</div>
         <div className={`size-8 rounded-xl bg-secondary/60 flex items-center justify-center ${accent}`}>{icon}</div>
       </div>
-      <div className={`mt-2 font-bold ${small ? "text-base" : "text-2xl"} ${accent}`}>{value}</div>
+      <div className={`mt-2 font-bold text-gold-light ${small ? "text-base" : "text-2xl"}`}>{value}</div>
       {typeof progress === "number" && (
         <div className="mt-2 h-1.5 rounded-full bg-secondary overflow-hidden">
           <div className="h-full bg-gradient-gold transition-all duration-500" style={{ width: `${progress}%` }} />

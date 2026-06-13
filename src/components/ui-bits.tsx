@@ -27,7 +27,7 @@ const statusStyles: Record<BookingStatus, string> = {
   pending: "bg-warning/15 text-warning border-warning/30",
   confirmed: "bg-success/15 text-success border-success/30",
   in_progress: "bg-info/15 text-info border-info/30",
-  completed: "bg-[oklch(0.55_0.18_295)]/15 text-[oklch(0.65_0.22_295)] border-[oklch(0.55_0.18_295)]/30",
+  completed: "bg-info/15 text-info border-info/30",
   cancelled: "bg-destructive/15 text-destructive border-destructive/30",
 };
 

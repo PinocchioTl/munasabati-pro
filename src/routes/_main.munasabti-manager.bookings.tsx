@@ -102,20 +102,20 @@ function BookingsPage() {
         <KpiMini label="المدفوع" value={formatSAR(stats.paid)} />
       </div>
 
-      <Card className="p-3 lg:p-4 sticky top-14 sm:top-16 z-20 bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/80">
+      <Card className="p-3 lg:p-4 sticky top-14 sm:top-16 z-20 bg-card/95 border-gold/20 backdrop-blur supports-[backdrop-filter]:bg-card/90">
         <div className="flex flex-col gap-3">
           <div className="flex flex-col lg:flex-row gap-3">
             <SearchBox value={query} onChange={setQuery} className="flex-1"
               placeholder="ابحث باسم، هاتف، رقم حجز، نوع مناسبة، موقع..." />
             <div className="flex gap-2">
               <select value={eventFilter} onChange={(e) => setEventFilter(e.target.value as any)}
-                className="flex-1 lg:flex-none bg-secondary/60 rounded-xl px-3 py-2.5 text-sm outline-none focus:ring-2 focus:ring-ring min-w-0">
+                className="flex-1 lg:flex-none bg-secondary border border-input rounded-xl px-3 py-2.5 text-sm outline-none focus:ring-2 focus:ring-ring/30 min-w-0">
                 <option value="all">كل المناسبات</option>
                 {eventTypes.map((t) => <option key={t.id} value={t.name}>{t.label}</option>)}
               </select>
-              <div className="hidden lg:flex bg-secondary/60 rounded-xl p-1">
-                <button onClick={() => setView("cards")} className={`p-2 rounded-lg transition ${view === "cards" ? "bg-card shadow-soft" : ""}`}><LayoutGrid className="size-4" /></button>
-                <button onClick={() => setView("timeline")} className={`p-2 rounded-lg transition ${view === "timeline" ? "bg-card shadow-soft" : ""}`}><List className="size-4" /></button>
+              <div className="hidden lg:flex bg-secondary rounded-xl p-1">
+                <button onClick={() => setView("cards")} className={`p-2 rounded-lg transition ${view === "cards" ? "bg-gradient-gold text-primary-foreground shadow-gold" : ""}`}><LayoutGrid className="size-4" /></button>
+                <button onClick={() => setView("timeline")} className={`p-2 rounded-lg transition ${view === "timeline" ? "bg-gradient-gold text-primary-foreground shadow-gold" : ""}`}><List className="size-4" /></button>
               </div>
             </div>
           </div>
@@ -129,7 +129,7 @@ function BookingsPage() {
             ] as const).map((r) => (
               <button key={r.id} onClick={() => setDateRange(r.id)}
                 className={`px-3 py-1.5 rounded-lg text-[11px] font-semibold whitespace-nowrap transition shrink-0 ${
-                  dateRange === r.id ? "bg-gold text-gold-foreground shadow-soft" : "bg-secondary/60 hover:bg-secondary"
+                   dateRange === r.id ? "bg-gradient-gold text-primary-foreground shadow-gold" : "bg-secondary border border-gold/10 hover:border-gold/25"
                 }`}>{r.label}</button>
             ))}
           </div>
@@ -139,7 +139,7 @@ function BookingsPage() {
               return (
                 <button key={t.id} onClick={() => setFilter(t.id)}
                   className={`px-3 lg:px-4 py-1.5 lg:py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition flex items-center gap-1.5 lg:gap-2 shrink-0 ${
-                    filter === t.id ? "bg-primary text-primary-foreground shadow-elegant" : "bg-secondary hover:bg-secondary/70"
+                     filter === t.id ? "bg-gradient-gold text-primary-foreground shadow-gold" : "bg-secondary border border-gold/10 hover:border-gold/25"
                   }`}>
                   {t.label}
                   <span className={`text-[10px] px-1.5 py-0.5 rounded-full ${filter === t.id ? "bg-primary-foreground/20" : "bg-card"}`}>{count}</span>
@@ -171,7 +171,7 @@ function KpiMini({ label, value, gold }: { label: string; value: string; gold?: 
   return (
     <Card className="p-3 lg:p-4">
       <div className="text-[10px] lg:text-[11px] text-muted-foreground truncate">{label}</div>
-      <div className={`text-base lg:text-xl font-bold mt-1 truncate ${gold ? "text-gold" : ""}`}>{value}</div>
+      <div className={`text-base lg:text-xl font-bold mt-1 text-gold-light truncate ${gold ? "text-gold-light" : ""}`}>{value}</div>
     </Card>
   );
 }
@@ -182,7 +182,7 @@ function BookingCard({ b, typeMap, onEdit }: { b: any; typeMap: Record<string, {
   const decorations = b.booking_decorations || [];
   const evt = typeMap[b.event_type];
   return (
-    <Card className="p-5 hover:shadow-luxury transition-all">
+    <Card className="p-5 border-gold/20 hover:shadow-luxury transition-all">
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-center gap-3 min-w-0">
           <div
@@ -193,7 +193,7 @@ function BookingCard({ b, typeMap, onEdit }: { b: any; typeMap: Record<string, {
             <span className="text-[10px] font-bold">{b.code?.split("-")[1] || "•"}</span>
           </div>
           <div className="min-w-0">
-            <div className="font-bold text-base truncate">{b.customer_name}</div>
+            <div className="font-bold text-base text-gold-light truncate">{b.customer_name}</div>
             <div className="text-xs text-muted-foreground flex items-center gap-1.5 mt-1">
               <Phone className="size-3" /> {b.phone || "—"}
             </div>
@@ -311,7 +311,7 @@ const statusClass: Record<BookingStatus, string> = {
   pending: "bg-warning/15 text-warning border-warning/30",
   confirmed: "bg-success/15 text-success border-success/30",
   in_progress: "bg-info/15 text-info border-info/30",
-  completed: "bg-[oklch(0.55_0.18_295)]/15 text-[oklch(0.65_0.22_295)] border-[oklch(0.55_0.18_295)]/30",
+  completed: "bg-info/15 text-info border-info/30",
   cancelled: "bg-destructive/15 text-destructive border-destructive/30",
 };
 

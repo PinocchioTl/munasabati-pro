@@ -353,7 +353,7 @@ function Dashboard() {
 
 function Card({ children, className = "" }: { children: React.ReactNode; className?: string }) {
   return (
-    <div className={`bg-card rounded-2xl border border-border/70 shadow-elegant p-4 sm:p-5 ${className}`}>
+    <div className={`bg-card rounded-2xl border border-gold/20 shadow-elegant p-4 sm:p-5 ${className}`}>
       {children}
     </div>
   );
@@ -364,7 +364,7 @@ function CardHeader({ eyebrow, title, action }: { eyebrow?: string; title: strin
     <div className="flex items-start justify-between gap-3 mb-4">
       <div className="min-w-0">
         {eyebrow && <div className="text-[10px] uppercase tracking-[0.14em] font-bold text-muted-foreground/70 mb-1">{eyebrow}</div>}
-        <div className="text-base font-bold truncate">{title}</div>
+        <div className="text-base font-bold text-gold-light truncate">{title}</div>
       </div>
       {action}
     </div>
@@ -386,8 +386,8 @@ function Metric({
 }) {
   const a = accentMap[accent];
   const inner = (
-    <div className="relative bg-card rounded-2xl border border-border/70 shadow-elegant p-4 lg:p-5 overflow-hidden group hover:shadow-luxury transition">
-      <div className={`absolute inset-0 bg-gradient-to-bl ${a.bg} opacity-60 pointer-events-none`} />
+    <div className="relative bg-card rounded-2xl border border-gold/20 shadow-elegant p-4 lg:p-5 overflow-hidden group hover:shadow-luxury transition">
+      <div className={`absolute inset-0 bg-linear-to-bl ${a.bg} opacity-60 pointer-events-none`} />
       <div className="relative">
         <div className="flex items-start justify-between">
           <div className={`size-10 rounded-xl flex items-center justify-center ${a.icon}`}>
@@ -395,7 +395,7 @@ function Metric({
           </div>
           {to && <ArrowUpRight className="size-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition" />}
         </div>
-        <div className="mt-3 text-xl lg:text-2xl font-bold tracking-tight truncate">{value}</div>
+        <div className="mt-3 text-xl lg:text-2xl font-bold tracking-tight text-gold-light truncate">{value}</div>
         <div className="text-[11px] text-muted-foreground mt-1 truncate font-medium">{label}</div>
         {sub && <div className="text-[11px] text-muted-foreground/70 mt-1.5 truncate">{sub}</div>}
       </div>
@@ -445,9 +445,9 @@ function QuickAction({ to, icon: Icon, label }: { to: string; icon: any; label: 
   return (
     <Link
       to={to}
-      className="flex flex-col items-center justify-center gap-1.5 py-3 rounded-xl bg-secondary/40 hover:bg-secondary border border-transparent hover:border-border transition group"
+      className="flex flex-col items-center justify-center gap-1.5 py-3 rounded-xl bg-secondary hover:bg-secondary/75 border border-gold/10 hover:border-gold/25 transition group"
     >
-      <div className="size-9 rounded-xl bg-card border border-border flex items-center justify-center text-gold group-hover:scale-110 transition">
+      <div className="size-9 rounded-full bg-background border border-gold/20 flex items-center justify-center text-gold group-hover:scale-110 transition">
         <Icon className="size-[18px]" />
       </div>
       <span className="text-[11px] font-semibold">{label}</span>
