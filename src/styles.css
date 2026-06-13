@@ -337,6 +337,23 @@
   color: color-mix(in oklab, var(--sidebar-foreground) 55%, transparent);
 }
 
+[data-auth-immersive] [data-compact-login] label > span:first-child {
+  display: none;
+}
+
+[data-auth-immersive] [data-compact-login] input:not([type="checkbox"]) {
+  min-height: 2.5rem;
+  padding-top: 0.625rem;
+  padding-bottom: 0.625rem;
+  font-size: 0.6875rem;
+}
+
+@media (max-width: 640px) {
+  [data-auth-immersive] > img {
+    object-position: center;
+  }
+}
+
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
