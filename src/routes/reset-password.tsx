@@ -32,28 +32,29 @@ function ResetPage() {
   }
 
   return (
-    <AuthShell title="تعيين كلمة مرور جديدة" subtitle="اختر كلمة مرور قوية لحماية حسابك">
-      <form onSubmit={onSubmit} className="space-y-4">
+    <AuthShell title="كلمة مرور جديدة" subtitle="اختر كلمة مرور قوية ومختلفة لحماية حسابك">
+      <form onSubmit={onSubmit} className="space-y-5">
         <Field label="كلمة المرور الجديدة">
           <div className="relative">
-            <Lock className="absolute right-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+            <Lock className="absolute right-4 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
             <input type={show ? "text" : "password"} value={password} onChange={(e) => setPassword(e.target.value)}
-              className={`${inputCls} pr-10 pl-10`} placeholder="••••••••" />
+              className={`${inputCls} pr-11 pl-11 text-left`} dir="ltr" placeholder="••••••••" autoComplete="new-password" />
             <button type="button" onClick={() => setShow(!show)}
-              className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground">
+              aria-label={show ? "إخفاء كلمة المرور" : "إظهار كلمة المرور"}
+              className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground transition hover:text-gold">
               {show ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
             </button>
           </div>
         </Field>
         <Field label="تأكيد كلمة المرور">
           <div className="relative">
-            <Lock className="absolute right-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+            <Lock className="absolute right-4 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
             <input type={show ? "text" : "password"} value={confirm} onChange={(e) => setConfirm(e.target.value)}
-              className={`${inputCls} pr-10`} placeholder="••••••••" />
+              className={`${inputCls} pr-11 text-left`} dir="ltr" placeholder="••••••••" autoComplete="new-password" />
           </div>
         </Field>
-        {error && <div className="rounded-xl bg-destructive/10 border border-destructive/30 text-destructive text-xs px-3 py-2">{error}</div>}
-        <Button type="submit" loading={loading} className="w-full" size="lg" variant="gold">
+        {error && <div role="alert" className="rounded-2xl border border-destructive/25 bg-destructive/10 px-4 py-3 text-xs text-destructive">{error}</div>}
+        <Button type="submit" loading={loading} className="w-full rounded-2xl py-3.5 shadow-gold transition hover:-translate-y-0.5" size="lg" variant="gold">
           <ShieldCheck className="size-4" /> حفظ كلمة المرور
         </Button>
       </form>
