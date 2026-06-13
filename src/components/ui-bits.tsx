@@ -42,8 +42,8 @@ export function StatusBadge({ status }: { status: BookingStatus }) {
 
 export function Button({ children, variant = "primary", size = "md", className = "", loading, disabled, ...props }: any) {
   const variants: Record<string, string> = {
-    primary: "bg-primary text-primary-foreground hover:opacity-90 shadow-elegant",
-    gold: "bg-gradient-gold text-primary shadow-gold hover:opacity-95",
+    primary: "bg-gradient-gold text-primary-foreground hover:opacity-90 shadow-gold",
+    gold: "bg-gradient-gold text-primary-foreground shadow-gold hover:opacity-95",
     outline: "border border-border bg-card hover:bg-secondary",
     ghost: "hover:bg-secondary",
     destructive: "bg-destructive text-destructive-foreground hover:opacity-90",
