@@ -79,16 +79,17 @@ function SignupPage() {
 
   return (
     <AuthShell
+      variant="immersive"
       title="أنشئ حساباً جديداً"
       subtitle="ابدأ إدارة مناسباتك باحترافية خلال دقائق"
-      footer={<>لديك حساب بالفعل؟ <Link to="/login" className="mr-1 font-bold text-gold transition hover:text-foreground">سجّل الدخول</Link></>}
+      footer={<>لديك حساب؟ <Link to="/login" className="mr-1 font-bold text-gold underline underline-offset-4 transition hover:text-gold-light">تسجيل الدخول</Link></>}
     >
-      <form onSubmit={onSubmit} className="space-y-4">
-        <Field label="الاسم">
+      <form onSubmit={onSubmit} className="space-y-3" data-auth-form>
+        <Field label="الاسم الكامل">
           <div className="relative">
-            <User className="absolute right-4 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+            <User className="absolute left-4 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
             <input value={fullName} onChange={(e) => setFullName(e.target.value)}
-              className={`${inputCls} pr-11`} placeholder="الاسم الكامل" autoComplete="name" maxLength={100} />
+              className={`${inputCls} pl-11 text-right`} placeholder="الاسم الكامل" autoComplete="name" maxLength={100} />
           </div>
         </Field>
 
@@ -99,20 +100,20 @@ function SignupPage() {
 
         <Field label="البريد الإلكتروني">
           <div className="relative">
-            <Mail className="absolute right-4 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+            <Mail className="absolute left-4 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
             <input type="email" value={email} onChange={(e) => setEmail(e.target.value)}
-              className={`${inputCls} pr-11 text-left`} dir="ltr" placeholder="you@example.com" autoComplete="email" />
+              className={`${inputCls} pl-11 text-right`} dir="rtl" placeholder="البريد الإلكتروني" autoComplete="email" />
           </div>
         </Field>
 
         <Field label="كلمة المرور">
           <div className="relative">
-            <Lock className="absolute right-4 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+            <Lock className="absolute left-4 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
             <input type={show ? "text" : "password"} value={password} onChange={(e) => setPassword(e.target.value)}
-              className={`${inputCls} pr-11 pl-11 text-left`} dir="ltr" placeholder="••••••••" autoComplete="new-password" />
+              className={`${inputCls} pl-20 text-right`} dir="rtl" placeholder="كلمة المرور" autoComplete="new-password" />
             <button type="button" onClick={() => setShow(!show)}
               aria-label={show ? "إخفاء كلمة المرور" : "إظهار كلمة المرور"}
-              className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground transition hover:text-gold">
+              className="absolute left-11 top-1/2 -translate-y-1/2 text-muted-foreground transition hover:text-gold">
               {show ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
             </button>
           </div>
@@ -130,16 +131,16 @@ function SignupPage() {
 
         <Field label="تأكيد كلمة المرور">
           <div className="relative">
-            <Lock className="absolute right-4 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+            <Lock className="absolute left-4 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
             <input type={show ? "text" : "password"} value={confirm} onChange={(e) => setConfirm(e.target.value)}
-              className={`${inputCls} pr-11 pl-11 text-left`} dir="ltr" placeholder="••••••••" autoComplete="new-password" />
-            {confirm && password === confirm && <CheckCircle2 className="absolute left-4 top-1/2 size-4 -translate-y-1/2 text-success" />}
+              className={`${inputCls} pl-16 text-right`} dir="rtl" placeholder="تأكيد كلمة المرور" autoComplete="new-password" />
+            {confirm && password === confirm && <CheckCircle2 className="absolute left-10 top-1/2 size-4 -translate-y-1/2 text-success" />}
           </div>
         </Field>
 
         {error && <div role="alert" className="rounded-2xl border border-destructive/25 bg-destructive/10 px-4 py-3 text-xs leading-5 text-destructive">{error}</div>}
 
-        <Button type="submit" loading={loading} className="w-full rounded-2xl py-3.5 shadow-gold transition hover:-translate-y-0.5" size="lg" variant="gold">
+        <Button type="submit" loading={loading} className="w-full rounded-xl py-3 shadow-gold transition hover:-translate-y-0.5" size="lg" variant="gold">
           <UserPlus className="size-4" /> إنشاء الحساب
         </Button>
 

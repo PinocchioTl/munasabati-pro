@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
-import { CalendarCheck2, ChartNoAxesCombined, Gem, Sparkles } from "lucide-react";
+import { CalendarCheck2, ChartNoAxesCombined, Sparkles } from "lucide-react";
 import logo from "@/assets/logo.png";
 import authIllustration from "@/assets/auth-events-illustration.jpg";
 
@@ -9,30 +9,21 @@ export function AuthShell({ title, subtitle, children, footer, variant = "split"
 }) {
   if (variant === "immersive") {
     return (
-      <main dir="rtl" className="relative min-h-screen overflow-hidden bg-sidebar" data-auth-immersive>
-        <img
-          src={authIllustration}
-          alt="قاعة مناسبات فاخرة مزينة بالورود"
-          width={1024}
-          height={1280}
-          fetchPriority="high"
-          className="absolute inset-0 size-full object-cover object-center"
-        />
-        <div className="absolute inset-0 bg-sidebar/10" />
-
-        <section className="relative z-10 flex min-h-screen items-center justify-center px-5 py-6">
-          <div className="w-full max-w-[340px] -translate-y-1 animate-in fade-in duration-500 rounded-[48%_48%_2.25rem_2.25rem/18%_18%_2.25rem_2.25rem] bg-sidebar/92 px-6 py-8 text-sidebar-foreground shadow-luxury backdrop-blur-[2px] sm:px-7">
+      <main dir="rtl" className="auth-stage relative min-h-screen overflow-hidden bg-sidebar" data-auth-immersive>
+        <div className="auth-arch" aria-hidden="true" />
+        <section className="relative z-10 flex min-h-screen items-center justify-center px-4 py-5 sm:px-6">
+          <div className="auth-card w-full max-w-[440px] animate-in fade-in zoom-in-95 duration-500 overflow-y-auto rounded-[2rem] border border-gold/35 bg-sidebar/90 px-6 py-7 text-sidebar-foreground shadow-luxury backdrop-blur-xl sm:px-9">
             <header className="mb-5 text-center">
-              <Link to="/login" aria-label="Munasabati Pro" className="mx-auto mb-2.5 grid size-11 place-items-center text-gold">
-                <Gem className="size-10 stroke-[1.15]" />
+              <Link to="/login" aria-label="Munasabati Pro" className="auth-brand-mark mx-auto mb-3 grid size-14 place-items-center text-gold">
+                <span className="font-serif text-xl font-bold">M</span>
               </Link>
-              <div className="text-lg font-medium tracking-[0.14em] text-gold">MUNASABATI</div>
-              <div className="mt-0.5 text-[7px] font-bold tracking-[0.4em] text-gold/80">PRO</div>
-              <h1 className="mt-5 text-base font-bold text-sidebar-foreground">{title}</h1>
-              {subtitle && <p className="mt-1 text-[10px] leading-5 text-sidebar-foreground/65">{subtitle}</p>}
+              <div className="font-serif text-xl font-medium tracking-[0.2em] text-gold-light">MUNASABATI</div>
+              <div className="mt-1 text-[8px] font-bold tracking-[0.55em] text-gold">PRO</div>
+              <h1 className="mt-5 text-xl font-bold text-sidebar-foreground">{title}</h1>
+              {subtitle && <p className="mt-1.5 text-xs leading-5 text-sidebar-foreground/60">{subtitle}</p>}
             </header>
             {children}
-            {footer && <div className="mt-5 text-center text-[10px] text-sidebar-foreground/65">{footer}</div>}
+            {footer && <div className="mt-5 text-center text-xs text-sidebar-foreground/65">{footer}</div>}
           </div>
         </section>
       </main>
