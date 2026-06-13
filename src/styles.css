@@ -72,7 +72,7 @@
    --brand-beige     #E8D8C4  Soft Beige
    ================================================================ */
 :root {
-  --radius: 1rem;
+  --radius: 0.75rem;
 
   /* Munasabati Pro — Premium palette */
   --brand-dark: oklch(0.20 0.04 285);       /* #1E1B2E Luxury Dark */
@@ -91,10 +91,10 @@
   --brand-cream: var(--brand-surface);
 
   /* Surfaces */
-  --background: var(--brand-bg);
+  --background: oklch(0.975 0.008 85);
   --foreground: var(--brand-ink);
 
-  --card: var(--brand-surface);
+  --card: oklch(0.985 0.007 85);
   --card-foreground: var(--brand-ink);
 
   --popover: var(--brand-surface);
@@ -127,8 +127,8 @@
   --destructive: oklch(0.55 0.2 25);
   --destructive-foreground: oklch(0.99 0 0);
 
-  --border: oklch(0.88 0.01 285);
-  --input: oklch(0.92 0.008 285);
+  --border: oklch(0.86 0.025 82);
+  --input: oklch(0.89 0.018 82);
   --ring: var(--brand-gold);
 
   --chart-1: var(--brand-gold);
@@ -263,6 +263,51 @@
   .animate-fade-in { animation: fadeIn 0.4s ease-out; }
   .animate-slide-up { animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
   .animate-scale-in { animation: scaleIn 0.25s cubic-bezier(0.16, 1, 0.3, 1); }
+}
+
+/* Munasabati architectural system — shared by every manager screen */
+[data-manager-root] {
+  background:
+    linear-gradient(90deg, color-mix(in oklab, var(--gold) 7%, transparent) 1px, transparent 1px),
+    linear-gradient(color-mix(in oklab, var(--gold) 5%, transparent) 1px, transparent 1px),
+    var(--background);
+  background-size: 72px 72px;
+}
+
+[data-manager-main] {
+  position: relative;
+  isolation: isolate;
+}
+
+[data-manager-main]::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(circle at 85% 0%, color-mix(in oklab, var(--gold) 9%, transparent), transparent 32rem);
+}
+
+[data-manager-content] :is(.bg-card, .bg-white) {
+  border-color: color-mix(in oklab, var(--gold) 22%, var(--border));
+}
+
+[data-manager-content] :is(input, textarea, select) {
+  background-color: color-mix(in oklab, var(--card) 92%, var(--gold) 8%);
+}
+
+.munasabati-panel {
+  background: color-mix(in oklab, var(--card) 97%, var(--gold) 3%);
+  border: 1px solid color-mix(in oklab, var(--gold) 24%, var(--border));
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-elegant);
+}
+
+.munasabati-rule {
+  width: 2.75rem;
+  height: 2px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--gold), color-mix(in oklab, var(--gold) 15%, transparent));
 }
 
 @keyframes fadeIn {

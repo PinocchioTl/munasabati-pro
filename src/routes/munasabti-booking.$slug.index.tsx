@@ -52,7 +52,7 @@ function Hero({ owner, slug }: any) {
   const subtitle = owner.hero_subtitle?.trim() || owner.tagline;
   const description = owner.hero_description?.trim();
   return (
-    <section className="relative rounded-3xl overflow-hidden shadow-2xl">
+    <section className="relative rounded-2xl overflow-hidden shadow-2xl border bk-border-gold">
       {owner.cover_url ? (
         <div className="relative">
           <div className="aspect-[16/10] sm:aspect-[16/7]">
@@ -64,13 +64,14 @@ function Hero({ owner, slug }: any) {
               className="absolute inset-0 size-full object-cover"
             />
           </div>
-          <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/45 to-black/10" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-black/15" />
+          <div className="absolute inset-3 sm:inset-5 border border-white/20 rounded-xl pointer-events-none" />
         </div>
       ) : (
         <div className="aspect-[16/7] bk-primary" />
       )}
 
-      <div className="absolute inset-0 flex flex-col justify-end p-5 sm:p-10 text-white">
+      <div className="absolute inset-0 flex flex-col justify-end p-7 sm:p-12 text-white">
         <div className="flex items-center gap-3 mb-4">
           {owner.logo_url && (
             <div className="size-14 sm:size-16 rounded-2xl bg-white/15 backdrop-blur-md p-2 shrink-0 ring-2 ring-white/20">
@@ -78,6 +79,7 @@ function Hero({ owner, slug }: any) {
             </div>
           )}
           <div className="min-w-0">
+            <div className="w-12 h-px bk-gold mb-3" />
             <h1 className="text-2xl sm:text-4xl font-bold leading-tight drop-shadow-lg">{title}</h1>
             {subtitle && <p className="text-sm sm:text-base opacity-95 mt-1 drop-shadow">{subtitle}</p>}
           </div>
@@ -131,7 +133,7 @@ function TrustBadges({ slug }: { slug: string }) {
   return (
     <section className="grid grid-cols-3 gap-2 sm:gap-4">
       {items.map(({ value, label, icon: Icon }) => (
-        <div key={label} className="bg-white rounded-2xl p-4 sm:p-5 text-center shadow-sm border border-black/[0.04]">
+        <div key={label} className="bg-white rounded-xl p-4 sm:p-5 text-center shadow-sm">
           <div className="size-10 sm:size-12 mx-auto rounded-xl bk-gold flex items-center justify-center mb-2">
             <Icon className="size-5 sm:size-6" />
           </div>
@@ -149,7 +151,7 @@ function TrustBadges({ slug }: { slug: string }) {
 
 function About({ owner }: any) {
   return (
-    <section className="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-black/[0.04]">
+    <section className="bg-white rounded-2xl p-6 sm:p-8 shadow-sm">
       <h2 className="text-xl font-bold bk-text-primary mb-3 flex items-center gap-2">
         <Sparkles className="size-5 bk-text-gold" /> من نحن
       </h2>
@@ -274,7 +276,7 @@ function Contact({ owner }: any) {
   const hasAny = owner.phone || Object.values(links).some((v) => v && String(v).trim());
   if (!hasAny) return null;
   return (
-    <section className="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-black/[0.04]">
+    <section className="bg-white rounded-2xl p-6 sm:p-8 shadow-sm">
       <h2 className="text-xl font-bold bk-text-primary mb-4">تواصل معنا</h2>
       <div className="flex flex-wrap gap-2">
         {owner.phone && (
@@ -311,7 +313,8 @@ function SocialBtn({ href, icon: Icon, label }: any) {
 
 function BigCTA({ slug }: { slug: string }) {
   return (
-    <section className="bk-primary rounded-3xl p-8 sm:p-12 text-center text-white shadow-xl relative overflow-hidden">
+    <section className="bk-primary rounded-2xl border bk-border-gold p-8 sm:p-12 text-center text-white shadow-xl relative overflow-hidden">
+      <div className="absolute inset-3 border border-white/10 rounded-xl pointer-events-none" />
       <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_top_right,var(--bk-gold),transparent_60%)]" />
       <div className="relative">
         <CalendarDays className="size-12 mx-auto bk-text-gold mb-3" />
