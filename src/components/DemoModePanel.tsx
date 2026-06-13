@@ -39,18 +39,18 @@ export function DemoModePanel() {
   };
 
   return (
-    <Card className="p-5 border-2 border-dashed border-gold/40 bg-gradient-to-br from-gold/5 to-transparent">
+    <Card className="p-5 border border-gold-light/45 bg-gradient-gold text-primary-foreground shadow-gold">
       <div className="flex items-start gap-4 flex-wrap">
-        <div className="size-12 rounded-2xl bg-gradient-gold flex items-center justify-center text-primary shadow-gold">
+        <div className="size-12 rounded-2xl bg-primary-foreground/10 flex items-center justify-center text-primary-foreground border border-primary-foreground/15">
           <FlaskConical className="size-6" />
         </div>
         <div className="flex-1 min-w-[200px]">
           <div className="flex items-center gap-2 mb-1">
             <h3 className="font-bold text-base">وضع المطور — البيانات التجريبية</h3>
-            <span className="text-[10px] font-bold bg-gold/20 text-gold px-2 py-0.5 rounded-full">DEMO</span>
+            <span className="text-[10px] font-bold bg-primary-foreground/10 text-primary-foreground px-2 py-0.5 rounded-full">DEMO</span>
           </div>
-          <p className="text-xs text-muted-foreground">
-            تحميل أو حذف بيانات تجريبية احترافية لعرض التطبيق. متاح فقط لحساب <code className="text-gold">admin@local</code>.
+          <p className="text-xs text-primary-foreground/75">
+            تحميل أو حذف بيانات تجريبية احترافية لعرض التطبيق. متاح فقط لحساب <code className="font-bold text-primary-foreground">admin@local</code>.
           </p>
         </div>
         <div className="flex gap-2 w-full sm:w-auto">

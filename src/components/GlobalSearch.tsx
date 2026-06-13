@@ -122,7 +122,7 @@ export function GlobalSearch() {
           if (e.key === "Enter" && results[0]) go(results[0]);
         }}
         placeholder="بحث عن حجز، زبون، ديكور..."
-        className="w-full bg-secondary/60 border border-transparent focus:border-ring focus:bg-card rounded-xl pr-10 pl-4 py-2.5 text-sm outline-none transition"
+        className="w-full bg-secondary border border-gold/15 text-foreground placeholder:text-muted-foreground focus:border-gold focus:ring-2 focus:ring-gold/20 rounded-xl pr-10 pl-4 py-2.5 text-sm outline-none transition"
       />
       {open && q.trim() && (
         <div className="absolute top-full mt-2 left-0 right-0 bg-card border border-border rounded-xl shadow-lg overflow-hidden z-50 max-h-96 overflow-y-auto">

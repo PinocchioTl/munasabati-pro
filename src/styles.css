@@ -86,26 +86,26 @@
   --brand-beige: var(--brand-bg);
   --brand-cream: var(--brand-surface);
 
-  /* Surfaces */
-  --background: var(--brand-bg);
-  --foreground: var(--brand-ink);
+  /* Manager surfaces — dark by default */
+  --background: var(--brand-deep);
+  --foreground: var(--brand-bg);
 
-  --card: oklch(0.985 0.007 85);
-  --card-foreground: var(--brand-ink);
+  --card: var(--brand-dark);
+  --card-foreground: var(--brand-bg);
 
-  --popover: var(--brand-surface);
-  --popover-foreground: var(--brand-ink);
+  --popover: var(--brand-dark);
+  --popover-foreground: var(--brand-bg);
 
   /* Primary buttons = Gold */
   --primary: var(--brand-gold);
   --primary-foreground: var(--brand-dark);
 
-  /* Secondary = light neutral surface (chips, ghost buttons, hover) */
-  --secondary: oklch(0.94 0.006 85);
-  --secondary-foreground: var(--brand-dark);
+  /* Dark controls and secondary content */
+  --secondary: oklch(0.1873 0.0307 298.74);        /* #15101F */
+  --secondary-foreground: var(--brand-bg);
 
-  --muted: oklch(0.93 0.008 85);
-  --muted-foreground: oklch(0.45 0.03 285);
+  --muted: oklch(0.25 0.045 296);
+  --muted-foreground: oklch(0.8199 0.0336 305.26); /* #C9BFD6 */
 
   --accent: var(--brand-gold-soft);
   --accent-foreground: var(--brand-dark);
@@ -119,13 +119,13 @@
   --success-foreground: oklch(0.99 0 0);
   --warning: var(--brand-gold);
   --warning-foreground: var(--brand-dark);
-  --info: oklch(0.55 0.1 250);
-  --info-foreground: oklch(0.99 0 0);
+  --info: oklch(0.72 0.105 270);
+  --info-foreground: var(--brand-bg);
   --destructive: oklch(0.55 0.2 25);
   --destructive-foreground: oklch(0.99 0 0);
 
-  --border: oklch(0.86 0.025 82);
-  --input: oklch(0.89 0.018 82);
+  --border: oklch(0.7309 0.1146 84.99 / 0.18);
+  --input: oklch(0.36 0.055 297);
   --ring: var(--brand-gold);
 
   --chart-1: var(--brand-gold);
@@ -135,11 +135,11 @@
   --chart-5: oklch(0.55 0.1 250);
 
   /* Sidebar = Luxury Dark with gold accents */
-  --sidebar: var(--brand-dark);
+  --sidebar: var(--brand-deep);
   --sidebar-foreground: var(--brand-bg);
   --sidebar-primary: var(--brand-gold);
   --sidebar-primary-foreground: var(--brand-dark);
-  --sidebar-accent: var(--brand-deep);
+  --sidebar-accent: var(--brand-dark);
   --sidebar-accent-foreground: oklch(0.97 0.006 85);
   --sidebar-border: oklch(0.7309 0.1146 84.99 / 0.24);
   --sidebar-ring: var(--brand-gold);
@@ -266,10 +266,11 @@
 /* Munasabati architectural system — shared by every manager screen */
 [data-manager-root] {
   background:
-    linear-gradient(90deg, color-mix(in oklab, var(--gold) 7%, transparent) 1px, transparent 1px),
-    linear-gradient(color-mix(in oklab, var(--gold) 5%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in oklab, var(--gold) 4%, transparent) 1px, transparent 1px),
+    linear-gradient(color-mix(in oklab, var(--gold) 3%, transparent) 1px, transparent 1px),
     var(--background);
   background-size: 72px 72px;
+  color: var(--foreground);
 }
 
 [data-manager-main] {
@@ -287,16 +288,26 @@
 }
 
 [data-manager-content] :is(.bg-card, .bg-white) {
-  border-color: color-mix(in oklab, var(--gold) 22%, var(--border));
+  border-color: color-mix(in oklab, var(--gold) 18%, transparent);
 }
 
 [data-manager-content] :is(input, textarea, select) {
-  background-color: color-mix(in oklab, var(--card) 92%, var(--gold) 8%);
+  background-color: oklch(0.1873 0.0307 298.74);
+  color: var(--foreground);
+  border-color: color-mix(in oklab, var(--brand-dark) 72%, var(--gold) 28%);
+}
+
+[data-manager-content] :is(input, textarea)::placeholder {
+  color: color-mix(in oklab, var(--muted-foreground) 68%, transparent);
+}
+
+[data-manager-content] :is(input, textarea, select):focus {
+  border-color: var(--gold);
 }
 
 .munasabati-panel {
-  background: color-mix(in oklab, var(--card) 97%, var(--gold) 3%);
-  border: 1px solid color-mix(in oklab, var(--gold) 24%, var(--border));
+  background: var(--card);
+  border: 1px solid color-mix(in oklab, var(--gold) 18%, transparent);
   border-radius: var(--radius-xl);
   box-shadow: var(--shadow-elegant);
 }

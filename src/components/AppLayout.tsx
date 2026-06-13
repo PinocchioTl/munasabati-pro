@@ -87,7 +87,7 @@ export function AppLayout() {
     <div className="min-h-screen bg-background flex w-full" dir="rtl" data-manager-root>
       {/* Desktop sidebar */}
       <aside
-        className={`hidden md:flex shrink-0 flex-col bg-sidebar text-sidebar-foreground sticky top-0 h-screen border-l border-gold/35 transition-[width] duration-300 ease-out shadow-luxury ${
+        className={`hidden md:flex shrink-0 flex-col bg-sidebar text-sidebar-foreground sticky top-0 h-screen border-l border-gold/20 transition-[width] duration-300 ease-out shadow-luxury ${
           collapsed ? "w-[78px]" : "w-64"
         }`}
       >
@@ -158,7 +158,7 @@ export function AppLayout() {
       {/* Main */}
       <main className="flex-1 min-w-0 flex flex-col" data-manager-main>
         {/* Topbar */}
-        <header className="sticky top-0 z-30 bg-card/92 backdrop-blur-xl border-b border-gold/20 shadow-soft">
+        <header className="sticky top-0 z-30 bg-sidebar/95 text-sidebar-foreground backdrop-blur-xl border-b border-gold/20 shadow-soft">
           <div className="flex items-center gap-2 sm:gap-3 px-3 sm:px-4 lg:px-8 h-14 sm:h-16">
             {/* Mobile brand */}
             <div className="md:hidden flex items-center gap-2 min-w-0">
@@ -174,7 +174,7 @@ export function AppLayout() {
 
             {/* Desktop page title */}
             <div className="hidden md:flex items-center gap-2 min-w-0 ml-2">
-              <h1 className="text-base font-bold text-foreground truncate">{currentTitle}</h1>
+              <h1 className="text-base font-bold text-sidebar-foreground truncate">{currentTitle}</h1>
             </div>
 
             {/* Search */}
@@ -185,7 +185,7 @@ export function AppLayout() {
             {/* Share */}
             <button
               onClick={() => setShareOpen(true)}
-              className="hidden sm:flex items-center gap-2 bg-secondary hover:bg-secondary/80 text-foreground transition rounded-xl px-3 py-2 text-xs font-semibold border border-border"
+              className="hidden sm:flex items-center gap-2 bg-secondary hover:bg-card text-sidebar-foreground transition rounded-xl px-3 py-2 text-xs font-semibold border border-gold/15"
               title="مشاركة رابط الحجز"
             >
               <Share2 className="size-4" />
@@ -195,7 +195,7 @@ export function AppLayout() {
             {/* Notifications */}
             <Link
               to="/munasabti-manager/notifications"
-              className="relative size-9 sm:size-10 rounded-xl hover:bg-secondary flex items-center justify-center transition"
+              className="relative size-9 sm:size-10 rounded-xl hover:bg-card flex items-center justify-center transition"
               title="الإشعارات"
             >
               <Bell className="size-[18px]" />
@@ -209,7 +209,7 @@ export function AppLayout() {
             {/* Primary action */}
             <button
               onClick={() => navigate({ to: "/munasabti-manager/bookings" })}
-              className="inline-flex items-center gap-2 bg-gradient-gold text-primary hover:opacity-95 transition rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 text-sm font-bold shadow-gold"
+              className="inline-flex items-center gap-2 bg-gradient-gold text-primary-foreground hover:opacity-95 transition rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 text-sm font-bold shadow-gold"
             >
               <Plus className="size-4" />
               <span className="hidden sm:inline">حجز جديد</span>
@@ -225,7 +225,7 @@ export function AppLayout() {
       <ShareBookingLinkModal open={shareOpen} onClose={() => setShareOpen(false)} />
 
       {/* Mobile bottom nav */}
-      <nav className="md:hidden fixed bottom-0 inset-x-0 z-40 glass border-t border-border/60 safe-area-inset">
+      <nav className="md:hidden fixed bottom-0 inset-x-0 z-40 bg-sidebar/95 text-sidebar-foreground backdrop-blur-xl border-t border-gold/20 safe-area-inset">
         <div className="grid grid-cols-5 px-1 py-1.5">
           {mobileNav.map((item) => {
             const active = isActivePath(pathname, item.to);
@@ -295,7 +295,7 @@ function UserCard({ collapsed }: { collapsed: boolean }) {
       <div className={`rounded-2xl bg-sidebar-accent/40 backdrop-blur flex items-center gap-3 ${
         collapsed ? "p-1.5 justify-center" : "p-2.5"
       }`}>
-        <div className="size-10 rounded-full bg-gradient-gold flex items-center justify-center text-primary font-bold shrink-0 ring-2 ring-white/10">
+        <div className="size-10 rounded-full bg-gradient-gold flex items-center justify-center text-primary-foreground font-bold shrink-0 ring-2 ring-gold/15">
           {initial}
         </div>
         {!collapsed && (

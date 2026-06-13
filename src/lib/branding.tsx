@@ -17,10 +17,10 @@ export interface Branding {
 const DEFAULTS: Branding = {
   companyName: "Munasabati",
   logoUrl: logoAsset,
-  primaryColor: "#D4AF37",      // Premium Gold — primary buttons & accents
-  secondaryColor: "#1E1B2E",    // Luxury Dark — sidebar & headings
-  accentColor: "#2D2A4A",       // Deep Purple — secondary surfaces
-  backgroundColor: "#F5F3EE",   // Soft sand background
+  primaryColor: "#C9A24B",      // Royal Gold — primary buttons & accents
+  secondaryColor: "#1C1430",    // Midnight Purple — sidebar & topbar
+  accentColor: "#2E2049",       // Deep Plum — secondary surfaces
+  backgroundColor: "#1C1430",   // Midnight Purple — application background
 };
 
 interface Ctx {
@@ -58,6 +58,7 @@ export function BrandingProvider({ children }: { children: ReactNode }) {
       const LEGACY = new Set([
         "#111827", "#2563EB", "#F9FAFB",
         "#561C24", "#6D2932", "#C7B7A3", "#E8D8C4",
+        "#D4AF37", "#1E1B2E", "#2D2A4A", "#F5F3EE",
       ]);
       const clean = (v: string | null | undefined, fallback: string) =>
         !v || LEGACY.has(v.toUpperCase()) ? fallback : v;
@@ -75,19 +76,12 @@ export function BrandingProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => { fetchBranding(); }, [fetchBranding]);
 
-  // Apply CSS variables + document title.
-  // primaryColor = brand accent (gold) → buttons, ring, sidebar accent
-  // secondaryColor = brand dark → sidebar background
+  // The product theme is controlled centrally in styles.css; account branding
+  // remains available for logos, names, and the public booking experience.
   useEffect(() => {
     const root = document.documentElement;
-    root.style.setProperty("--primary", branding.primaryColor);
-    root.style.setProperty("--gold", branding.primaryColor);
-    root.style.setProperty("--ring", branding.primaryColor);
-    root.style.setProperty("--sidebar-primary", branding.primaryColor);
-    root.style.setProperty("--sidebar-ring", branding.primaryColor);
-    root.style.setProperty("--sidebar", branding.secondaryColor);
-    root.style.setProperty("--info", branding.accentColor);
-    root.style.setProperty("--background", branding.backgroundColor);
+    ["--primary", "--gold", "--ring", "--sidebar-primary", "--sidebar-ring", "--sidebar", "--info", "--background"]
+      .forEach((property) => root.style.removeProperty(property));
     document.title = `${branding.companyName} — مناسبتي`;
   }, [branding]);
 
