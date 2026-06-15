@@ -20,13 +20,13 @@ const primaryNav: NavItem[] = [
   { to: "/munasabti-manager", label: "الرئيسية", icon: LayoutDashboard },
   { to: "/munasabti-manager/bookings", label: "الحجوزات", icon: CalendarDays },
   { to: "/munasabti-manager/calendar", label: "التقويم", icon: CalendarRange },
-  { to: "/munasabti-manager/booking-requests", label: "طلبات الرابط", icon: Inbox },
+  { to: "/munasabti-manager/booking-requests", label: "الحجوزات عبر الرابط", icon: Inbox },
 ];
 
 const catalogNav: NavItem[] = [
   { to: "/munasabti-manager/decorations", label: "الديكورات", icon: Sparkles },
   { to: "/munasabti-manager/supplies", label: "المستلزمات", icon: Package },
-  { to: "/munasabti-manager/customers", label: "الزبائن", icon: Users },
+  { to: "/munasabti-manager/customers", label: "العملاء", icon: Users },
 ];
 
 const insightsNav: NavItem[] = [
