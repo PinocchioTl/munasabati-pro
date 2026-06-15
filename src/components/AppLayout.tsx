@@ -3,9 +3,12 @@ import {
   LayoutDashboard, CalendarDays, CalendarRange, Sparkles, Package,
   Users, Wallet, Bell, BarChart3, Settings, Search, Plus, Crown, LogOut,
   Share2, Inbox, Palette, PanelLeftClose, PanelLeftOpen,
+  Menu, MoreHorizontal,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { ShareBookingLinkModal } from "@/components/ShareBookingLinkModal";
+import { Button } from "@/components/ui/button";
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { useNotifications } from "@/lib/db";
 import { useAuth, signOut } from "@/lib/auth";
 import { useBranding } from "@/lib/branding";
@@ -44,13 +47,12 @@ const groups: { label?: string; items: NavItem[] }[] = [
   { label: "النظام", items: systemNav },
 ];
 
-// Mobile bottom-nav (5 items)
+// Keep the most frequent destinations visible; every other route is in "More" and the drawer.
 const mobileNav: NavItem[] = [
   { to: "/munasabti-manager", label: "الرئيسية", icon: LayoutDashboard },
   { to: "/munasabti-manager/bookings", label: "الحجوزات", icon: CalendarDays },
   { to: "/munasabti-manager/calendar", label: "التقويم", icon: CalendarRange },
   { to: "/munasabti-manager/booking-requests", label: "الطلبات", icon: Inbox },
-  { to: "/munasabti-manager/settings", label: "المزيد", icon: Settings },
 ];
 
 const SIDEBAR_KEY = "mm.sidebar.collapsed";
@@ -67,6 +69,8 @@ export function AppLayout() {
   const { branding } = useBranding();
   const [shareOpen, setShareOpen] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [moreOpen, setMoreOpen] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -160,6 +164,16 @@ export function AppLayout() {
         {/* Topbar */}
         <header className="sticky top-0 z-30 bg-sidebar/95 text-sidebar-foreground backdrop-blur-xl border-b border-gold/20 shadow-soft">
           <div className="flex items-center gap-2 sm:gap-3 px-3 sm:px-4 lg:px-8 h-14 sm:h-16">
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon"
+              onClick={() => setDrawerOpen(true)}
+              className="md:hidden shrink-0 text-sidebar-foreground hover:bg-card"
+              aria-label="فتح قائمة الصفحات"
+            >
+              <Menu className="size-5" />
+            </Button>
             {/* Mobile brand */}
             <div className="md:hidden flex items-center gap-2 min-w-0">
               <div className="size-9 rounded-xl bg-gradient-gold flex items-center justify-center overflow-hidden shrink-0">
@@ -224,6 +238,22 @@ export function AppLayout() {
 
       <ShareBookingLinkModal open={shareOpen} onClose={() => setShareOpen(false)} />
 
+      <MobileDrawer
+        open={drawerOpen}
+        onOpenChange={setDrawerOpen}
+        pathname={pathname}
+        unread={unread}
+        companyName={branding.companyName}
+        logoUrl={branding.logoUrl}
+      />
+
+      <MobileMoreMenu
+        open={moreOpen}
+        onOpenChange={setMoreOpen}
+        pathname={pathname}
+        unread={unread}
+      />
+
       {/* Mobile bottom nav */}
       <nav className="md:hidden fixed bottom-0 inset-x-0 z-40 bg-sidebar/95 text-sidebar-foreground backdrop-blur-xl border-t border-gold/20 safe-area-inset">
         <div className="grid grid-cols-5 px-1 py-1.5">
@@ -249,9 +279,114 @@ export function AppLayout() {
               </Link>
             );
           })}
+          <button
+            type="button"
+            onClick={() => setMoreOpen(true)}
+            className={`relative flex flex-col items-center gap-0.5 py-2 mx-0.5 rounded-xl text-[10px] font-semibold transition active:scale-95 ${
+              mobileNav.some((item) => isActivePath(pathname, item.to)) ? "text-muted-foreground" : "text-gold"
+            }`}
+            aria-label="عرض المزيد من الصفحات"
+            aria-expanded={moreOpen}
+          >
+            {!mobileNav.some((item) => isActivePath(pathname, item.to)) && (
+              <span className="absolute top-0 left-1/2 -translate-x-1/2 h-1 w-8 rounded-b-full bg-gradient-gold" />
+            )}
+            <div className={`size-9 rounded-xl flex items-center justify-center ${
+              !mobileNav.some((item) => isActivePath(pathname, item.to)) ? "bg-gold/10" : ""
+            }`}>
+              <MoreHorizontal className="size-5" />
+            </div>
+            <span className="leading-none">المزيد</span>
+          </button>
         </div>
       </nav>
     </div>
+  );
+}
+
+function MobileDrawer({ open, onOpenChange, pathname, unread, companyName, logoUrl }: {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  pathname: string;
+  unread: number;
+  companyName: string;
+  logoUrl?: string | null;
+}) {
+  return (
+    <Sheet open={open} onOpenChange={onOpenChange}>
+      <SheetContent side="right" dir="rtl" className="md:hidden w-[88vw] max-w-sm bg-sidebar text-sidebar-foreground border-gold/20 p-0 overflow-y-auto">
+        <SheetHeader className="text-right p-5 border-b border-gold/20">
+          <div className="flex items-center gap-3 pl-8">
+            <div className="size-11 rounded-xl border border-gold/40 bg-sidebar-accent flex items-center justify-center overflow-hidden shrink-0">
+              {logoUrl ? <img src={logoUrl} alt={companyName} className="size-full object-contain" /> : <Crown className="size-5 text-gold" />}
+            </div>
+            <div className="min-w-0">
+              <SheetTitle className="text-gold truncate">{companyName}</SheetTitle>
+              <SheetDescription className="text-sidebar-foreground/55">جميع صفحات التطبيق</SheetDescription>
+            </div>
+          </div>
+        </SheetHeader>
+        <nav className="p-3 space-y-4" aria-label="قائمة الهاتف الرئيسية">
+          {groups.map((group, index) => (
+            <div key={index}>
+              {group.label && <div className="px-3 mb-1.5 text-[10px] font-bold text-sidebar-foreground/45">{group.label}</div>}
+              <div className="space-y-1">
+                {group.items.map((item) => {
+                  const Icon = item.icon;
+                  const active = isActivePath(pathname, item.to);
+                  return (
+                    <Link key={item.to} to={item.to} onClick={() => onOpenChange(false)} className={`flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-semibold transition ${active ? "bg-sidebar-accent text-gold border border-gold/20" : "text-sidebar-foreground/75 hover:bg-sidebar-accent/50"}`}>
+                      <Icon className="size-[18px] shrink-0" />
+                      <span className="flex-1">{item.label}</span>
+                      {item.badge === "notif" && unread > 0 && <span className="min-w-5 rounded-full bg-destructive px-1.5 py-0.5 text-center text-[10px] text-destructive-foreground">{unread > 9 ? "9+" : unread}</span>}
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
+        </nav>
+        <div className="p-3 border-t border-gold/20">
+          <Button variant="ghost" className="w-full justify-start text-sidebar-foreground/70 hover:text-destructive hover:bg-destructive/10" onClick={() => signOut()}>
+            <LogOut className="size-4" /> تسجيل الخروج
+          </Button>
+        </div>
+      </SheetContent>
+    </Sheet>
+  );
+}
+
+function MobileMoreMenu({ open, onOpenChange, pathname, unread }: {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  pathname: string;
+  unread: number;
+}) {
+  const moreItems = groups.flatMap((group) => group.items).filter(
+    (item) => !mobileNav.some((mobileItem) => mobileItem.to === item.to),
+  );
+  return (
+    <Sheet open={open} onOpenChange={onOpenChange}>
+      <SheetContent side="bottom" dir="rtl" className="md:hidden max-h-[78vh] overflow-y-auto rounded-t-3xl bg-sidebar text-sidebar-foreground border-gold/20 px-4 pb-[calc(1rem+env(safe-area-inset-bottom))]">
+        <SheetHeader className="text-right mb-4">
+          <SheetTitle className="text-gold">المزيد</SheetTitle>
+          <SheetDescription className="text-sidebar-foreground/55">انتقل إلى أي صفحة في التطبيق</SheetDescription>
+        </SheetHeader>
+        <nav className="grid grid-cols-2 gap-2" aria-label="المزيد من الصفحات">
+          {moreItems.map((item) => {
+            const Icon = item.icon;
+            const active = isActivePath(pathname, item.to);
+            return (
+              <Link key={item.to} to={item.to} onClick={() => onOpenChange(false)} className={`relative flex min-w-0 items-center gap-2.5 rounded-2xl border px-3 py-3.5 text-sm font-semibold transition ${active ? "border-gold/40 bg-sidebar-accent text-gold" : "border-gold/10 bg-sidebar-accent/35 text-sidebar-foreground/80"}`}>
+                <Icon className="size-[18px] shrink-0" />
+                <span className="truncate">{item.label}</span>
+                {item.badge === "notif" && unread > 0 && <span className="mr-auto size-2 rounded-full bg-destructive shrink-0" />}
+              </Link>
+            );
+          })}
+        </nav>
+      </SheetContent>
+    </Sheet>
   );
 }
 
