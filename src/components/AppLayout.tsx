@@ -220,14 +220,6 @@ export function AppLayout() {
               )}
             </Link>
 
-            {/* Primary action */}
-            <button
-              onClick={() => navigate({ to: "/munasabti-manager/bookings" })}
-              className="inline-flex items-center gap-2 bg-gradient-gold text-primary-foreground hover:opacity-95 transition rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 text-sm font-bold shadow-gold"
-            >
-              <Plus className="size-4" />
-              <span className="hidden sm:inline">حجز جديد</span>
-            </button>
           </div>
         </header>
 
