@@ -45,7 +45,7 @@ function DecorationsPage() {
     <div className="space-y-6 animate-slide-up">
       <SectionHeader
         title="الديكورات"
-        subtitle="معرض كامل للديكورات — المخزون يُحدّث تلقائياً بعد كل حجز"
+        subtitle="&nbsp;المخزون يُحدّث تلقائياً بعد كل حجز"
         action={<Button variant="gold" onClick={() => setOpen(true)}><Plus className="size-4" />إضافة ديكور</Button>}
       />
 
