@@ -328,29 +328,10 @@ function MobileDrawer({ open, onOpenChange, pathname, companyName, logoUrl }: {
   );
 }
 
-// placeholder removed below
-                    </Link>
-                  );
-                })}
-              </div>
-            </div>
-          ))}
-        </nav>
-        <div className="p-3 border-t border-gold/20">
-          <Button variant="ghost" className="w-full justify-start text-sidebar-foreground/70 hover:text-destructive hover:bg-destructive/10" onClick={() => signOut()}>
-            <LogOut className="size-4" /> تسجيل الخروج
-          </Button>
-        </div>
-      </SheetContent>
-    </Sheet>
-  );
-}
-
-function MobileMoreMenu({ open, onOpenChange, pathname, unread }: {
+function MobileMoreMenu({ open, onOpenChange, pathname }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   pathname: string;
-  unread: number;
 }) {
   const moreItems = groups.flatMap((group) => group.items).filter(
     (item) => !mobileNav.some((mobileItem) => mobileItem.to === item.to),
@@ -370,7 +351,6 @@ function MobileMoreMenu({ open, onOpenChange, pathname, unread }: {
               <Link key={item.to} to={item.to} onClick={() => onOpenChange(false)} className={`relative flex min-w-0 items-center gap-2.5 rounded-2xl border px-3 py-3.5 text-sm font-semibold transition ${active ? "border-gold/40 bg-sidebar-accent text-gold" : "border-gold/10 bg-sidebar-accent/35 text-sidebar-foreground/80"}`}>
                 <Icon className="size-[18px] shrink-0" />
                 <span className="truncate">{item.label}</span>
-                {item.badge === "notif" && unread > 0 && <span className="mr-auto size-2 rounded-full bg-destructive shrink-0" />}
               </Link>
             );
           })}
