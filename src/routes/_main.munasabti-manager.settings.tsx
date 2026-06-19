@@ -12,6 +12,7 @@ import { BookingLinkSettings } from "@/components/BookingLinkSettings";
 import { Link2 } from "lucide-react";
 import { PhoneInput } from "@/components/PhoneInput";
 import { supabase } from "@/integrations/supabase/client";
+import { formatDateTime } from "@/lib/date-format";
 import {
   exportData, downloadBundle, importBundle, summarizeBundle, adaptLegacyBundle,
   USER_SELECTABLE, TABLE_LABELS,
