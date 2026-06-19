@@ -215,7 +215,7 @@ function BookingCard({ b, typeMap, onEdit }: { b: any; typeMap: Record<string, {
       <div className="grid grid-cols-2 gap-3 mt-5">
         <Mini label="نوع المناسبة" value={evt?.label || b.event_type} />
         <Mini label="السعر الإجمالي" value={formatSAR(total)} gold />
-        <Mini label="التاريخ" value={b.event_date} icon={<Calendar className="size-4 text-info" />} />
+        <Mini label="التاريخ" value={formatDateLong(b.event_date)} icon={<Calendar className="size-4 text-info" />} />
         <Mini label="الوقت" value={`${b.start_time?.slice(0,5)} — ${b.end_time?.slice(0,5)}`} icon={<Clock className="size-4 text-info" />} />
       </div>
 
