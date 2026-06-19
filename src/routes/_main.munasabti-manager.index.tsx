@@ -218,7 +218,7 @@ function Dashboard() {
                     color={n.level === "error" ? "destructive" : n.level === "warning" ? "warning" : "info"}
                     icon={Bell}
                     title={n.title}
-                    to="/munasabti-manager/notifications"
+                    to="/munasabti-manager"
                   />
                 ))}
               </div>
