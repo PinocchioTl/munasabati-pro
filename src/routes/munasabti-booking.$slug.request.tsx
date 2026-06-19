@@ -501,9 +501,14 @@ function ItemCard({
   const cover = images[0];
 
   return (
-    <div className={`rounded-2xl border-2 overflow-hidden bg-white transition ${
-      qty > 0 ? "bk-border-gold shadow-md" : "border-gray-100"
+    <div className={`relative rounded-2xl border-2 overflow-hidden bg-white transition ${
+      qty > 0 ? "bk-border-gold shadow-lg ring-2 ring-[var(--bk-gold)]/30" : "border-gray-100 hover:border-gray-200"
     }`}>
+      {qty > 0 && (
+        <div className="absolute top-2 right-2 z-10 size-8 rounded-full bk-gold flex items-center justify-center shadow-lg ring-2 ring-white">
+          <CheckCircle2 className="size-5" />
+        </div>
+      )}
       <button
         type="button"
         onClick={() => images.length > 0 && onOpenImages(images, 0)}
