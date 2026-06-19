@@ -62,8 +62,6 @@ function isActivePath(pathname: string, to: string) {
 
 export function AppLayout() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
-  const { data: notifications = [] } = useNotifications();
-  const unread = notifications.filter((n) => !n.is_read).length;
   const { branding } = useBranding();
   const [shareOpen, setShareOpen] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
