@@ -260,7 +260,7 @@ function TimelineView({ bookings, typeMap, onEdit }: { bookings: any[]; typeMap:
             <div className="flex flex-col items-center shrink-0">
               <div className="size-14 rounded-2xl bg-gradient-luxury text-gold flex flex-col items-center justify-center px-1">
                 <span className="text-base font-bold leading-none">{date.slice(8,10)}</span>
-                <span className="text-[10px] opacity-80 leading-tight mt-0.5">{(await null, '')}{['جان','فيف','مار','أفر','ماي','جوان','جويل','أوت','سبت','أكت','نوف','ديس'][Number(date.slice(5,7))-1]}</span>
+                <span className="text-[10px] opacity-80 leading-tight mt-0.5">{monthShort(Number(date.slice(5,7))-1)}</span>
               </div>
               <div className="w-px flex-1 bg-border mt-2" />
             </div>
