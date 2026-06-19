@@ -22,24 +22,13 @@ export const Route = createFileRoute("/_main/munasabti-manager/settings")({
   component: SettingsPage,
 });
 
-type SectionId = "branding" | "booking-link" | "notifications" | "appearance" | "backup" | "security";
+type SectionId = "booking-link" | "notifications" | "backup" | "security";
 
 const sections: { id: SectionId; label: string; icon: typeof Bell; color: string; bg: string; desc: string }[] = [
-  { id: "branding",      label: "الهوية البصرية", icon: Sparkles, color: "text-gold", bg: "bg-gold/10", desc: "شعار الشركة، الاسم، الألوان" },
   { id: "booking-link",  label: "رابط الحجز", icon: Link2, color: "text-gold", bg: "bg-gold/10", desc: "تخصيص الرابط، QR Code، الإحصائيات" },
   { id: "notifications", label: "الإشعارات", icon: Bell, color: "text-warning", bg: "bg-warning/10", desc: "تنبيهات المناسبات والمخزون والدفعات" },
-  { id: "appearance",    label: "المظهر",    icon: Palette, color: "text-info",    bg: "bg-info/10",    desc: "الوضع الليلي، الألوان، حجم الخط" },
   { id: "backup",        label: "النسخ الاحتياطي", icon: Database, color: "text-success", bg: "bg-success/10", desc: "تصدير، استيراد، نسخ تلقائي" },
   { id: "security",      label: "الأمان",    icon: Shield, color: "text-destructive", bg: "bg-destructive/10", desc: "كلمة المرور، PIN، جلسات الدخول" },
-];
-
-const ACCENT_COLORS = [
-  { name: "ذهبي", value: "gold", hex: "#D4AF37" },
-  { name: "أزرق", value: "blue", hex: "#2563EB" },
-  { name: "أخضر", value: "green", hex: "#10B981" },
-  { name: "بنفسجي", value: "purple", hex: "#8B5CF6" },
-  { name: "وردي", value: "pink", hex: "#EC4899" },
-  { name: "برتقالي", value: "orange", hex: "#F97316" },
 ];
 
 function SettingsPage() {
