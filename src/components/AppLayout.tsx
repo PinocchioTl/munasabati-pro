@@ -379,14 +379,6 @@ function SidebarItem({ item, active, collapsed }: { item: NavItem; active: boole
       )}
       <Icon className={`size-[18px] shrink-0 transition-transform group-hover:scale-110 ${active ? "text-gold" : ""}`} />
       {!collapsed && <span className="flex-1 truncate">{item.label}</span>}
-      {!collapsed && badge > 0 && (
-        <span className="text-[10px] font-bold bg-destructive text-destructive-foreground rounded-full px-1.5 py-0.5 min-w-[18px] text-center">
-          {badge > 9 ? "9+" : badge}
-        </span>
-      )}
-      {collapsed && badge > 0 && (
-        <span className="absolute top-1 left-1 size-2 rounded-full bg-destructive ring-2 ring-[color:var(--sidebar)]" />
-      )}
     </Link>
   );
 }
