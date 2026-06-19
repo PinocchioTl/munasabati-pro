@@ -15,8 +15,9 @@ export const Route = createFileRoute("/_main/munasabti-manager/analytics")({
   component: AnalyticsPage,
 });
 
-const arMonths = ["يناير","فبراير","مارس","أبريل","مايو","يونيو","يوليو","أغسطس","سبتمبر","أكتوبر","نوفمبر","ديسمبر"];
-const arMonthsShort = ["ينا","فبر","مار","أبر","ماي","يون","يول","أغس","سبت","أكت","نوف","ديس"];
+import { MAGHREBI_MONTHS, MAGHREBI_MONTHS_SHORT } from "@/lib/date-format";
+const arMonths = MAGHREBI_MONTHS;
+const arMonthsShort = MAGHREBI_MONTHS_SHORT;
 const arDays = ["الأحد","الإثنين","الثلاثاء","الأربعاء","الخميس","الجمعة","السبت"];
 
 type RangeFilter = "month" | "quarter" | "year" | "all";

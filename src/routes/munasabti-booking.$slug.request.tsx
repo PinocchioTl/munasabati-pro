@@ -14,6 +14,7 @@ import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import { LiveSummary, type SummaryItem } from "@/components/booking/LiveSummary";
 import { ImageLightbox } from "@/components/booking/ImageLightbox";
+import { formatDateLong, formatDateTime } from "@/lib/date-format";
 
 export const Route = createFileRoute("/munasabti-booking/$slug/request")({
   validateSearch: (s) => ({
@@ -153,7 +154,7 @@ function RequestPage() {
         decorations: selectedDecorations,
         supplies: selectedSupplies,
       } as any });
-      setResult({ id: (res as any).id, at: new Date().toLocaleString("ar-DZ") });
+      setResult({ id: (res as any).id, at: formatDateTime(new Date()) });
     } catch (err: any) {
       toast.error(err.message || "فشل إرسال الطلب");
     } finally {
@@ -174,7 +175,7 @@ function RequestPage() {
         <div className="mt-6 bg-[var(--bk-bg)] rounded-2xl p-4 text-right space-y-2.5">
           <Row label="رقم الطلب" value={<span className="font-mono text-xs">#{result.id.slice(0, 8).toUpperCase()}</span>} />
           <Row label="تاريخ الإرسال" value={result.at} />
-          <Row label="تاريخ المناسبة" value={form.event_date} />
+          <Row label="تاريخ المناسبة" value={formatDateLong(form.event_date)} />
           <Row label="الحالة" value={<span className="text-amber-600 font-bold">قيد الانتظار</span>} />
         </div>
         <Link to="/munasabti-booking/$slug" params={{ slug }}
@@ -535,7 +536,7 @@ function StepReview({
       <SectionTitle icon={<ClipboardList className="size-5 bk-text-gold" />} title="مراجعة الطلب" />
 
       <div className="bg-[var(--bk-bg)] rounded-xl p-4 space-y-2">
-        <Row label="تاريخ المناسبة" value={form.event_date} />
+        <Row label="تاريخ المناسبة" value={formatDateLong(form.event_date)} />
         <Row label="نوع المناسبة" value={EVENT_TYPES.find(t => t.value === form.event_type)?.label || "—"} />
         <Row label="الاسم" value={form.customer_name} />
         <Row label="الهاتف" value={form.customer_phone} />

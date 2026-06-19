@@ -13,6 +13,7 @@ import {
 } from "@/lib/booking-link.functions";
 import { ShareBookingLinkModal } from "@/components/ShareBookingLinkModal";
 import { PUBLIC_BOOKING_ORIGIN, bookingUrl } from "@/lib/booking-url";
+import { formatDateShort } from "@/lib/date-format";
 
 const SLUG_RE = /^[a-z0-9][a-z0-9-]{2,39}$/;
 
@@ -368,7 +369,7 @@ export function BookingLinkSettings() {
             label="آخر زيارة"
             value={
               data?.last_visit_at
-                ? new Date(data.last_visit_at).toLocaleDateString("ar")
+                ? formatDateShort(data.last_visit_at)
                 : "—"
             }
             color="text-warning bg-warning/10"

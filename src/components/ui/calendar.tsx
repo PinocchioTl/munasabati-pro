@@ -6,6 +6,11 @@ import { DayButton, DayPicker, getDefaultClassNames } from "react-day-picker";
 
 import { cn } from "@/lib/utils";
 import { Button, buttonVariants } from "@/components/ui/button";
+import {
+  MAGHREBI_MONTHS,
+  MAGHREBI_MONTHS_SHORT,
+  AR_WEEKDAYS_SHORT,
+} from "@/lib/date-format";
 
 function Calendar({
   className,
@@ -31,8 +36,12 @@ function Calendar({
         className,
       )}
       captionLayout={captionLayout}
+      dir="rtl"
       formatters={{
-        formatMonthDropdown: (date) => date.toLocaleString("default", { month: "short" }),
+        formatMonthDropdown: (date) => MAGHREBI_MONTHS_SHORT[date.getMonth()],
+        formatCaption: (date) => `${MAGHREBI_MONTHS[date.getMonth()]} ${date.getFullYear()}`,
+        formatWeekdayName: (date) => AR_WEEKDAYS_SHORT[date.getDay()],
+        formatYearCaption: (date) => String(date.getFullYear()),
         ...formatters,
       }}
       classNames={{

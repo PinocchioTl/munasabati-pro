@@ -8,6 +8,7 @@ import { ShareBookingLinkModal } from "@/components/ShareBookingLinkModal";
 import { eventTypeLabels } from "@/lib/db";
 import { listBookingRequests, updateBookingRequestStatus } from "@/lib/booking-requests.functions";
 import { Inbox, Check, X, Share2, Phone, Calendar, MapPin, Clock } from "lucide-react";
+import { formatDateLong, formatDateTime } from "@/lib/date-format";
 
 export const Route = createFileRoute("/_main/munasabti-manager/booking-requests")({
   component: BookingRequestsPage,
@@ -130,7 +131,7 @@ function BookingRequestsPage() {
 
 function RequestCard({ req, onAccept, onReject, busy }: any) {
   const status = (req.status || "pending") as "pending" | "accepted" | "rejected";
-  const created = req.created_at ? new Date(req.created_at).toLocaleString("ar-DZ") : "";
+  const created = req.created_at ? formatDateTime(req.created_at) : "";
   return (
     <Card className="p-4 lg:p-5 space-y-3">
       <div className="flex items-start justify-between gap-3">
@@ -150,7 +151,7 @@ function RequestCard({ req, onAccept, onReject, busy }: any) {
         </div>
         <div className="flex items-center gap-2 text-muted-foreground">
           <Calendar className="size-3.5 shrink-0" />
-          <span className="text-foreground">{req.event_date}</span>
+          <span className="text-foreground">{formatDateLong(req.event_date)}</span>
           <span>•</span>
           <span>{eventTypeLabels[req.event_type] || req.event_type}</span>
         </div>

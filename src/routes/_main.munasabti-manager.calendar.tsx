@@ -9,14 +9,15 @@ import {
   Clock, User, Phone, Wallet, TrendingUp, Flame, CircleDot,
 } from "lucide-react";
 import { useState, useMemo } from "react";
+import { MAGHREBI_MONTHS, AR_WEEKDAYS_LONG, AR_WEEKDAYS_SHORT } from "@/lib/date-format";
 
 export const Route = createFileRoute("/_main/munasabti-manager/calendar")({
   component: CalendarPage,
 });
 
-const monthNames = ["يناير","فبراير","مارس","أبريل","مايو","يونيو","يوليو","أغسطس","سبتمبر","أكتوبر","نوفمبر","ديسمبر"];
-const fullDayNames = ["الأحد","الإثنين","الثلاثاء","الأربعاء","الخميس","الجمعة","السبت"];
-const shortDayNames = ["أحد","إثنين","ثلاثاء","أربعاء","خميس","جمعة","سبت"];
+const monthNames = MAGHREBI_MONTHS;
+const fullDayNames = AR_WEEKDAYS_LONG;
+const shortDayNames = AR_WEEKDAYS_SHORT;
 const WEEKDAY_ORDER = [6, 0, 1, 2, 3, 4, 5] as const; // السبت → الجمعة، مبني على Date.getDay()
 type WeekdayNumber = 0 | 1 | 2 | 3 | 4 | 5 | 6;
 type CalendarCell = { date: Date; iso: string; day: number; weekDay: WeekdayNumber } | null;
