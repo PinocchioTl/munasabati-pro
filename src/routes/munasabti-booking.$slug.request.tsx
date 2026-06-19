@@ -258,25 +258,53 @@ function RequestPage() {
           />
         )}
 
-        {/* Footer nav */}
-        <div className="sticky bottom-[68px] lg:bottom-3 z-20 bg-white rounded-2xl p-3 shadow-2xl border bk-border-gold flex items-center justify-between gap-2">
-          <button type="button" onClick={goBack} disabled={stepIdx === 0}
-            className="inline-flex items-center gap-1 px-4 py-3 rounded-xl bg-gray-100 text-sm font-bold disabled:opacity-40">
-            <ChevronRight className="size-4" /> السابق
-          </button>
-
-          {step === "review" ? (
-            <button type="button" onClick={submit} disabled={submitting}
-              className="bk-gold inline-flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-sm shadow-lg disabled:opacity-60">
-              {submitting ? <Loader2 className="size-4 animate-spin" /> : <Send className="size-4" />}
-              إرسال طلب الحجز
-            </button>
-          ) : (
-            <button type="button" onClick={goNext}
-              className="bk-gold inline-flex items-center gap-1 px-6 py-3 rounded-xl font-bold text-sm shadow-lg">
-              التالي <ChevronLeft className="size-4" />
-            </button>
+        {/* Sticky Bottom Bar: counts + total + nav (visible on every step) */}
+        <div className="sticky bottom-[68px] lg:bottom-3 z-20 bg-white rounded-2xl shadow-2xl border bk-border-gold overflow-hidden">
+          {(selectedDecorations.length > 0 || selectedSupplies.length > 0) && (
+            <div className="px-3 sm:px-4 py-2 bg-[color-mix(in_oklab,var(--bk-gold)_10%,white)] border-b bk-border-gold flex items-center justify-between gap-3 text-[11px] sm:text-xs">
+              <div className="flex items-center gap-3 flex-wrap min-w-0">
+                {selectedDecorations.length > 0 && (
+                  <span className="inline-flex items-center gap-1 font-bold bk-text-primary">
+                    <Sparkles className="size-3.5 bk-text-gold" />
+                    {selectedDecorations.length} ديكور
+                  </span>
+                )}
+                {selectedSupplies.length > 0 && (
+                  <span className="inline-flex items-center gap-1 font-bold bk-text-primary">
+                    <Package className="size-3.5 bk-text-gold" />
+                    {selectedSupplies.length} مستلزم
+                  </span>
+                )}
+              </div>
+              {showPrices && total > 0 && (
+                <div className="flex items-baseline gap-1.5 shrink-0">
+                  <span className="text-gray-500">الإجمالي:</span>
+                  <span className="font-bold bk-text-gold text-sm sm:text-base">
+                    {new Intl.NumberFormat("ar-DZ").format(total)} د.ج
+                  </span>
+                </div>
+              )}
+            </div>
           )}
+          <div className="p-3 flex items-center justify-between gap-2">
+            <button type="button" onClick={goBack} disabled={stepIdx === 0}
+              className="inline-flex items-center gap-1 px-4 py-3 rounded-xl bg-gray-100 text-sm font-bold disabled:opacity-40">
+              <ChevronRight className="size-4" /> السابق
+            </button>
+
+            {step === "review" ? (
+              <button type="button" onClick={submit} disabled={submitting}
+                className="bk-gold inline-flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-sm shadow-lg disabled:opacity-60">
+                {submitting ? <Loader2 className="size-4 animate-spin" /> : <Send className="size-4" />}
+                إرسال طلب الحجز
+              </button>
+            ) : (
+              <button type="button" onClick={goNext}
+                className="bk-gold inline-flex items-center gap-1 px-6 py-3 rounded-xl font-bold text-sm shadow-lg">
+                التالي <ChevronLeft className="size-4" />
+              </button>
+            )}
+          </div>
         </div>
       </div>
 
@@ -352,9 +380,29 @@ function StepItems({
   date: string;
 }) {
   const [lightbox, setLightbox] = useState<{ urls: string[]; idx: number } | null>(null);
+  const [search, setSearch] = useState("");
+  const [cat, setCat] = useState<string>("all");
+  const [sort, setSort] = useState<"default" | "price-asc" | "price-desc" | "popular">("default");
   const title = kind === "decoration" ? "اختر الديكورات" : "اختر المستلزمات";
   const Icon = kind === "decoration" ? Sparkles : Package;
   const priceField = kind === "decoration" ? "price" : "cost";
+
+  const categories = useMemo(
+    () => Array.from(new Set(items.map((i: any) => i.category).filter(Boolean))) as string[],
+    [items],
+  );
+
+  const filtered = useMemo(() => {
+    let list = [...items];
+    if (cat !== "all") list = list.filter((i: any) => i.category === cat);
+    const q = search.trim().toLowerCase();
+    if (q) list = list.filter((i: any) =>
+      (i.name + " " + (i.category ?? "") + " " + (i.description ?? "")).toLowerCase().includes(q));
+    if (sort === "price-asc") list.sort((a: any, b: any) => (a[priceField] || 0) - (b[priceField] || 0));
+    else if (sort === "price-desc") list.sort((a: any, b: any) => (b[priceField] || 0) - (a[priceField] || 0));
+    else if (sort === "popular") list.sort((a: any, b: any) => (b.bookings_count || 0) - (a.bookings_count || 0));
+    return list;
+  }, [items, cat, search, sort, priceField]);
 
   if (loading) {
     return (
@@ -371,15 +419,51 @@ function StepItems({
         <span className="text-[11px] text-gray-400">متوفر في {date}</span>
       </div>
 
+      {items.length > 0 && (
+        <div className="space-y-2">
+          <div className="flex gap-2">
+            <input
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+              placeholder={kind === "decoration" ? "ابحث عن ديكور..." : "ابحث عن مستلزم..."}
+              className="flex-1 rounded-xl border border-gray-200 px-4 py-2.5 text-sm outline-none focus:border-[var(--bk-gold)]"
+            />
+            <select value={sort} onChange={e => setSort(e.target.value as any)}
+              className="rounded-xl border border-gray-200 px-3 py-2.5 text-xs font-bold bg-white outline-none focus:border-[var(--bk-gold)]">
+              <option value="default">الترتيب</option>
+              <option value="price-asc">السعر: من الأقل</option>
+              <option value="price-desc">السعر: من الأعلى</option>
+              <option value="popular">الأكثر طلباً</option>
+            </select>
+          </div>
+          {categories.length > 0 && (
+            <div className="flex gap-1.5 overflow-x-auto scrollbar-none -mx-1 px-1">
+              <button onClick={() => setCat("all")}
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold shrink-0 ${cat === "all" ? "bk-gold" : "bg-gray-100 text-gray-600"}`}>
+                الكل
+              </button>
+              {categories.map(c => (
+                <button key={c} onClick={() => setCat(c)}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap shrink-0 ${cat === c ? "bk-gold" : "bg-gray-100 text-gray-600"}`}>
+                  {c}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
       {items.length === 0 ? (
         <div className="text-center py-12 text-sm text-gray-500">
           {kind === "decoration"
             ? "لا توجد ديكورات متاحة في هذا التاريخ. يمكنك المتابعة لاختيار المستلزمات."
             : "لا توجد مستلزمات متاحة في هذا التاريخ."}
         </div>
+      ) : filtered.length === 0 ? (
+        <div className="text-center py-12 text-sm text-gray-500">لا توجد نتائج مطابقة لبحثك</div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          {items.map((it: any) => (
+          {filtered.map((it: any) => (
             <ItemCard
               key={it.id}
               item={it}
@@ -417,9 +501,14 @@ function ItemCard({
   const cover = images[0];
 
   return (
-    <div className={`rounded-2xl border-2 overflow-hidden bg-white transition ${
-      qty > 0 ? "bk-border-gold shadow-md" : "border-gray-100"
+    <div className={`relative rounded-2xl border-2 overflow-hidden bg-white transition ${
+      qty > 0 ? "bk-border-gold shadow-lg ring-2 ring-[var(--bk-gold)]/30" : "border-gray-100 hover:border-gray-200"
     }`}>
+      {qty > 0 && (
+        <div className="absolute top-2 right-2 z-10 size-8 rounded-full bk-gold flex items-center justify-center shadow-lg ring-2 ring-white">
+          <CheckCircle2 className="size-5" />
+        </div>
+      )}
       <button
         type="button"
         onClick={() => images.length > 0 && onOpenImages(images, 0)}
