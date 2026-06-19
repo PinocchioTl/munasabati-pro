@@ -380,9 +380,29 @@ function StepItems({
   date: string;
 }) {
   const [lightbox, setLightbox] = useState<{ urls: string[]; idx: number } | null>(null);
+  const [search, setSearch] = useState("");
+  const [cat, setCat] = useState<string>("all");
+  const [sort, setSort] = useState<"default" | "price-asc" | "price-desc" | "popular">("default");
   const title = kind === "decoration" ? "اختر الديكورات" : "اختر المستلزمات";
   const Icon = kind === "decoration" ? Sparkles : Package;
   const priceField = kind === "decoration" ? "price" : "cost";
+
+  const categories = useMemo(
+    () => Array.from(new Set(items.map((i: any) => i.category).filter(Boolean))) as string[],
+    [items],
+  );
+
+  const filtered = useMemo(() => {
+    let list = [...items];
+    if (cat !== "all") list = list.filter((i: any) => i.category === cat);
+    const q = search.trim().toLowerCase();
+    if (q) list = list.filter((i: any) =>
+      (i.name + " " + (i.category ?? "") + " " + (i.description ?? "")).toLowerCase().includes(q));
+    if (sort === "price-asc") list.sort((a: any, b: any) => (a[priceField] || 0) - (b[priceField] || 0));
+    else if (sort === "price-desc") list.sort((a: any, b: any) => (b[priceField] || 0) - (a[priceField] || 0));
+    else if (sort === "popular") list.sort((a: any, b: any) => (b.bookings_count || 0) - (a.bookings_count || 0));
+    return list;
+  }, [items, cat, search, sort, priceField]);
 
   if (loading) {
     return (
@@ -399,15 +419,51 @@ function StepItems({
         <span className="text-[11px] text-gray-400">متوفر في {date}</span>
       </div>
 
+      {items.length > 0 && (
+        <div className="space-y-2">
+          <div className="flex gap-2">
+            <input
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+              placeholder={kind === "decoration" ? "ابحث عن ديكور..." : "ابحث عن مستلزم..."}
+              className="flex-1 rounded-xl border border-gray-200 px-4 py-2.5 text-sm outline-none focus:border-[var(--bk-gold)]"
+            />
+            <select value={sort} onChange={e => setSort(e.target.value as any)}
+              className="rounded-xl border border-gray-200 px-3 py-2.5 text-xs font-bold bg-white outline-none focus:border-[var(--bk-gold)]">
+              <option value="default">الترتيب</option>
+              <option value="price-asc">السعر: من الأقل</option>
+              <option value="price-desc">السعر: من الأعلى</option>
+              <option value="popular">الأكثر طلباً</option>
+            </select>
+          </div>
+          {categories.length > 0 && (
+            <div className="flex gap-1.5 overflow-x-auto scrollbar-none -mx-1 px-1">
+              <button onClick={() => setCat("all")}
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold shrink-0 ${cat === "all" ? "bk-gold" : "bg-gray-100 text-gray-600"}`}>
+                الكل
+              </button>
+              {categories.map(c => (
+                <button key={c} onClick={() => setCat(c)}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap shrink-0 ${cat === c ? "bk-gold" : "bg-gray-100 text-gray-600"}`}>
+                  {c}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
       {items.length === 0 ? (
         <div className="text-center py-12 text-sm text-gray-500">
           {kind === "decoration"
             ? "لا توجد ديكورات متاحة في هذا التاريخ. يمكنك المتابعة لاختيار المستلزمات."
             : "لا توجد مستلزمات متاحة في هذا التاريخ."}
         </div>
+      ) : filtered.length === 0 ? (
+        <div className="text-center py-12 text-sm text-gray-500">لا توجد نتائج مطابقة لبحثك</div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          {items.map((it: any) => (
+          {filtered.map((it: any) => (
             <ItemCard
               key={it.id}
               item={it}
