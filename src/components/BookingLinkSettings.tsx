@@ -369,7 +369,7 @@ export function BookingLinkSettings() {
             label="آخر زيارة"
             value={
               data?.last_visit_at
-                ? new Date(data.last_visit_at).toLocaleDateString("ar")
+                ? formatDateShort(data.last_visit_at)
                 : "—"
             }
             color="text-warning bg-warning/10"
