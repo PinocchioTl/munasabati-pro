@@ -36,8 +36,12 @@ function Calendar({
         className,
       )}
       captionLayout={captionLayout}
+      dir="rtl"
       formatters={{
-        formatMonthDropdown: (date) => date.toLocaleString("default", { month: "short" }),
+        formatMonthDropdown: (date) => MAGHREBI_MONTHS_SHORT[date.getMonth()],
+        formatCaption: (date) => `${MAGHREBI_MONTHS[date.getMonth()]} ${date.getFullYear()}`,
+        formatWeekdayName: (date) => AR_WEEKDAYS_SHORT[date.getDay()],
+        formatYearCaption: (date) => String(date.getFullYear()),
         ...formatters,
       }}
       classNames={{
