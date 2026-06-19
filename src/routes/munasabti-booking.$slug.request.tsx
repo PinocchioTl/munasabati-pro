@@ -154,7 +154,7 @@ function RequestPage() {
         decorations: selectedDecorations,
         supplies: selectedSupplies,
       } as any });
-      setResult({ id: (res as any).id, at: new Date().toLocaleString("ar-DZ") });
+      setResult({ id: (res as any).id, at: formatDateTime(new Date()) });
     } catch (err: any) {
       toast.error(err.message || "فشل إرسال الطلب");
     } finally {
