@@ -175,7 +175,7 @@ function RequestPage() {
         <div className="mt-6 bg-[var(--bk-bg)] rounded-2xl p-4 text-right space-y-2.5">
           <Row label="رقم الطلب" value={<span className="font-mono text-xs">#{result.id.slice(0, 8).toUpperCase()}</span>} />
           <Row label="تاريخ الإرسال" value={result.at} />
-          <Row label="تاريخ المناسبة" value={form.event_date} />
+          <Row label="تاريخ المناسبة" value={formatDateLong(form.event_date)} />
           <Row label="الحالة" value={<span className="text-amber-600 font-bold">قيد الانتظار</span>} />
         </div>
         <Link to="/munasabti-booking/$slug" params={{ slug }}
