@@ -151,7 +151,7 @@ function RequestCard({ req, onAccept, onReject, busy }: any) {
         </div>
         <div className="flex items-center gap-2 text-muted-foreground">
           <Calendar className="size-3.5 shrink-0" />
-          <span className="text-foreground">{req.event_date}</span>
+          <span className="text-foreground">{formatDateLong(req.event_date)}</span>
           <span>•</span>
           <span>{eventTypeLabels[req.event_type] || req.event_type}</span>
         </div>
