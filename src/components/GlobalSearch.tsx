@@ -77,7 +77,7 @@ export function GlobalSearch() {
         out.push({
           id: `c-${c.id}`, type: "client", label: c.name,
           sub: c.phone ?? undefined,
-          to: "/munasabti-manager/customers", q: c.name || c.phone || "", icon: Users,
+          to: "/munasabti-manager/bookings", q: c.name || c.phone || "", icon: Users,
         });
       }
     }
