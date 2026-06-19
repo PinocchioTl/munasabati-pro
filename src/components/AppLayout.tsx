@@ -1,7 +1,7 @@
 import { Link, Outlet, useRouterState, useNavigate } from "@tanstack/react-router";
 import {
   LayoutDashboard, CalendarDays, CalendarRange, Sparkles, Package,
-  Users, Wallet, Bell, BarChart3, Settings, Search, Plus, Crown, LogOut,
+  Wallet, BarChart3, Settings, Crown, LogOut,
   Share2, Inbox, Palette, PanelLeftClose, PanelLeftOpen,
   Menu, MoreHorizontal,
 } from "lucide-react";
@@ -9,12 +9,12 @@ import { useEffect, useState } from "react";
 import { ShareBookingLinkModal } from "@/components/ShareBookingLinkModal";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
-import { useNotifications } from "@/lib/db";
 import { useAuth, signOut } from "@/lib/auth";
 import { useBranding } from "@/lib/branding";
 import { GlobalSearch } from "@/components/GlobalSearch";
+import { NotificationsBell } from "@/components/NotificationsBell";
 
-type NavItem = { to: string; label: string; icon: any; badge?: "notif" };
+type NavItem = { to: string; label: string; icon: any };
 
 const primaryNav: NavItem[] = [
   { to: "/munasabti-manager", label: "الرئيسية", icon: LayoutDashboard },
@@ -26,7 +26,6 @@ const primaryNav: NavItem[] = [
 const catalogNav: NavItem[] = [
   { to: "/munasabti-manager/decorations", label: "الديكورات", icon: Sparkles },
   { to: "/munasabti-manager/supplies", label: "المستلزمات", icon: Package },
-  { to: "/munasabti-manager/customers", label: "العملاء", icon: Users },
 ];
 
 const insightsNav: NavItem[] = [
@@ -36,7 +35,6 @@ const insightsNav: NavItem[] = [
 
 const systemNav: NavItem[] = [
   { to: "/munasabti-manager/booking-page-builder", label: "تخصيص صفحة الحجز", icon: Palette },
-  { to: "/munasabti-manager/notifications", label: "الإشعارات", icon: Bell, badge: "notif" },
   { to: "/munasabti-manager/settings", label: "الإعدادات", icon: Settings },
 ];
 
