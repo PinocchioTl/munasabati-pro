@@ -218,7 +218,6 @@ export function AppLayout() {
         open={drawerOpen}
         onOpenChange={setDrawerOpen}
         pathname={pathname}
-        unread={unread}
         companyName={branding.companyName}
         logoUrl={branding.logoUrl}
       />
@@ -227,7 +226,6 @@ export function AppLayout() {
         open={moreOpen}
         onOpenChange={setMoreOpen}
         pathname={pathname}
-        unread={unread}
       />
 
       {/* Mobile bottom nav */}
