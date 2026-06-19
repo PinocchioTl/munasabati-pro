@@ -258,14 +258,14 @@ function TimelineView({ bookings, typeMap, onEdit }: { bookings: any[]; typeMap:
         {grouped.map(([date, items]) => (
           <div key={date} className="flex gap-4">
             <div className="flex flex-col items-center shrink-0">
-              <div className="size-14 rounded-2xl bg-gradient-luxury text-gold flex flex-col items-center justify-center">
-                <span className="text-[10px] opacity-70">{date.slice(5,7)}/{date.slice(8,10)}</span>
-                <span className="text-[10px] font-bold">{date.slice(0,4)}</span>
+              <div className="size-14 rounded-2xl bg-gradient-luxury text-gold flex flex-col items-center justify-center px-1">
+                <span className="text-base font-bold leading-none">{date.slice(8,10)}</span>
+                <span className="text-[10px] opacity-80 leading-tight mt-0.5">{(await null, '')}{['جان','فيف','مار','أفر','ماي','جوان','جويل','أوت','سبت','أكت','نوف','ديس'][Number(date.slice(5,7))-1]}</span>
               </div>
               <div className="w-px flex-1 bg-border mt-2" />
             </div>
             <div className="flex-1 space-y-2 pb-2">
-              <div className="text-xs text-muted-foreground font-semibold">{date} • {items.length} حجز</div>
+              <div className="text-xs text-muted-foreground font-semibold">{formatDateLong(date)} • {items.length} حجز</div>
               {items.map(b => (
                 <div key={b.id} className="bg-secondary/40 rounded-xl p-3 flex items-center justify-between gap-3 hover:bg-secondary transition">
                   <div className="min-w-0">
