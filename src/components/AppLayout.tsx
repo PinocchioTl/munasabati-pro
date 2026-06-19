@@ -129,7 +129,6 @@ export function AppLayout() {
                     item={item}
                     active={isActivePath(pathname, item.to)}
                     collapsed={collapsed}
-                    badge={item.badge === "notif" ? unread : 0}
                   />
                 ))}
               </div>
