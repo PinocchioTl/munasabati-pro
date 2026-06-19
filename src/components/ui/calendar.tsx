@@ -6,6 +6,11 @@ import { DayButton, DayPicker, getDefaultClassNames } from "react-day-picker";
 
 import { cn } from "@/lib/utils";
 import { Button, buttonVariants } from "@/components/ui/button";
+import {
+  MAGHREBI_MONTHS,
+  MAGHREBI_MONTHS_SHORT,
+  AR_WEEKDAYS_SHORT,
+} from "@/lib/date-format";
 
 function Calendar({
   className,
