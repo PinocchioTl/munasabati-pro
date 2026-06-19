@@ -258,25 +258,53 @@ function RequestPage() {
           />
         )}
 
-        {/* Footer nav */}
-        <div className="sticky bottom-[68px] lg:bottom-3 z-20 bg-white rounded-2xl p-3 shadow-2xl border bk-border-gold flex items-center justify-between gap-2">
-          <button type="button" onClick={goBack} disabled={stepIdx === 0}
-            className="inline-flex items-center gap-1 px-4 py-3 rounded-xl bg-gray-100 text-sm font-bold disabled:opacity-40">
-            <ChevronRight className="size-4" /> السابق
-          </button>
-
-          {step === "review" ? (
-            <button type="button" onClick={submit} disabled={submitting}
-              className="bk-gold inline-flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-sm shadow-lg disabled:opacity-60">
-              {submitting ? <Loader2 className="size-4 animate-spin" /> : <Send className="size-4" />}
-              إرسال طلب الحجز
-            </button>
-          ) : (
-            <button type="button" onClick={goNext}
-              className="bk-gold inline-flex items-center gap-1 px-6 py-3 rounded-xl font-bold text-sm shadow-lg">
-              التالي <ChevronLeft className="size-4" />
-            </button>
+        {/* Sticky Bottom Bar: counts + total + nav (visible on every step) */}
+        <div className="sticky bottom-[68px] lg:bottom-3 z-20 bg-white rounded-2xl shadow-2xl border bk-border-gold overflow-hidden">
+          {(selectedDecorations.length > 0 || selectedSupplies.length > 0) && (
+            <div className="px-3 sm:px-4 py-2 bg-[color-mix(in_oklab,var(--bk-gold)_10%,white)] border-b bk-border-gold flex items-center justify-between gap-3 text-[11px] sm:text-xs">
+              <div className="flex items-center gap-3 flex-wrap min-w-0">
+                {selectedDecorations.length > 0 && (
+                  <span className="inline-flex items-center gap-1 font-bold bk-text-primary">
+                    <Sparkles className="size-3.5 bk-text-gold" />
+                    {selectedDecorations.length} ديكور
+                  </span>
+                )}
+                {selectedSupplies.length > 0 && (
+                  <span className="inline-flex items-center gap-1 font-bold bk-text-primary">
+                    <Package className="size-3.5 bk-text-gold" />
+                    {selectedSupplies.length} مستلزم
+                  </span>
+                )}
+              </div>
+              {showPrices && total > 0 && (
+                <div className="flex items-baseline gap-1.5 shrink-0">
+                  <span className="text-gray-500">الإجمالي:</span>
+                  <span className="font-bold bk-text-gold text-sm sm:text-base">
+                    {new Intl.NumberFormat("ar-DZ").format(total)} د.ج
+                  </span>
+                </div>
+              )}
+            </div>
           )}
+          <div className="p-3 flex items-center justify-between gap-2">
+            <button type="button" onClick={goBack} disabled={stepIdx === 0}
+              className="inline-flex items-center gap-1 px-4 py-3 rounded-xl bg-gray-100 text-sm font-bold disabled:opacity-40">
+              <ChevronRight className="size-4" /> السابق
+            </button>
+
+            {step === "review" ? (
+              <button type="button" onClick={submit} disabled={submitting}
+                className="bk-gold inline-flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-sm shadow-lg disabled:opacity-60">
+                {submitting ? <Loader2 className="size-4 animate-spin" /> : <Send className="size-4" />}
+                إرسال طلب الحجز
+              </button>
+            ) : (
+              <button type="button" onClick={goNext}
+                className="bk-gold inline-flex items-center gap-1 px-6 py-3 rounded-xl font-bold text-sm shadow-lg">
+                التالي <ChevronLeft className="size-4" />
+              </button>
+            )}
+          </div>
         </div>
       </div>
 
