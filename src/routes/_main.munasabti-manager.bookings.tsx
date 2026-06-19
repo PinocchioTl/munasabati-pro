@@ -10,7 +10,7 @@ import { Plus, Phone, Calendar, Clock, LayoutGrid, List, ChevronDown, Pencil } f
 import { useState, useMemo } from "react";
 import { SearchBox } from "@/components/SearchBox";
 import { matches } from "@/lib/search";
-import { formatDateLong, formatDateShort } from "@/lib/date-format";
+import { formatDateLong, monthShort } from "@/lib/date-format";
 
 export const Route = createFileRoute("/_main/munasabti-manager/bookings")({
   component: BookingsPage,
