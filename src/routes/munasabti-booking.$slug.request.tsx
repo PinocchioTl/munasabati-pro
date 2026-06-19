@@ -536,7 +536,7 @@ function StepReview({
       <SectionTitle icon={<ClipboardList className="size-5 bk-text-gold" />} title="مراجعة الطلب" />
 
       <div className="bg-[var(--bk-bg)] rounded-xl p-4 space-y-2">
-        <Row label="تاريخ المناسبة" value={form.event_date} />
+        <Row label="تاريخ المناسبة" value={formatDateLong(form.event_date)} />
         <Row label="نوع المناسبة" value={EVENT_TYPES.find(t => t.value === form.event_type)?.label || "—"} />
         <Row label="الاسم" value={form.customer_name} />
         <Row label="الهاتف" value={form.customer_phone} />
