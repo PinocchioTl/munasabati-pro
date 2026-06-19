@@ -332,7 +332,7 @@ function Dashboard() {
                   <div className="text-[11px] text-muted-foreground flex items-center gap-1.5 mt-0.5 truncate">
                     <span>{eventTypeLabels[b.event_type]}</span>
                     <span className="opacity-40">•</span>
-                    <span>{b.event_date}</span>
+                    <span>{formatDateLong(b.event_date)}</span>
                   </div>
                 </div>
                 <div className="text-left shrink-0">
