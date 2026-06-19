@@ -14,11 +14,9 @@ import { Route as SignupRouteImport } from './routes/signup'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as ProfitsRouteImport } from './routes/profits'
-import { Route as NotificationsRouteImport } from './routes/notifications'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as DecorationsRouteImport } from './routes/decorations'
-import { Route as CustomersRouteImport } from './routes/customers'
 import { Route as CalendarRouteImport } from './routes/calendar'
 import { Route as BookingsRouteImport } from './routes/bookings'
 import { Route as BookingRequestsRouteImport } from './routes/booking-requests'
@@ -35,9 +33,7 @@ import { Route as MunasabtiBookingSlugDecorationsRouteImport } from './routes/mu
 import { Route as MainMunasabtiManagerSuppliesRouteImport } from './routes/_main.munasabti-manager.supplies'
 import { Route as MainMunasabtiManagerSettingsRouteImport } from './routes/_main.munasabti-manager.settings'
 import { Route as MainMunasabtiManagerProfitsRouteImport } from './routes/_main.munasabti-manager.profits'
-import { Route as MainMunasabtiManagerNotificationsRouteImport } from './routes/_main.munasabti-manager.notifications'
 import { Route as MainMunasabtiManagerDecorationsRouteImport } from './routes/_main.munasabti-manager.decorations'
-import { Route as MainMunasabtiManagerCustomersRouteImport } from './routes/_main.munasabti-manager.customers'
 import { Route as MainMunasabtiManagerCalendarRouteImport } from './routes/_main.munasabti-manager.calendar'
 import { Route as MainMunasabtiManagerBookingsRouteImport } from './routes/_main.munasabti-manager.bookings'
 import { Route as MainMunasabtiManagerBookingRequestsRouteImport } from './routes/_main.munasabti-manager.booking-requests'
@@ -70,11 +66,6 @@ const ProfitsRoute = ProfitsRouteImport.update({
   path: '/profits',
   getParentRoute: () => rootRouteImport,
 } as any)
-const NotificationsRoute = NotificationsRouteImport.update({
-  id: '/notifications',
-  path: '/notifications',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
@@ -88,11 +79,6 @@ const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
 const DecorationsRoute = DecorationsRouteImport.update({
   id: '/decorations',
   path: '/decorations',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CustomersRoute = CustomersRouteImport.update({
-  id: '/customers',
-  path: '/customers',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CalendarRoute = CalendarRouteImport.update({
@@ -182,22 +168,10 @@ const MainMunasabtiManagerProfitsRoute =
     path: '/munasabti-manager/profits',
     getParentRoute: () => MainRoute,
   } as any)
-const MainMunasabtiManagerNotificationsRoute =
-  MainMunasabtiManagerNotificationsRouteImport.update({
-    id: '/munasabti-manager/notifications',
-    path: '/munasabti-manager/notifications',
-    getParentRoute: () => MainRoute,
-  } as any)
 const MainMunasabtiManagerDecorationsRoute =
   MainMunasabtiManagerDecorationsRouteImport.update({
     id: '/munasabti-manager/decorations',
     path: '/munasabti-manager/decorations',
-    getParentRoute: () => MainRoute,
-  } as any)
-const MainMunasabtiManagerCustomersRoute =
-  MainMunasabtiManagerCustomersRouteImport.update({
-    id: '/munasabti-manager/customers',
-    path: '/munasabti-manager/customers',
     getParentRoute: () => MainRoute,
   } as any)
 const MainMunasabtiManagerCalendarRoute =
@@ -243,11 +217,9 @@ export interface FileRoutesByFullPath {
   '/booking-requests': typeof BookingRequestsRoute
   '/bookings': typeof BookingsRoute
   '/calendar': typeof CalendarRoute
-  '/customers': typeof CustomersRoute
   '/decorations': typeof DecorationsRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
-  '/notifications': typeof NotificationsRoute
   '/profits': typeof ProfitsRoute
   '/reset-password': typeof ResetPasswordRoute
   '/settings': typeof SettingsRoute
@@ -260,9 +232,7 @@ export interface FileRoutesByFullPath {
   '/munasabti-manager/booking-requests': typeof MainMunasabtiManagerBookingRequestsRoute
   '/munasabti-manager/bookings': typeof MainMunasabtiManagerBookingsRoute
   '/munasabti-manager/calendar': typeof MainMunasabtiManagerCalendarRoute
-  '/munasabti-manager/customers': typeof MainMunasabtiManagerCustomersRoute
   '/munasabti-manager/decorations': typeof MainMunasabtiManagerDecorationsRoute
-  '/munasabti-manager/notifications': typeof MainMunasabtiManagerNotificationsRoute
   '/munasabti-manager/profits': typeof MainMunasabtiManagerProfitsRoute
   '/munasabti-manager/settings': typeof MainMunasabtiManagerSettingsRoute
   '/munasabti-manager/supplies': typeof MainMunasabtiManagerSuppliesRoute
@@ -279,11 +249,9 @@ export interface FileRoutesByTo {
   '/booking-requests': typeof BookingRequestsRoute
   '/bookings': typeof BookingsRoute
   '/calendar': typeof CalendarRoute
-  '/customers': typeof CustomersRoute
   '/decorations': typeof DecorationsRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
-  '/notifications': typeof NotificationsRoute
   '/profits': typeof ProfitsRoute
   '/reset-password': typeof ResetPasswordRoute
   '/settings': typeof SettingsRoute
@@ -295,9 +263,7 @@ export interface FileRoutesByTo {
   '/munasabti-manager/booking-requests': typeof MainMunasabtiManagerBookingRequestsRoute
   '/munasabti-manager/bookings': typeof MainMunasabtiManagerBookingsRoute
   '/munasabti-manager/calendar': typeof MainMunasabtiManagerCalendarRoute
-  '/munasabti-manager/customers': typeof MainMunasabtiManagerCustomersRoute
   '/munasabti-manager/decorations': typeof MainMunasabtiManagerDecorationsRoute
-  '/munasabti-manager/notifications': typeof MainMunasabtiManagerNotificationsRoute
   '/munasabti-manager/profits': typeof MainMunasabtiManagerProfitsRoute
   '/munasabti-manager/settings': typeof MainMunasabtiManagerSettingsRoute
   '/munasabti-manager/supplies': typeof MainMunasabtiManagerSuppliesRoute
@@ -316,11 +282,9 @@ export interface FileRoutesById {
   '/booking-requests': typeof BookingRequestsRoute
   '/bookings': typeof BookingsRoute
   '/calendar': typeof CalendarRoute
-  '/customers': typeof CustomersRoute
   '/decorations': typeof DecorationsRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
-  '/notifications': typeof NotificationsRoute
   '/profits': typeof ProfitsRoute
   '/reset-password': typeof ResetPasswordRoute
   '/settings': typeof SettingsRoute
@@ -333,9 +297,7 @@ export interface FileRoutesById {
   '/_main/munasabti-manager/booking-requests': typeof MainMunasabtiManagerBookingRequestsRoute
   '/_main/munasabti-manager/bookings': typeof MainMunasabtiManagerBookingsRoute
   '/_main/munasabti-manager/calendar': typeof MainMunasabtiManagerCalendarRoute
-  '/_main/munasabti-manager/customers': typeof MainMunasabtiManagerCustomersRoute
   '/_main/munasabti-manager/decorations': typeof MainMunasabtiManagerDecorationsRoute
-  '/_main/munasabti-manager/notifications': typeof MainMunasabtiManagerNotificationsRoute
   '/_main/munasabti-manager/profits': typeof MainMunasabtiManagerProfitsRoute
   '/_main/munasabti-manager/settings': typeof MainMunasabtiManagerSettingsRoute
   '/_main/munasabti-manager/supplies': typeof MainMunasabtiManagerSuppliesRoute
@@ -354,11 +316,9 @@ export interface FileRouteTypes {
     | '/booking-requests'
     | '/bookings'
     | '/calendar'
-    | '/customers'
     | '/decorations'
     | '/forgot-password'
     | '/login'
-    | '/notifications'
     | '/profits'
     | '/reset-password'
     | '/settings'
@@ -371,9 +331,7 @@ export interface FileRouteTypes {
     | '/munasabti-manager/booking-requests'
     | '/munasabti-manager/bookings'
     | '/munasabti-manager/calendar'
-    | '/munasabti-manager/customers'
     | '/munasabti-manager/decorations'
-    | '/munasabti-manager/notifications'
     | '/munasabti-manager/profits'
     | '/munasabti-manager/settings'
     | '/munasabti-manager/supplies'
@@ -390,11 +348,9 @@ export interface FileRouteTypes {
     | '/booking-requests'
     | '/bookings'
     | '/calendar'
-    | '/customers'
     | '/decorations'
     | '/forgot-password'
     | '/login'
-    | '/notifications'
     | '/profits'
     | '/reset-password'
     | '/settings'
@@ -406,9 +362,7 @@ export interface FileRouteTypes {
     | '/munasabti-manager/booking-requests'
     | '/munasabti-manager/bookings'
     | '/munasabti-manager/calendar'
-    | '/munasabti-manager/customers'
     | '/munasabti-manager/decorations'
-    | '/munasabti-manager/notifications'
     | '/munasabti-manager/profits'
     | '/munasabti-manager/settings'
     | '/munasabti-manager/supplies'
@@ -426,11 +380,9 @@ export interface FileRouteTypes {
     | '/booking-requests'
     | '/bookings'
     | '/calendar'
-    | '/customers'
     | '/decorations'
     | '/forgot-password'
     | '/login'
-    | '/notifications'
     | '/profits'
     | '/reset-password'
     | '/settings'
@@ -443,9 +395,7 @@ export interface FileRouteTypes {
     | '/_main/munasabti-manager/booking-requests'
     | '/_main/munasabti-manager/bookings'
     | '/_main/munasabti-manager/calendar'
-    | '/_main/munasabti-manager/customers'
     | '/_main/munasabti-manager/decorations'
-    | '/_main/munasabti-manager/notifications'
     | '/_main/munasabti-manager/profits'
     | '/_main/munasabti-manager/settings'
     | '/_main/munasabti-manager/supplies'
@@ -464,11 +414,9 @@ export interface RootRouteChildren {
   BookingRequestsRoute: typeof BookingRequestsRoute
   BookingsRoute: typeof BookingsRoute
   CalendarRoute: typeof CalendarRoute
-  CustomersRoute: typeof CustomersRoute
   DecorationsRoute: typeof DecorationsRoute
   ForgotPasswordRoute: typeof ForgotPasswordRoute
   LoginRoute: typeof LoginRoute
-  NotificationsRoute: typeof NotificationsRoute
   ProfitsRoute: typeof ProfitsRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   SettingsRoute: typeof SettingsRoute
@@ -515,13 +463,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProfitsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/notifications': {
-      id: '/notifications'
-      path: '/notifications'
-      fullPath: '/notifications'
-      preLoaderRoute: typeof NotificationsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/login': {
       id: '/login'
       path: '/login'
@@ -541,13 +482,6 @@ declare module '@tanstack/react-router' {
       path: '/decorations'
       fullPath: '/decorations'
       preLoaderRoute: typeof DecorationsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/customers': {
-      id: '/customers'
-      path: '/customers'
-      fullPath: '/customers'
-      preLoaderRoute: typeof CustomersRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/calendar': {
@@ -662,25 +596,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MainMunasabtiManagerProfitsRouteImport
       parentRoute: typeof MainRoute
     }
-    '/_main/munasabti-manager/notifications': {
-      id: '/_main/munasabti-manager/notifications'
-      path: '/munasabti-manager/notifications'
-      fullPath: '/munasabti-manager/notifications'
-      preLoaderRoute: typeof MainMunasabtiManagerNotificationsRouteImport
-      parentRoute: typeof MainRoute
-    }
     '/_main/munasabti-manager/decorations': {
       id: '/_main/munasabti-manager/decorations'
       path: '/munasabti-manager/decorations'
       fullPath: '/munasabti-manager/decorations'
       preLoaderRoute: typeof MainMunasabtiManagerDecorationsRouteImport
-      parentRoute: typeof MainRoute
-    }
-    '/_main/munasabti-manager/customers': {
-      id: '/_main/munasabti-manager/customers'
-      path: '/munasabti-manager/customers'
-      fullPath: '/munasabti-manager/customers'
-      preLoaderRoute: typeof MainMunasabtiManagerCustomersRouteImport
       parentRoute: typeof MainRoute
     }
     '/_main/munasabti-manager/calendar': {
@@ -734,9 +654,7 @@ interface MainRouteChildren {
   MainMunasabtiManagerBookingRequestsRoute: typeof MainMunasabtiManagerBookingRequestsRoute
   MainMunasabtiManagerBookingsRoute: typeof MainMunasabtiManagerBookingsRoute
   MainMunasabtiManagerCalendarRoute: typeof MainMunasabtiManagerCalendarRoute
-  MainMunasabtiManagerCustomersRoute: typeof MainMunasabtiManagerCustomersRoute
   MainMunasabtiManagerDecorationsRoute: typeof MainMunasabtiManagerDecorationsRoute
-  MainMunasabtiManagerNotificationsRoute: typeof MainMunasabtiManagerNotificationsRoute
   MainMunasabtiManagerProfitsRoute: typeof MainMunasabtiManagerProfitsRoute
   MainMunasabtiManagerSettingsRoute: typeof MainMunasabtiManagerSettingsRoute
   MainMunasabtiManagerSuppliesRoute: typeof MainMunasabtiManagerSuppliesRoute
@@ -751,10 +669,7 @@ const MainRouteChildren: MainRouteChildren = {
     MainMunasabtiManagerBookingRequestsRoute,
   MainMunasabtiManagerBookingsRoute: MainMunasabtiManagerBookingsRoute,
   MainMunasabtiManagerCalendarRoute: MainMunasabtiManagerCalendarRoute,
-  MainMunasabtiManagerCustomersRoute: MainMunasabtiManagerCustomersRoute,
   MainMunasabtiManagerDecorationsRoute: MainMunasabtiManagerDecorationsRoute,
-  MainMunasabtiManagerNotificationsRoute:
-    MainMunasabtiManagerNotificationsRoute,
   MainMunasabtiManagerProfitsRoute: MainMunasabtiManagerProfitsRoute,
   MainMunasabtiManagerSettingsRoute: MainMunasabtiManagerSettingsRoute,
   MainMunasabtiManagerSuppliesRoute: MainMunasabtiManagerSuppliesRoute,
@@ -803,11 +718,9 @@ const rootRouteChildren: RootRouteChildren = {
   BookingRequestsRoute: BookingRequestsRoute,
   BookingsRoute: BookingsRoute,
   CalendarRoute: CalendarRoute,
-  CustomersRoute: CustomersRoute,
   DecorationsRoute: DecorationsRoute,
   ForgotPasswordRoute: ForgotPasswordRoute,
   LoginRoute: LoginRoute,
-  NotificationsRoute: NotificationsRoute,
   ProfitsRoute: ProfitsRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   SettingsRoute: SettingsRoute,
