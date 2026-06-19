@@ -311,7 +311,24 @@ function MobileDrawer({ open, onOpenChange, pathname, companyName, logoUrl }: {
                     <Link key={item.to} to={item.to} onClick={() => onOpenChange(false)} className={`flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-semibold transition ${active ? "bg-sidebar-accent text-gold border border-gold/20" : "text-sidebar-foreground/75 hover:bg-sidebar-accent/50"}`}>
                       <Icon className="size-[18px] shrink-0" />
                       <span className="flex-1">{item.label}</span>
-                      {item.badge === "notif" && unread > 0 && <span className="min-w-5 rounded-full bg-destructive px-1.5 py-0.5 text-center text-[10px] text-destructive-foreground">{unread > 9 ? "9+" : unread}</span>}
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
+        </nav>
+        <div className="p-3 border-t border-gold/20">
+          <Button variant="ghost" className="w-full justify-start text-sidebar-foreground/70 hover:text-destructive hover:bg-destructive/10" onClick={() => signOut()}>
+            <LogOut className="size-4" /> تسجيل الخروج
+          </Button>
+        </div>
+      </SheetContent>
+    </Sheet>
+  );
+}
+
+// placeholder removed below
                     </Link>
                   );
                 })}
