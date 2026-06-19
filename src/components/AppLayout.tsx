@@ -278,11 +278,10 @@ export function AppLayout() {
   );
 }
 
-function MobileDrawer({ open, onOpenChange, pathname, unread, companyName, logoUrl }: {
+function MobileDrawer({ open, onOpenChange, pathname, companyName, logoUrl }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   pathname: string;
-  unread: number;
   companyName: string;
   logoUrl?: string | null;
 }) {
