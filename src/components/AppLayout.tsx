@@ -247,9 +247,6 @@ export function AppLayout() {
                   <Icon className={`size-5 transition-transform ${active ? "scale-110" : ""}`} />
                 </div>
                 <span className="leading-none">{item.label}</span>
-                {item.to === "/munasabti-manager/booking-requests" && unread > 0 && (
-                  <span className="absolute top-1 left-3 size-2 rounded-full bg-destructive ring-2 ring-background" />
-                )}
               </Link>
             );
           })}
