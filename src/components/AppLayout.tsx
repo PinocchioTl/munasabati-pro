@@ -360,7 +360,7 @@ function MobileMoreMenu({ open, onOpenChange, pathname }: {
   );
 }
 
-function SidebarItem({ item, active, collapsed, badge }: { item: NavItem; active: boolean; collapsed: boolean; badge: number }) {
+function SidebarItem({ item, active, collapsed }: { item: NavItem; active: boolean; collapsed: boolean }) {
   const Icon = item.icon;
   return (
     <Link
