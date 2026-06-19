@@ -202,18 +202,7 @@ export function AppLayout() {
             </button>
 
             {/* Notifications */}
-            <Link
-              to="/munasabti-manager/notifications"
-              className="relative size-9 sm:size-10 rounded-xl hover:bg-card flex items-center justify-center transition"
-              title="الإشعارات"
-            >
-              <Bell className="size-[18px]" />
-              {unread > 0 && (
-                <span className="absolute -top-0.5 -left-0.5 min-w-[18px] h-[18px] text-[10px] font-bold rounded-full bg-destructive text-destructive-foreground flex items-center justify-center px-1 ring-2 ring-background">
-                  {unread > 9 ? "9+" : unread}
-                </span>
-              )}
-            </Link>
+            <NotificationsBell />
 
           </div>
         </header>
