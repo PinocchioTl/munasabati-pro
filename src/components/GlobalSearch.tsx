@@ -21,7 +21,7 @@ const PAGES: Result[] = [
   { id: "p-requests", type: "page", label: "طلبات الرابط", to: "/munasabti-manager/booking-requests", icon: FileText },
   { id: "p-decor", type: "page", label: "الديكورات", to: "/munasabti-manager/decorations", icon: Sparkles },
   { id: "p-supplies", type: "page", label: "المستلزمات", to: "/munasabti-manager/supplies", icon: Package },
-  { id: "p-customers", type: "page", label: "الزبائن", to: "/munasabti-manager/customers", icon: Users },
+  
   { id: "p-profits", type: "page", label: "الأرباح", to: "/munasabti-manager/profits", icon: FileText },
   { id: "p-analytics", type: "page", label: "الإحصائيات", to: "/munasabti-manager/analytics", icon: FileText },
   { id: "p-settings", type: "page", label: "الإعدادات", to: "/munasabti-manager/settings", icon: FileText },
@@ -77,7 +77,7 @@ export function GlobalSearch() {
         out.push({
           id: `c-${c.id}`, type: "client", label: c.name,
           sub: c.phone ?? undefined,
-          to: "/munasabti-manager/customers", q: c.name || c.phone || "", icon: Users,
+          to: "/munasabti-manager/bookings", q: c.name || c.phone || "", icon: Users,
         });
       }
     }

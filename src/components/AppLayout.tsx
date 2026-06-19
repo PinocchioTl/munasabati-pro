@@ -1,7 +1,7 @@
 import { Link, Outlet, useRouterState, useNavigate } from "@tanstack/react-router";
 import {
   LayoutDashboard, CalendarDays, CalendarRange, Sparkles, Package,
-  Users, Wallet, Bell, BarChart3, Settings, Search, Plus, Crown, LogOut,
+  Wallet, BarChart3, Settings, Crown, LogOut,
   Share2, Inbox, Palette, PanelLeftClose, PanelLeftOpen,
   Menu, MoreHorizontal,
 } from "lucide-react";
@@ -9,12 +9,12 @@ import { useEffect, useState } from "react";
 import { ShareBookingLinkModal } from "@/components/ShareBookingLinkModal";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
-import { useNotifications } from "@/lib/db";
 import { useAuth, signOut } from "@/lib/auth";
 import { useBranding } from "@/lib/branding";
 import { GlobalSearch } from "@/components/GlobalSearch";
+import { NotificationsBell } from "@/components/NotificationsBell";
 
-type NavItem = { to: string; label: string; icon: any; badge?: "notif" };
+type NavItem = { to: string; label: string; icon: any };
 
 const primaryNav: NavItem[] = [
   { to: "/munasabti-manager", label: "الرئيسية", icon: LayoutDashboard },
@@ -26,7 +26,6 @@ const primaryNav: NavItem[] = [
 const catalogNav: NavItem[] = [
   { to: "/munasabti-manager/decorations", label: "الديكورات", icon: Sparkles },
   { to: "/munasabti-manager/supplies", label: "المستلزمات", icon: Package },
-  { to: "/munasabti-manager/customers", label: "العملاء", icon: Users },
 ];
 
 const insightsNav: NavItem[] = [
@@ -36,7 +35,6 @@ const insightsNav: NavItem[] = [
 
 const systemNav: NavItem[] = [
   { to: "/munasabti-manager/booking-page-builder", label: "تخصيص صفحة الحجز", icon: Palette },
-  { to: "/munasabti-manager/notifications", label: "الإشعارات", icon: Bell, badge: "notif" },
   { to: "/munasabti-manager/settings", label: "الإعدادات", icon: Settings },
 ];
 
@@ -64,8 +62,6 @@ function isActivePath(pathname: string, to: string) {
 
 export function AppLayout() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
-  const { data: notifications = [] } = useNotifications();
-  const unread = notifications.filter((n) => !n.is_read).length;
   const { branding } = useBranding();
   const [shareOpen, setShareOpen] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
@@ -133,7 +129,6 @@ export function AppLayout() {
                     item={item}
                     active={isActivePath(pathname, item.to)}
                     collapsed={collapsed}
-                    badge={item.badge === "notif" ? unread : 0}
                   />
                 ))}
               </div>
@@ -207,18 +202,7 @@ export function AppLayout() {
             </button>
 
             {/* Notifications */}
-            <Link
-              to="/munasabti-manager/notifications"
-              className="relative size-9 sm:size-10 rounded-xl hover:bg-card flex items-center justify-center transition"
-              title="الإشعارات"
-            >
-              <Bell className="size-[18px]" />
-              {unread > 0 && (
-                <span className="absolute -top-0.5 -left-0.5 min-w-[18px] h-[18px] text-[10px] font-bold rounded-full bg-destructive text-destructive-foreground flex items-center justify-center px-1 ring-2 ring-background">
-                  {unread > 9 ? "9+" : unread}
-                </span>
-              )}
-            </Link>
+            <NotificationsBell />
 
           </div>
         </header>
@@ -234,7 +218,6 @@ export function AppLayout() {
         open={drawerOpen}
         onOpenChange={setDrawerOpen}
         pathname={pathname}
-        unread={unread}
         companyName={branding.companyName}
         logoUrl={branding.logoUrl}
       />
@@ -243,7 +226,6 @@ export function AppLayout() {
         open={moreOpen}
         onOpenChange={setMoreOpen}
         pathname={pathname}
-        unread={unread}
       />
 
       {/* Mobile bottom nav */}
@@ -265,9 +247,6 @@ export function AppLayout() {
                   <Icon className={`size-5 transition-transform ${active ? "scale-110" : ""}`} />
                 </div>
                 <span className="leading-none">{item.label}</span>
-                {item.to === "/munasabti-manager/booking-requests" && unread > 0 && (
-                  <span className="absolute top-1 left-3 size-2 rounded-full bg-destructive ring-2 ring-background" />
-                )}
               </Link>
             );
           })}
@@ -296,11 +275,10 @@ export function AppLayout() {
   );
 }
 
-function MobileDrawer({ open, onOpenChange, pathname, unread, companyName, logoUrl }: {
+function MobileDrawer({ open, onOpenChange, pathname, companyName, logoUrl }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   pathname: string;
-  unread: number;
   companyName: string;
   logoUrl?: string | null;
 }) {
@@ -330,7 +308,6 @@ function MobileDrawer({ open, onOpenChange, pathname, unread, companyName, logoU
                     <Link key={item.to} to={item.to} onClick={() => onOpenChange(false)} className={`flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-semibold transition ${active ? "bg-sidebar-accent text-gold border border-gold/20" : "text-sidebar-foreground/75 hover:bg-sidebar-accent/50"}`}>
                       <Icon className="size-[18px] shrink-0" />
                       <span className="flex-1">{item.label}</span>
-                      {item.badge === "notif" && unread > 0 && <span className="min-w-5 rounded-full bg-destructive px-1.5 py-0.5 text-center text-[10px] text-destructive-foreground">{unread > 9 ? "9+" : unread}</span>}
                     </Link>
                   );
                 })}
@@ -348,11 +325,10 @@ function MobileDrawer({ open, onOpenChange, pathname, unread, companyName, logoU
   );
 }
 
-function MobileMoreMenu({ open, onOpenChange, pathname, unread }: {
+function MobileMoreMenu({ open, onOpenChange, pathname }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   pathname: string;
-  unread: number;
 }) {
   const moreItems = groups.flatMap((group) => group.items).filter(
     (item) => !mobileNav.some((mobileItem) => mobileItem.to === item.to),
@@ -372,7 +348,6 @@ function MobileMoreMenu({ open, onOpenChange, pathname, unread }: {
               <Link key={item.to} to={item.to} onClick={() => onOpenChange(false)} className={`relative flex min-w-0 items-center gap-2.5 rounded-2xl border px-3 py-3.5 text-sm font-semibold transition ${active ? "border-gold/40 bg-sidebar-accent text-gold" : "border-gold/10 bg-sidebar-accent/35 text-sidebar-foreground/80"}`}>
                 <Icon className="size-[18px] shrink-0" />
                 <span className="truncate">{item.label}</span>
-                {item.badge === "notif" && unread > 0 && <span className="mr-auto size-2 rounded-full bg-destructive shrink-0" />}
               </Link>
             );
           })}
@@ -382,7 +357,7 @@ function MobileMoreMenu({ open, onOpenChange, pathname, unread }: {
   );
 }
 
-function SidebarItem({ item, active, collapsed, badge }: { item: NavItem; active: boolean; collapsed: boolean; badge: number }) {
+function SidebarItem({ item, active, collapsed }: { item: NavItem; active: boolean; collapsed: boolean }) {
   const Icon = item.icon;
   return (
     <Link
@@ -401,14 +376,6 @@ function SidebarItem({ item, active, collapsed, badge }: { item: NavItem; active
       )}
       <Icon className={`size-[18px] shrink-0 transition-transform group-hover:scale-110 ${active ? "text-gold" : ""}`} />
       {!collapsed && <span className="flex-1 truncate">{item.label}</span>}
-      {!collapsed && badge > 0 && (
-        <span className="text-[10px] font-bold bg-destructive text-destructive-foreground rounded-full px-1.5 py-0.5 min-w-[18px] text-center">
-          {badge > 9 ? "9+" : badge}
-        </span>
-      )}
-      {collapsed && badge > 0 && (
-        <span className="absolute top-1 left-1 size-2 rounded-full bg-destructive ring-2 ring-[color:var(--sidebar)]" />
-      )}
     </Link>
   );
 }

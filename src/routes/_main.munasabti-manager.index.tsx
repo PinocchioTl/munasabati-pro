@@ -188,7 +188,7 @@ function Dashboard() {
               <QuickAction to="/munasabti-manager/bookings" icon={CalendarDays} label="حجز جديد" />
               <QuickAction to="/munasabti-manager/decorations" icon={Sparkles} label="ديكور جديد" />
               <QuickAction to="/munasabti-manager/supplies" icon={Package} label="مستلزم" />
-              <QuickAction to="/munasabti-manager/customers" icon={Crown} label="زبون جديد" />
+              <QuickAction to="/munasabti-manager/calendar" icon={Crown} label="التقويم" />
             </div>
           </Card>
 
@@ -218,7 +218,7 @@ function Dashboard() {
                     color={n.level === "error" ? "destructive" : n.level === "warning" ? "warning" : "info"}
                     icon={Bell}
                     title={n.title}
-                    to="/munasabti-manager/notifications"
+                    to="/munasabti-manager"
                   />
                 ))}
               </div>
