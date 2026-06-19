@@ -131,7 +131,7 @@ function BookingRequestsPage() {
 
 function RequestCard({ req, onAccept, onReject, busy }: any) {
   const status = (req.status || "pending") as "pending" | "accepted" | "rejected";
-  const created = req.created_at ? new Date(req.created_at).toLocaleString("ar-DZ") : "";
+  const created = req.created_at ? formatDateTime(req.created_at) : "";
   return (
     <Card className="p-4 lg:p-5 space-y-3">
       <div className="flex items-start justify-between gap-3">
