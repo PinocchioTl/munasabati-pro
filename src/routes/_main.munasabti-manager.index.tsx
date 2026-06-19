@@ -13,13 +13,14 @@ import {
   AlertCircle, Activity, Package,
 } from "lucide-react";
 import { ResponsiveContainer, Area, AreaChart, Tooltip, XAxis, YAxis, CartesianGrid } from "recharts";
+import { MAGHREBI_MONTHS_SHORT, AR_WEEKDAYS_LONG, formatDateLong } from "@/lib/date-format";
 
 export const Route = createFileRoute("/_main/munasabti-manager/")({
   component: Dashboard,
 });
 
-const arabicMonths = ["ينا","فبر","مار","أبر","ماي","يون","يول","أغس","سبت","أكت","نوف","ديس"];
-const arabicDays = ["الأحد","الإثنين","الثلاثاء","الأربعاء","الخميس","الجمعة","السبت"];
+const arabicMonths = MAGHREBI_MONTHS_SHORT;
+const arabicDays = AR_WEEKDAYS_LONG;
 
 function todayISO() { return new Date().toISOString().slice(0, 10); }
 
