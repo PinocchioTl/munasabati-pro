@@ -464,7 +464,7 @@ function BackupSection() {
               <div>
                 <div className="font-bold text-base">معاينة الاستيراد</div>
                 <div className="text-xs text-muted-foreground">
-                  نسخة بتاريخ {new Date(pending.exported_at).toLocaleString("ar")}
+                  نسخة بتاريخ {formatDateTime(pending.exported_at)}
                 </div>
               </div>
             </div>
