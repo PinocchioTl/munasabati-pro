@@ -1,15 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Card, SectionHeader, Button } from "@/components/ui-bits";
 import {
-  Bell, Palette, Database, Shield, Search, Crown, Moon, Sun, Type, Layout,
+  Bell, Database, Shield, Search, Crown,
   Download, Upload, Lock, KeyRound, LogOut, EyeOff,
-  AlertTriangle, Clock, Package, Wallet, Check, Sparkles,
+  AlertTriangle, Clock, Package, Wallet, Link2,
 } from "lucide-react";
 import { useState, useEffect, useMemo, ReactNode } from "react";
 import { toast } from "sonner";
-import { BrandingSettings } from "@/components/BrandingSettings";
 import { BookingLinkSettings } from "@/components/BookingLinkSettings";
-import { Link2 } from "lucide-react";
 import { PhoneInput } from "@/components/PhoneInput";
 import { supabase } from "@/integrations/supabase/client";
 import { formatDateTime } from "@/lib/date-format";
